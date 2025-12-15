@@ -16,8 +16,11 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <GreenistsLeaf className="w-10 h-10 text-white" />
-              <GreenistsLogo size="lg" variant="white" />
+              <img 
+                src="/images/branding/official-logo.png" 
+                alt="Greenists" 
+                className="h-12 object-contain brightness-0 invert"
+              />
             </div>
             <p className="text-white/80 text-sm">
               {t('brand.tagline')}

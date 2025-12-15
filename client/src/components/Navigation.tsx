@@ -106,9 +106,9 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <img 
-              src="/images/branding/greenists_logo_variations_sheet2(1).png" 
+              src="/images/branding/official-logo.png" 
               alt="Greenists" 
-              className="h-14 object-contain"
+              className="h-12 object-contain"
             />
           </Link>
           

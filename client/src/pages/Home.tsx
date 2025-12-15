@@ -190,13 +190,13 @@ export default function Home() {
               {/* Logo */}
               <div className="mb-8 animate-fade-in">
                 <img 
-                  src="/images/branding/greenists_logo_variations_sheet2(1).png" 
+                  src="/images/branding/official-logo.png" 
                   alt="Greenists" 
-                  className="h-24 md:h-32 mx-auto object-contain"
+                  className="h-20 md:h-28 mx-auto object-contain"
                 />
               </div>
               
-              {/* Tagline */}
+              {/* Brand Name */}
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-slide-up">
                 <span className="text-[#2D7A4A]">Green</span>
                 <span className="text-white">ists</span>
