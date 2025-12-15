@@ -1,1003 +1,736 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { trpc } from '@/lib/trpc';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Calculator, 
-  Users, 
-  MapPin, 
-  Utensils, 
-  Palette,
-  Building2,
-  Heart,
-  Briefcase,
-  GraduationCap,
-  PartyPopper,
-  Globe,
-  Sparkles,
-  Download,
-  CheckCircle2,
-  Info,
-  DollarSign,
-  Banknote,
-  RefreshCw,
-  Leaf,
-  Coffee,
-  Camera,
-  Music,
-  Baby,
-  Gift,
-  Droplets,
-  Flower2,
-  Star,
-  TrendingUp,
-  PieChart,
-  Target,
-  Award,
-  Zap
+  Calculator as CalcIcon, Users, Calendar, Clock, MapPin, 
+  Sparkles, CheckCircle2, ArrowRight, Star, Leaf, Award, 
+  Shield, TrendingUp, DollarSign, Percent, Download, Share2,
+  Building2, Heart, GraduationCap, Stethoscope, Baby,
+  Landmark, Banknote, Globe, Music, HardHat, Zap, Plane,
+  Camera, Utensils, Mic2, Flower2, Gift, Truck, Wifi,
+  Video, Palette, FileText, Info, ChevronDown, ChevronUp,
+  RefreshCw, Printer, Mail, MessageCircle, Phone
 } from 'lucide-react';
 
-// Exchange rates
-const EXCHANGE_RATES = {
-  USD: 1,
-  YER: 1700,
-  SAR: 3.75,
+// Premium pricing algorithm with AI-like intelligence
+const calculateEventCost = (config: EventConfig): PricingResult => {
+  const baseRates: Record<string, { base: number; perGuest: number; complexity: number }> = {
+    corporate: { base: 800, perGuest: 15, complexity: 1.2 },
+    wedding: { base: 1200, perGuest: 25, complexity: 1.5 },
+    government: { base: 1000, perGuest: 18, complexity: 1.3 },
+    healthcare: { base: 700, perGuest: 12, complexity: 1.1 },
+    education: { base: 500, perGuest: 10, complexity: 1.0 },
+    kids: { base: 600, perGuest: 20, complexity: 1.2 },
+    banking: { base: 900, perGuest: 16, complexity: 1.25 },
+    ngo: { base: 450, perGuest: 8, complexity: 0.9 },
+    entertainment: { base: 1500, perGuest: 30, complexity: 1.6 },
+    construction: { base: 650, perGuest: 12, complexity: 1.1 },
+    energy: { base: 850, perGuest: 14, complexity: 1.2 },
+    travel: { base: 750, perGuest: 18, complexity: 1.3 },
+    condolences: { base: 400, perGuest: 8, complexity: 0.8 },
+  };
+
+  const rate = baseRates[config.eventType] || baseRates.corporate;
+  
+  // Base calculation
+  let basePrice = rate.base + (config.guestCount * rate.perGuest);
+  
+  // Duration multiplier (non-linear for longer events)
+  const durationMultiplier = config.duration <= 4 ? 1 : config.duration <= 8 ? 1.3 : 1.6;
+  basePrice *= durationMultiplier;
+  
+  // Venue complexity
+  const venueMultiplier = config.venueType === 'outdoor' ? 1.2 : config.venueType === 'hybrid' ? 1.35 : 1;
+  basePrice *= venueMultiplier;
+  
+  // Season pricing (peak season: Oct-Dec, Mar-May)
+  const month = config.eventDate ? new Date(config.eventDate).getMonth() : new Date().getMonth();
+  const isPeakSeason = [2, 3, 4, 9, 10, 11].includes(month);
+  const seasonMultiplier = isPeakSeason ? 1.15 : 1;
+  basePrice *= seasonMultiplier;
+  
+  // Add-ons pricing with detailed breakdown
+  const addOnPrices: Record<string, number> = {
+    photography: 300,
+    videography: 500,
+    catering: config.guestCount * 12,
+    decoration: 400,
+    sound: 250,
+    lighting: 350,
+    entertainment: 600,
+    transportation: 200,
+    security: 150,
+    wifi: 100,
+    liveStreaming: 400,
+    giftBags: config.guestCount * 5,
+    vipLounge: 800,
+    redCarpet: 300,
+    droneFootage: 450,
+    photoWall: 200,
+  };
+  
+  let addOnsTotal = 0;
+  const addOnBreakdown: { name: string; price: number }[] = [];
+  config.addOns.forEach(addon => {
+    const price = addOnPrices[addon] || 0;
+    addOnsTotal += price;
+    addOnBreakdown.push({ name: addon, price });
+  });
+  
+  // Discounts
+  const sustainabilityDiscount = config.sustainableOptions ? 0.05 : 0;
+  const daysUntilEvent = config.eventDate 
+    ? Math.ceil((new Date(config.eventDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : 30;
+  const earlyBookingDiscount = daysUntilEvent > 60 ? 0.1 : daysUntilEvent > 30 ? 0.05 : 0;
+  const bulkDiscount = config.guestCount > 500 ? 0.08 : config.guestCount > 200 ? 0.05 : 0;
+  
+  const subtotal = basePrice + addOnsTotal;
+  const totalDiscountRate = sustainabilityDiscount + earlyBookingDiscount + bulkDiscount;
+  const discountAmount = subtotal * totalDiscountRate;
+  const finalPrice = subtotal - discountAmount;
+  
+  // Calculate sustainability score
+  let sustainabilityScore = 50;
+  if (config.sustainableOptions) sustainabilityScore += 25;
+  if (config.venueType === 'indoor') sustainabilityScore += 10;
+  if (config.guestCount <= 100) sustainabilityScore += 10;
+  if (config.addOns.includes('giftBags')) sustainabilityScore -= 5;
+  sustainabilityScore = Math.min(100, Math.max(0, sustainabilityScore));
+  
+  // ROI calculation
+  const baseROI: Record<string, number> = {
+    corporate: 250, wedding: 150, government: 180, banking: 220, entertainment: 300,
+    healthcare: 160, education: 140, kids: 120, ngo: 100, construction: 200,
+    energy: 230, travel: 180, condolences: 80,
+  };
+  const estimatedROI = baseROI[config.eventType] || 150;
+  
+  // Confidence level
+  let confidence = 70;
+  if (config.eventDate) confidence += 10;
+  if (config.guestCount > 0) confidence += 10;
+  if (config.addOns.length > 0) confidence += 5;
+  if (config.venueType) confidence += 5;
+  confidence = Math.min(100, confidence);
+  
+  // AI recommendations
+  const recommendations: string[] = [];
+  if (!config.sustainableOptions) {
+    recommendations.push('Enable sustainable options for 5% discount and ISO 20121 certification');
+  }
+  if (daysUntilEvent < 30) {
+    recommendations.push('Book earlier for up to 10% early booking discount');
+  }
+  if (config.eventType === 'corporate' && !config.addOns.includes('wifi')) {
+    recommendations.push('Consider adding high-speed WiFi for corporate events');
+  }
+  if (config.eventType === 'wedding' && !config.addOns.includes('photography')) {
+    recommendations.push('Photography is essential for wedding events');
+  }
+  if (config.guestCount > 100 && !config.addOns.includes('sound')) {
+    recommendations.push('Sound system recommended for events with 100+ guests');
+  }
+  
+  return {
+    basePrice: Math.round(basePrice),
+    addOnsTotal: Math.round(addOnsTotal),
+    addOnBreakdown,
+    subtotal: Math.round(subtotal),
+    discounts: {
+      sustainability: Math.round(subtotal * sustainabilityDiscount),
+      earlyBooking: Math.round(subtotal * earlyBookingDiscount),
+      bulk: Math.round(subtotal * bulkDiscount),
+      total: Math.round(discountAmount),
+      totalRate: Math.round(totalDiscountRate * 100),
+    },
+    finalPrice: Math.round(finalPrice),
+    priceInYER: Math.round(finalPrice * 1700),
+    priceInSAR: Math.round(finalPrice * 3.75),
+    sustainabilityScore,
+    estimatedROI,
+    confidenceLevel: confidence,
+    recommendations,
+    isPeakSeason,
+  };
 };
 
-type Currency = 'USD' | 'YER' | 'SAR';
-
-interface PriceBreakdown {
-  eventCost: number;
-  venueCost: number;
-  cateringCost: number;
-  decorationCost: number;
-  addOnsCost: number;
-  subtotal: number;
-  serviceFee: number;
-  total: number;
-  sustainabilityScore: number;
+interface EventConfig {
+  eventType: string;
+  guestCount: number;
+  eventDate: string;
+  duration: number;
+  venueType: 'indoor' | 'outdoor' | 'hybrid';
+  addOns: string[];
+  sustainableOptions: boolean;
 }
 
-// Premium Add-ons (10 items from homepage)
-const premiumAddOns = [
-  { id: 'saffron_water', nameEn: 'Saffron Water Service', nameAr: 'خدمة ماء الزعفران', price: 150, icon: Droplets, sustainable: true, description: { en: 'Traditional Yemeni hospitality with premium saffron-infused water', ar: 'ضيافة يمنية تقليدية بماء الزعفران الفاخر' } },
-  { id: 'kids_corner', nameEn: 'Kids Entertainment Corner', nameAr: 'ركن ترفيه الأطفال', price: 300, icon: Baby, sustainable: false, description: { en: 'Professional childcare with games and activities', ar: 'رعاية أطفال احترافية مع ألعاب وأنشطة' } },
-  { id: 'photo_booth', nameEn: 'Premium Photo Booth', nameAr: 'كشك تصوير فاخر', price: 250, icon: Camera, sustainable: false, description: { en: 'Professional photo booth with instant prints', ar: 'كشك تصوير احترافي مع طباعة فورية' } },
-  { id: 'live_music', nameEn: 'Live Oud & Traditional Music', nameAr: 'موسيقى عود حية', price: 400, icon: Music, sustainable: false, description: { en: 'Authentic Yemeni musicians with traditional instruments', ar: 'موسيقيون يمنيون أصيلون بآلات تقليدية' } },
-  { id: 'vip_gifts', nameEn: 'VIP Gift Bags', nameAr: 'حقائب هدايا VIP', price: 50, icon: Gift, sustainable: true, description: { en: 'Eco-friendly gift bags with local products', ar: 'حقائب هدايا صديقة للبيئة بمنتجات محلية' } },
-  { id: 'floral', nameEn: 'Premium Floral Arrangements', nameAr: 'تنسيقات زهور فاخرة', price: 350, icon: Flower2, sustainable: true, description: { en: 'Locally sourced sustainable flower arrangements', ar: 'تنسيقات زهور مستدامة من مصادر محلية' } },
-  { id: 'coffee_corner', nameEn: 'Yemeni Coffee Corner', nameAr: 'ركن القهوة اليمنية', price: 200, icon: Coffee, sustainable: true, description: { en: 'Premium Yemeni coffee service with traditional brewing', ar: 'خدمة قهوة يمنية فاخرة بطريقة تقليدية' } },
-  { id: 'green_decor', nameEn: 'Sustainable Green Décor', nameAr: 'ديكور أخضر مستدام', price: 280, icon: Leaf, sustainable: true, description: { en: 'Eco-friendly decorations with living plants', ar: 'ديكورات صديقة للبيئة بنباتات حية' } },
-  { id: 'premium_av', nameEn: 'Premium AV Equipment', nameAr: 'معدات صوت وصورة فاخرة', price: 500, icon: Zap, sustainable: false, description: { en: 'High-end audio-visual equipment and technicians', ar: 'معدات صوت وصورة عالية الجودة مع فنيين' } },
-  { id: 'valet', nameEn: 'Valet Parking Service', nameAr: 'خدمة صف السيارات', price: 180, icon: Star, sustainable: false, description: { en: 'Professional valet parking for all guests', ar: 'خدمة صف سيارات احترافية لجميع الضيوف' } },
-];
+interface PricingResult {
+  basePrice: number;
+  addOnsTotal: number;
+  addOnBreakdown: { name: string; price: number }[];
+  subtotal: number;
+  discounts: {
+    sustainability: number;
+    earlyBooking: number;
+    bulk: number;
+    total: number;
+    totalRate: number;
+  };
+  finalPrice: number;
+  priceInYER: number;
+  priceInSAR: number;
+  sustainabilityScore: number;
+  estimatedROI: number;
+  confidenceLevel: number;
+  recommendations: string[];
+  isPeakSeason: boolean;
+}
 
-export default function CalculatorPage() {
-  const { language } = useLanguage();
+export default function Calculator() {
+  const { language, t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<'calculator' | 'addons' | 'roi'>('calculator');
+  const [currency, setCurrency] = useState<'USD' | 'YER' | 'SAR'>('USD');
+  const [showBreakdown, setShowBreakdown] = useState(false);
   
-  // Form state
-  const [eventType, setEventType] = useState('corporate');
-  const [venueType, setVenueType] = useState('indoor');
-  const [cateringLevel, setCateringLevel] = useState('standard');
-  const [decorationLevel, setDecorationLevel] = useState('standard');
-  const [guestCount, setGuestCount] = useState([100]);
-  const [currency, setCurrency] = useState<Currency>('USD');
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
-  
-  // ROI Calculator state
-  const [expectedRevenue, setExpectedRevenue] = useState([50000]);
-  const [leadConversion, setLeadConversion] = useState([15]);
-  const [brandAwareness, setBrandAwareness] = useState([30]);
-  
-  // Quote state
-  const [quoteNumber, setQuoteNumber] = useState<string | null>(null);
-  const [isSavingQuote, setIsSavingQuote] = useState(false);
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
-  const [clientInfo, setClientInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
+  const [config, setConfig] = useState<EventConfig>({
+    eventType: 'corporate',
+    guestCount: 100,
+    eventDate: '',
+    duration: 4,
+    venueType: 'indoor',
+    addOns: [],
+    sustainableOptions: true,
   });
-  
-  // tRPC mutation for saving quotes
-  const createQuoteMutation = trpc.greenists.quotes.create.useMutation({
-    onSuccess: (data) => {
-      setQuoteNumber(data.quoteNumber);
-      setIsSavingQuote(false);
-    },
-    onError: (error) => {
-      console.error('Failed to save quote:', error);
-      setIsSavingQuote(false);
-    },
-  });
-  
-  // Save quote to database
-  const handleSaveQuote = async () => {
-    setIsSavingQuote(true);
-    
-    createQuoteMutation.mutate({
-      clientName: clientInfo.name || undefined,
-      clientEmail: clientInfo.email || undefined,
-      clientPhone: clientInfo.phone || undefined,
-      clientCompany: clientInfo.company || undefined,
-      eventType,
-      guestCount: guestCount[0],
-      venueType,
-      cateringLevel,
-      decorationLevel,
-      addOns: selectedAddOns,
-      baseCostUsd: breakdown.subtotal - breakdown.addOnsCost,
-      addOnsCostUsd: breakdown.addOnsCost,
-      subtotalUsd: breakdown.subtotal,
-      taxUsd: 0,
-      totalUsd: breakdown.total,
-      displayCurrency: currency,
-      expectedRevenue: expectedRevenue[0],
-      expectedRoi: roiCalculation.roi,
-      sustainabilityScore: breakdown.sustainabilityScore,
-    });
-  };
-  
-  // Download quote as PDF (opens in new tab)
-  const handleDownloadQuote = () => {
-    if (quoteNumber) {
-      window.open(`/api/quotes/${quoteNumber}/pdf`, '_blank');
-    } else {
-      // Save quote first, then download
-      setShowQuoteModal(true);
-    }
-  };
-  
-  // Pricing data (in USD)
-  const eventPrices: Record<string, { base: number; perGuest: number; icon: React.ElementType; labelEn: string; labelAr: string }> = {
-    corporate: { base: 500, perGuest: 15, icon: Building2, labelEn: 'Corporate', labelAr: 'شركات' },
-    wedding: { base: 1000, perGuest: 25, icon: Heart, labelEn: 'Wedding', labelAr: 'زفاف' },
-    conference: { base: 800, perGuest: 20, icon: Users, labelEn: 'Conference', labelAr: 'مؤتمر' },
-    government: { base: 1200, perGuest: 30, icon: Briefcase, labelEn: 'Government', labelAr: 'حكومي' },
-    tradeshow: { base: 1500, perGuest: 10, icon: Globe, labelEn: 'Trade Show', labelAr: 'معرض' },
-    educational: { base: 400, perGuest: 12, icon: GraduationCap, labelEn: 'Educational', labelAr: 'تعليمي' },
-    entertainment: { base: 700, perGuest: 18, icon: PartyPopper, labelEn: 'Entertainment', labelAr: 'ترفيهي' },
-  };
-  
-  const venuePrices: Record<string, { base: number; perGuest: number; labelEn: string; labelAr: string }> = {
-    indoor: { base: 200, perGuest: 5, labelEn: 'Indoor', labelAr: 'داخلي' },
-    outdoor: { base: 300, perGuest: 7, labelEn: 'Outdoor', labelAr: 'خارجي' },
-    hotel: { base: 500, perGuest: 10, labelEn: 'Hotel', labelAr: 'فندق' },
-    beach: { base: 800, perGuest: 15, labelEn: 'Beach', labelAr: 'شاطئ' },
-  };
-  
-  const cateringPrices: Record<string, { base: number; perGuest: number; labelEn: string; labelAr: string }> = {
-    basic: { base: 0, perGuest: 10, labelEn: 'Basic', labelAr: 'أساسي' },
-    standard: { base: 100, perGuest: 20, labelEn: 'Standard', labelAr: 'قياسي' },
-    premium: { base: 300, perGuest: 35, labelEn: 'Premium', labelAr: 'متميز' },
-    luxury: { base: 500, perGuest: 50, labelEn: 'Luxury', labelAr: 'فاخر' },
-  };
-  
-  const decorationPrices: Record<string, { base: number; perGuest: number; labelEn: string; labelAr: string }> = {
-    minimal: { base: 100, perGuest: 2, labelEn: 'Minimal', labelAr: 'بسيط' },
-    standard: { base: 300, perGuest: 5, labelEn: 'Standard', labelAr: 'قياسي' },
-    elegant: { base: 600, perGuest: 8, labelEn: 'Elegant', labelAr: 'أنيق' },
-    luxury: { base: 1000, perGuest: 12, labelEn: 'Luxury', labelAr: 'فاخر' },
-  };
-  
-  // Toggle add-on selection
-  const toggleAddOn = (id: string) => {
-    setSelectedAddOns(prev => 
-      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
-    );
-  };
-  
-  // Calculate prices
-  const breakdown = useMemo((): PriceBreakdown => {
-    const event = eventPrices[eventType];
-    const venue = venuePrices[venueType];
-    const catering = cateringPrices[cateringLevel];
-    const decoration = decorationPrices[decorationLevel];
-    const guests = guestCount[0];
-    
-    const eventCost = event.base + (event.perGuest * guests);
-    const venueCost = venue.base + (venue.perGuest * guests);
-    const cateringCost = catering.base + (catering.perGuest * guests);
-    const decorationCost = decoration.base + (decoration.perGuest * guests);
-    
-    // Calculate add-ons cost
-    const addOnsCost = selectedAddOns.reduce((total, id) => {
-      const addOn = premiumAddOns.find(a => a.id === id);
-      if (addOn) {
-        // Some add-ons are per-guest, others are flat
-        if (['vip_gifts'].includes(id)) {
-          return total + (addOn.price * Math.ceil(guests / 10)); // Per 10 guests
-        }
-        return total + addOn.price;
-      }
-      return total;
-    }, 0);
-    
-    // Calculate sustainability score
-    const sustainableAddOns = selectedAddOns.filter(id => 
-      premiumAddOns.find(a => a.id === id)?.sustainable
-    ).length;
-    const sustainabilityScore = Math.min(100, 
-      40 + // Base score
-      (sustainableAddOns * 10) + // +10 for each sustainable add-on
-      (decorationLevel === 'minimal' ? 10 : 0) + // Minimal decoration bonus
-      (venueType === 'outdoor' ? 10 : 0) // Outdoor venue bonus
-    );
-    
-    const subtotal = eventCost + venueCost + cateringCost + decorationCost + addOnsCost;
-    const serviceFee = subtotal * 0.15;
-    const total = subtotal + serviceFee;
-    
-    return {
-      eventCost,
-      venueCost,
-      cateringCost,
-      decorationCost,
-      addOnsCost,
-      subtotal,
-      serviceFee,
-      total,
-      sustainabilityScore,
-    };
-  }, [eventType, venueType, cateringLevel, decorationLevel, guestCount, selectedAddOns]);
-  
-  // Calculate ROI
-  const roiCalculation = useMemo(() => {
-    const eventCost = breakdown.total;
-    const revenue = expectedRevenue[0];
-    const leads = Math.round(guestCount[0] * (leadConversion[0] / 100));
-    const avgDealValue = revenue / Math.max(leads, 1);
-    const roi = ((revenue - eventCost) / eventCost) * 100;
-    const costPerLead = eventCost / Math.max(leads, 1);
-    const brandValue = eventCost * (brandAwareness[0] / 100) * 2; // Estimated brand value
-    
-    return {
-      eventCost,
-      expectedRevenue: revenue,
-      leads,
-      avgDealValue,
-      roi,
-      costPerLead,
-      brandValue,
-      totalValue: revenue + brandValue,
-    };
-  }, [breakdown.total, expectedRevenue, guestCount, leadConversion, brandAwareness]);
-  
-  // Format currency
-  const formatCurrency = (amountUsd: number, curr: Currency = currency): string => {
-    const converted = amountUsd * EXCHANGE_RATES[curr];
-    const symbols: Record<Currency, string> = {
-      USD: '$',
-      YER: 'ر.ي',
-      SAR: 'ر.س',
-    };
-    
-    if (curr === 'YER') {
-      return `${Math.round(converted).toLocaleString()} ${symbols[curr]}`;
-    }
-    return `${symbols[curr]}${converted.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  };
-  
-  // Currency buttons
-  const currencies: { code: Currency; labelEn: string; labelAr: string; flag: string }[] = [
-    { code: 'USD', labelEn: 'US Dollar', labelAr: 'دولار أمريكي', flag: '🇺🇸' },
-    { code: 'YER', labelEn: 'Yemeni Rial', labelAr: 'ريال يمني', flag: '🇾🇪' },
-    { code: 'SAR', labelEn: 'Saudi Riyal', labelAr: 'ريال سعودي', flag: '🇸🇦' },
+
+  const pricing = useMemo(() => calculateEventCost(config), [config]);
+
+  const eventTypes = [
+    { id: 'corporate', icon: Building2, nameAr: 'شركات', nameEn: 'Corporate', color: 'from-blue-500 to-blue-700' },
+    { id: 'wedding', icon: Heart, nameAr: 'زفاف', nameEn: 'Wedding', color: 'from-pink-500 to-rose-600' },
+    { id: 'government', icon: Landmark, nameAr: 'حكومي', nameEn: 'Government', color: 'from-amber-500 to-amber-700' },
+    { id: 'healthcare', icon: Stethoscope, nameAr: 'صحي', nameEn: 'Healthcare', color: 'from-teal-500 to-teal-700' },
+    { id: 'education', icon: GraduationCap, nameAr: 'تعليمي', nameEn: 'Education', color: 'from-indigo-500 to-indigo-700' },
+    { id: 'kids', icon: Baby, nameAr: 'أطفال', nameEn: 'Kids', color: 'from-orange-400 to-orange-600' },
+    { id: 'banking', icon: Banknote, nameAr: 'بنوك', nameEn: 'Banking', color: 'from-emerald-500 to-emerald-700' },
+    { id: 'entertainment', icon: Music, nameAr: 'ترفيهي', nameEn: 'Entertainment', color: 'from-purple-500 to-purple-700' },
   ];
-  
-  const resetCalculator = () => {
-    setEventType('corporate');
-    setVenueType('indoor');
-    setCateringLevel('standard');
-    setDecorationLevel('standard');
-    setGuestCount([100]);
-    setCurrency('USD');
-    setSelectedAddOns([]);
-    setExpectedRevenue([50000]);
-    setLeadConversion([15]);
-    setBrandAwareness([30]);
+
+  const addOnOptions = [
+    { id: 'photography', icon: Camera, nameAr: 'تصوير فوتوغرافي', nameEn: 'Photography', price: 300 },
+    { id: 'videography', icon: Video, nameAr: 'تصوير فيديو', nameEn: 'Videography', price: 500 },
+    { id: 'catering', icon: Utensils, nameAr: 'ضيافة', nameEn: 'Catering', price: 'per guest' },
+    { id: 'decoration', icon: Palette, nameAr: 'ديكور', nameEn: 'Decoration', price: 400 },
+    { id: 'sound', icon: Mic2, nameAr: 'صوتيات', nameEn: 'Sound System', price: 250 },
+    { id: 'lighting', icon: Sparkles, nameAr: 'إضاءة', nameEn: 'Lighting', price: 350 },
+    { id: 'entertainment', icon: Music, nameAr: 'ترفيه', nameEn: 'Entertainment', price: 600 },
+    { id: 'transportation', icon: Truck, nameAr: 'نقل', nameEn: 'Transportation', price: 200 },
+    { id: 'wifi', icon: Wifi, nameAr: 'واي فاي', nameEn: 'High-Speed WiFi', price: 100 },
+    { id: 'liveStreaming', icon: Video, nameAr: 'بث مباشر', nameEn: 'Live Streaming', price: 400 },
+    { id: 'giftBags', icon: Gift, nameAr: 'حقائب هدايا', nameEn: 'Gift Bags', price: 'per guest' },
+    { id: 'vipLounge', icon: Star, nameAr: 'صالة VIP', nameEn: 'VIP Lounge', price: 800 },
+    { id: 'redCarpet', icon: Award, nameAr: 'سجادة حمراء', nameEn: 'Red Carpet', price: 300 },
+    { id: 'droneFootage', icon: Camera, nameAr: 'تصوير درون', nameEn: 'Drone Footage', price: 450 },
+  ];
+
+  const toggleAddOn = (id: string) => {
+    setConfig(prev => ({
+      ...prev,
+      addOns: prev.addOns.includes(id) 
+        ? prev.addOns.filter(a => a !== id)
+        : [...prev.addOns, id]
+    }));
+  };
+
+  const getDisplayPrice = (usdPrice: number) => {
+    switch (currency) {
+      case 'YER': return `${(usdPrice * 1700).toLocaleString()} ر.ي`;
+      case 'SAR': return `${(usdPrice * 3.75).toLocaleString()} ر.س`;
+      default: return `$${usdPrice.toLocaleString()}`;
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#f8f6f0] to-white" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-[#2D7A4A] to-[#1a4d2e] text-white py-16">
-          <div className="container mx-auto px-4 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6">
-              <Calculator className="w-8 h-8" />
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              {language === 'ar' ? 'حاسبة تكلفة الفعاليات المتقدمة' : 'Advanced Event Cost Calculator'}
-            </h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              {language === 'ar' 
-                ? 'احصل على تقدير فوري ودقيق لتكلفة فعاليتك مع حساب العائد على الاستثمار'
-                : 'Get an instant estimate with ROI calculation and sustainability scoring'}
-            </p>
-            
-            {/* Exchange Rate Info */}
-            <div className="mt-8 inline-flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
-              <Info className="w-5 h-5" />
-              <span className="text-sm">
-                {language === 'ar' 
-                  ? '1 دولار = 1,700 ريال يمني = 3.75 ريال سعودي'
-                  : '1 USD = 1,700 YER = 3.75 SAR'}
-              </span>
-            </div>
-          </div>
-        </section>
+      {/* Premium Header with Gold Accents */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a5c36] via-[#2D7A4A] to-[#1a5c36]" />
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-[#D4AF37] rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl" />
+        </div>
         
-        {/* Calculator Section */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <Tabs defaultValue="calculator" className="w-full">
-              <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-8">
-                <TabsTrigger value="calculator" className="flex items-center gap-2">
-                  <Calculator className="w-4 h-4" />
-                  {language === 'ar' ? 'الحاسبة' : 'Calculator'}
-                </TabsTrigger>
-                <TabsTrigger value="addons" className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  {language === 'ar' ? 'الإضافات' : 'Add-ons'}
-                </TabsTrigger>
-                <TabsTrigger value="roi" className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />
-                  {language === 'ar' ? 'العائد' : 'ROI'}
-                </TabsTrigger>
-              </TabsList>
+        {/* Gold Border */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+        
+        <div className="relative container mx-auto px-4 py-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#D4AF37]/20 text-[#D4AF37] px-4 py-2 rounded-full text-sm mb-6">
+            <CalcIcon className="w-4 h-4" />
+            {language === 'ar' ? 'حاسبة تكلفة الفعاليات المتقدمة' : 'Advanced Event Cost Calculator'}
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            {language === 'ar' ? 'احسب تكلفة فعاليتك بدقة' : 'Calculate Your Event Cost Accurately'}
+          </h1>
+          <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
+            {language === 'ar' 
+              ? 'خوارزمية ذكية تقدم لك تقديرات دقيقة مع توصيات مخصصة لتحسين ميزانيتك'
+              : 'Smart algorithm providing accurate estimates with personalized recommendations to optimize your budget'}
+          </p>
+          
+          {/* Currency Selector */}
+          <div className="inline-flex bg-white/10 backdrop-blur-sm rounded-full p-1">
+            {(['USD', 'YER', 'SAR'] as const).map((curr) => (
+              <button
+                key={curr}
+                onClick={() => setCurrency(curr)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  currency === curr 
+                    ? 'bg-[#D4AF37] text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                {curr}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-              {/* Main Calculator Tab */}
-              <TabsContent value="calculator">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  {/* Left Column - Options */}
-                  <div className="lg:col-span-2 space-y-6">
-                    {/* Event Type */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Sparkles className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'نوع الفعالية' : 'Event Type'}
-                        </CardTitle>
-                        <CardDescription>
-                          {language === 'ar' ? 'اختر نوع فعاليتك' : 'Select your event type'}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                          {Object.entries(eventPrices).map(([key, value]) => (
-                            <button
-                              key={key}
-                              onClick={() => setEventType(key)}
-                              className={`p-3 rounded-xl border-2 transition-all text-center ${
-                                eventType === key
-                                  ? 'border-[#2D7A4A] bg-[#2D7A4A]/10'
-                                  : 'border-gray-200 hover:border-[#2D7A4A]/50'
-                              }`}
-                            >
-                              <value.icon className={`w-6 h-6 mx-auto mb-2 ${eventType === key ? 'text-[#2D7A4A]' : 'text-gray-500'}`} />
-                              <span className={`text-xs font-medium ${eventType === key ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                {language === 'ar' ? value.labelAr : value.labelEn}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Guest Count */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Users className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'عدد الضيوف' : 'Number of Guests'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="text-center">
-                            <span className="text-5xl font-bold text-[#2D7A4A]">{guestCount[0]}</span>
-                            <span className="text-gray-500 ms-2">{language === 'ar' ? 'ضيف' : 'guests'}</span>
-                          </div>
-                          <Slider
-                            value={guestCount}
-                            onValueChange={setGuestCount}
-                            min={10}
-                            max={1000}
-                            step={10}
-                            className="w-full"
-                          />
-                          <div className="flex justify-between text-sm text-gray-500">
-                            <span>10</span>
-                            <span>250</span>
-                            <span>500</span>
-                            <span>750</span>
-                            <span>1000</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Venue Type */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <MapPin className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'نوع المكان' : 'Venue Type'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {Object.entries(venuePrices).map(([key, value]) => (
-                            <button
-                              key={key}
-                              onClick={() => setVenueType(key)}
-                              className={`p-4 rounded-xl border-2 transition-all text-center ${
-                                venueType === key
-                                  ? 'border-[#2D7A4A] bg-[#2D7A4A]/10'
-                                  : 'border-gray-200 hover:border-[#2D7A4A]/50'
-                              }`}
-                            >
-                              <span className={`text-sm font-medium ${venueType === key ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                {language === 'ar' ? value.labelAr : value.labelEn}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Catering Level */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Utensils className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'مستوى الضيافة' : 'Catering Level'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {Object.entries(cateringPrices).map(([key, value]) => (
-                            <button
-                              key={key}
-                              onClick={() => setCateringLevel(key)}
-                              className={`p-4 rounded-xl border-2 transition-all text-center ${
-                                cateringLevel === key
-                                  ? 'border-[#2D7A4A] bg-[#2D7A4A]/10'
-                                  : 'border-gray-200 hover:border-[#2D7A4A]/50'
-                              }`}
-                            >
-                              <span className={`text-sm font-medium ${cateringLevel === key ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                {language === 'ar' ? value.labelAr : value.labelEn}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Decoration Level */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Palette className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'مستوى الديكور' : 'Decoration Level'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {Object.entries(decorationPrices).map(([key, value]) => (
-                            <button
-                              key={key}
-                              onClick={() => setDecorationLevel(key)}
-                              className={`p-4 rounded-xl border-2 transition-all text-center ${
-                                decorationLevel === key
-                                  ? 'border-[#2D7A4A] bg-[#2D7A4A]/10'
-                                  : 'border-gray-200 hover:border-[#2D7A4A]/50'
-                              }`}
-                            >
-                              <span className={`text-sm font-medium ${decorationLevel === key ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                {language === 'ar' ? value.labelAr : value.labelEn}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  
-                  {/* Right Column - Results */}
-                  <div className="space-y-6">
-                    {/* Currency Selector */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Banknote className="w-5 h-5 text-[#2D7A4A]" />
-                          {language === 'ar' ? 'العملة' : 'Currency'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex gap-2">
-                          {currencies.map((curr) => (
-                            <button
-                              key={curr.code}
-                              onClick={() => setCurrency(curr.code)}
-                              className={`flex-1 p-3 rounded-xl border-2 transition-all text-center ${
-                                currency === curr.code
-                                  ? 'border-[#2D7A4A] bg-[#2D7A4A]/10'
-                                  : 'border-gray-200 hover:border-[#2D7A4A]/50'
-                              }`}
-                            >
-                              <span className="text-2xl mb-1 block">{curr.flag}</span>
-                              <span className={`text-xs font-medium ${currency === curr.code ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                {curr.code}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Sustainability Score */}
-                    <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-2">
-                            <Leaf className="w-5 h-5 text-green-600" />
-                            <span className="font-semibold text-green-800">
-                              {language === 'ar' ? 'نقاط الاستدامة' : 'Sustainability Score'}
-                            </span>
-                          </div>
-                          <Badge className="bg-green-600">{breakdown.sustainabilityScore}/100</Badge>
-                        </div>
-                        <div className="w-full bg-green-200 rounded-full h-3">
-                          <div 
-                            className="bg-green-600 h-3 rounded-full transition-all duration-500"
-                            style={{ width: `${breakdown.sustainabilityScore}%` }}
-                          />
-                        </div>
-                        <p className="text-xs text-green-700 mt-2">
-                          {language === 'ar' 
-                            ? 'أضف خيارات مستدامة لزيادة النقاط'
-                            : 'Add sustainable options to increase your score'}
-                        </p>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Price Breakdown */}
-                    <Card className="sticky top-4">
-                      <CardHeader className="bg-gradient-to-br from-[#2D7A4A] to-[#1a4d2e] text-white rounded-t-lg">
-                        <CardTitle className="flex items-center gap-2">
-                          <DollarSign className="w-5 h-5" />
-                          {language === 'ar' ? 'تفاصيل التكلفة' : 'Cost Breakdown'}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'تكلفة الفعالية' : 'Event Cost'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.eventCost)}</span>
-                          </div>
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'تكلفة المكان' : 'Venue Cost'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.venueCost)}</span>
-                          </div>
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'تكلفة الضيافة' : 'Catering Cost'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.cateringCost)}</span>
-                          </div>
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'تكلفة الديكور' : 'Decoration Cost'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.decorationCost)}</span>
-                          </div>
-                          {breakdown.addOnsCost > 0 && (
-                            <div className="flex justify-between items-center pb-2 border-b">
-                              <span className="text-gray-600 flex items-center gap-1">
-                                <Sparkles className="w-4 h-4 text-amber-500" />
-                                {language === 'ar' ? 'الإضافات المميزة' : 'Premium Add-ons'}
-                              </span>
-                              <span className="font-semibold text-amber-600">{formatCurrency(breakdown.addOnsCost)}</span>
-                            </div>
-                          )}
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'المجموع الفرعي' : 'Subtotal'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.subtotal)}</span>
-                          </div>
-                          <div className="flex justify-between items-center pb-2 border-b">
-                            <span className="text-gray-600">
-                              {language === 'ar' ? 'رسوم الخدمة (15%)' : 'Service Fee (15%)'}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(breakdown.serviceFee)}</span>
-                          </div>
-                          
-                          {/* Total */}
-                          <div className="bg-[#2D7A4A]/10 rounded-xl p-4 mt-4">
-                            <div className="text-center">
-                              <p className="text-sm text-gray-600 mb-1">
-                                {language === 'ar' ? 'الإجمالي' : 'Total'}
-                              </p>
-                              <p className="text-3xl font-bold text-[#2D7A4A]">
-                                {formatCurrency(breakdown.total)}
-                              </p>
-                            </div>
-                            
-                            {/* Show in all currencies */}
-                            <div className="mt-4 pt-4 border-t border-[#2D7A4A]/20">
-                              <p className="text-xs text-gray-500 text-center mb-2">
-                                {language === 'ar' ? 'بجميع العملات' : 'In all currencies'}
-                              </p>
-                              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                                {currencies.map((curr) => (
-                                  <div key={curr.code} className={currency === curr.code ? 'font-bold' : ''}>
-                                    <span className="text-gray-500">{curr.flag}</span>
-                                    <p className={`font-semibold ${currency === curr.code ? 'text-[#2D7A4A]' : 'text-gray-700'}`}>
-                                      {formatCurrency(breakdown.total, curr.code)}
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Actions */}
-                          <div className="space-y-3 mt-6">
-                            <Button 
-                              className="w-full bg-[#2D7A4A] hover:bg-[#236339]"
-                              onClick={() => setShowQuoteModal(true)}
-                              disabled={isSavingQuote}
-                            >
-                              <Download className="w-4 h-4 me-2" />
-                              {isSavingQuote 
-                                ? (language === 'ar' ? 'جاري الحفظ...' : 'Saving...')
-                                : quoteNumber 
-                                  ? (language === 'ar' ? 'تحميل عرض السعر' : 'Download Quote')
-                                  : (language === 'ar' ? 'حفظ وتحميل عرض السعر' : 'Save & Download Quote')
-                              }
-                            </Button>
-                            {quoteNumber && (
-                              <div className="text-center mt-2">
-                                <Badge variant="outline" className="text-green-600 border-green-600">
-                                  {language === 'ar' ? 'رقم العرض: ' : 'Quote #'}{quoteNumber}
-                                </Badge>
-                              </div>
-                            )}
-                            <Button variant="outline" className="w-full border-[#2D7A4A] text-[#2D7A4A]" onClick={resetCalculator}>
-                              <RefreshCw className="w-4 h-4 me-2" />
-                              {language === 'ar' ? 'إعادة تعيين' : 'Reset'}
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              </TabsContent>
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Calculator Area */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Tab Navigation */}
+            <div className="bg-white rounded-2xl shadow-lg p-2 flex gap-2">
+              {[
+                { id: 'calculator', icon: CalcIcon, labelAr: 'الحاسبة', labelEn: 'Calculator' },
+                { id: 'addons', icon: Sparkles, labelAr: 'الإضافات', labelEn: 'Add-ons' },
+                { id: 'roi', icon: TrendingUp, labelAr: 'العائد', labelEn: 'ROI' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-gradient-to-r from-[#1a5c36] to-[#2D7A4A] text-white shadow-lg'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <tab.icon className="w-5 h-5" />
+                  {language === 'ar' ? tab.labelAr : tab.labelEn}
+                </button>
+              ))}
+            </div>
 
-              {/* Premium Add-ons Tab */}
-              <TabsContent value="addons">
-                <div className="max-w-4xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                      {language === 'ar' ? '10 إضافات مميزة' : '10 Premium Add-ons'}
-                    </h2>
-                    <p className="text-gray-600">
-                      {language === 'ar' 
-                        ? 'اختر الإضافات لتخصيص فعاليتك'
-                        : 'Select add-ons to customize your event'}
-                    </p>
-                    <div className="flex justify-center gap-4 mt-4">
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        <Leaf className="w-3 h-3 mr-1" />
-                        {language === 'ar' ? 'مستدام' : 'Sustainable'}
-                      </Badge>
-                      <Badge variant="secondary">
-                        {selectedAddOns.length} {language === 'ar' ? 'مختار' : 'selected'}
-                      </Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {premiumAddOns.map((addOn) => (
-                      <Card 
-                        key={addOn.id}
-                        className={`cursor-pointer transition-all hover:shadow-lg ${
-                          selectedAddOns.includes(addOn.id) 
-                            ? 'border-[#2D7A4A] bg-[#2D7A4A]/5 ring-2 ring-[#2D7A4A]' 
-                            : 'border-gray-200'
+            {/* Calculator Tab */}
+            {activeTab === 'calculator' && (
+              <div className="bg-white rounded-3xl shadow-xl p-8 border border-[#D4AF37]/20">
+                {/* Event Type Selection */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-[#1a5c36] mb-4 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-[#D4AF37]" />
+                    {language === 'ar' ? 'نوع الفعالية' : 'Event Type'}
+                  </h3>
+                  <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+                    {eventTypes.map((type) => (
+                      <button
+                        key={type.id}
+                        onClick={() => setConfig(prev => ({ ...prev, eventType: type.id }))}
+                        className={`group p-4 rounded-2xl border-2 transition-all duration-300 ${
+                          config.eventType === type.id
+                            ? 'border-[#D4AF37] bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 shadow-lg scale-105'
+                            : 'border-gray-200 hover:border-[#D4AF37]/50 hover:shadow-md'
                         }`}
-                        onClick={() => toggleAddOn(addOn.id)}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-4">
-                            <div className={`p-3 rounded-xl ${
-                              selectedAddOns.includes(addOn.id) 
-                                ? 'bg-[#2D7A4A] text-white' 
-                                : 'bg-gray-100 text-gray-600'
-                            }`}>
-                              <addOn.icon className="w-6 h-6" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-semibold text-gray-800">
-                                  {language === 'ar' ? addOn.nameAr : addOn.nameEn}
-                                </h3>
-                                {addOn.sustainable && (
-                                  <Badge className="bg-green-100 text-green-700 text-xs">
-                                    <Leaf className="w-3 h-3 mr-1" />
-                                    {language === 'ar' ? 'مستدام' : 'Eco'}
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-500 mb-2">
-                                {addOn.description[language]}
-                              </p>
-                              <p className="font-bold text-[#2D7A4A]">
-                                {formatCurrency(addOn.price)}
-                              </p>
-                            </div>
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                              selectedAddOns.includes(addOn.id) 
-                                ? 'border-[#2D7A4A] bg-[#2D7A4A]' 
-                                : 'border-gray-300'
-                            }`}>
-                              {selectedAddOns.includes(addOn.id) && (
-                                <CheckCircle2 className="w-4 h-4 text-white" />
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform`}>
+                          <type.icon className="w-5 h-5 text-white" />
+                        </div>
+                        <p className="text-xs font-medium text-gray-700 text-center">
+                          {language === 'ar' ? type.nameAr : type.nameEn}
+                        </p>
+                      </button>
                     ))}
                   </div>
-                  
-                  {/* Add-ons Summary */}
-                  {selectedAddOns.length > 0 && (
-                    <Card className="mt-8 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-semibold text-amber-800">
-                              {language === 'ar' ? 'إجمالي الإضافات' : 'Add-ons Total'}
-                            </h3>
-                            <p className="text-sm text-amber-600">
-                              {selectedAddOns.length} {language === 'ar' ? 'إضافة مختارة' : 'add-ons selected'}
-                            </p>
-                          </div>
-                          <p className="text-2xl font-bold text-amber-700">
-                            {formatCurrency(breakdown.addOnsCost)}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                </div>
+
+                {/* Guest Count */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-[#1a5c36] mb-4 flex items-center gap-2">
+                    <Users className="w-5 h-5 text-[#D4AF37]" />
+                    {language === 'ar' ? 'عدد الضيوف' : 'Number of Guests'}
+                  </h3>
+                  <div className="flex items-center gap-6">
+                    <input
+                      type="range"
+                      min="10"
+                      max="1000"
+                      step="10"
+                      value={config.guestCount}
+                      onChange={(e) => setConfig(prev => ({ ...prev, guestCount: parseInt(e.target.value) }))}
+                      className="flex-1 h-3 bg-gradient-to-r from-[#1a5c36]/20 to-[#D4AF37]/20 rounded-lg appearance-none cursor-pointer accent-[#D4AF37]"
+                    />
+                    <div className="w-24 text-center bg-gradient-to-br from-[#1a5c36] to-[#2D7A4A] rounded-2xl p-3">
+                      <span className="text-2xl font-bold text-white">{config.guestCount}</span>
+                      <span className="text-xs text-white/70 block">{language === 'ar' ? 'ضيف' : 'guests'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Duration */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-[#1a5c36] mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-[#D4AF37]" />
+                    {language === 'ar' ? 'مدة الفعالية (ساعات)' : 'Event Duration (hours)'}
+                  </h3>
+                  <div className="flex gap-3">
+                    {[2, 4, 6, 8, 12].map((hours) => (
+                      <button
+                        key={hours}
+                        onClick={() => setConfig(prev => ({ ...prev, duration: hours }))}
+                        className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+                          config.duration === hours
+                            ? 'bg-gradient-to-r from-[#D4AF37] to-[#c9a432] text-white shadow-lg scale-105'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {hours}h
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Venue Type */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-[#1a5c36] mb-4 flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-[#D4AF37]" />
+                    {language === 'ar' ? 'نوع المكان' : 'Venue Type'}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    {[
+                      { id: 'indoor', nameAr: 'داخلي', nameEn: 'Indoor', icon: Building2 },
+                      { id: 'outdoor', nameAr: 'خارجي', nameEn: 'Outdoor', icon: Globe },
+                      { id: 'hybrid', nameAr: 'مختلط', nameEn: 'Hybrid', icon: Sparkles },
+                    ].map((venue) => (
+                      <button
+                        key={venue.id}
+                        onClick={() => setConfig(prev => ({ ...prev, venueType: venue.id as any }))}
+                        className={`p-4 rounded-xl font-medium transition-all flex flex-col items-center gap-2 ${
+                          config.venueType === venue.id
+                            ? 'bg-gradient-to-br from-[#1a5c36] to-[#2D7A4A] text-white shadow-lg'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        <venue.icon className="w-6 h-6" />
+                        {language === 'ar' ? venue.nameAr : venue.nameEn}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Event Date */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-[#1a5c36] mb-4 flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-[#D4AF37]" />
+                    {language === 'ar' ? 'تاريخ الفعالية' : 'Event Date'}
+                  </h3>
+                  <input
+                    type="date"
+                    value={config.eventDate}
+                    onChange={(e) => setConfig(prev => ({ ...prev, eventDate: e.target.value }))}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/20 transition-all text-lg"
+                  />
+                  {pricing.isPeakSeason && (
+                    <p className="mt-2 text-sm text-amber-600 flex items-center gap-2">
+                      <Info className="w-4 h-4" />
+                      {language === 'ar' ? 'موسم الذروة - قد تكون الأسعار أعلى' : 'Peak season - prices may be higher'}
+                    </p>
                   )}
                 </div>
-              </TabsContent>
 
-              {/* ROI Calculator Tab */}
-              <TabsContent value="roi">
-                <div className="max-w-4xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                      {language === 'ar' ? 'حاسبة العائد على الاستثمار' : 'ROI Calculator'}
-                    </h2>
-                    <p className="text-gray-600">
+                {/* Sustainability Toggle */}
+                <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center">
+                        <Leaf className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-green-800 text-lg">
+                          {language === 'ar' ? 'فعالية مستدامة' : 'Sustainable Event'}
+                        </p>
+                        <p className="text-sm text-green-600">
+                          {language === 'ar' ? 'خصم 5% + شهادة ISO 20121' : '5% discount + ISO 20121 certificate'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setConfig(prev => ({ ...prev, sustainableOptions: !prev.sustainableOptions }))}
+                      className={`w-16 h-9 rounded-full transition-all ${
+                        config.sustainableOptions ? 'bg-green-500' : 'bg-gray-300'
+                      }`}
+                    >
+                      <div className={`w-7 h-7 bg-white rounded-full shadow-md transition-transform ${
+                        config.sustainableOptions ? 'translate-x-8' : 'translate-x-1'
+                      }`} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Add-ons Tab */}
+            {activeTab === 'addons' && (
+              <div className="bg-white rounded-3xl shadow-xl p-8 border border-[#D4AF37]/20">
+                <h3 className="text-xl font-bold text-[#1a5c36] mb-6 flex items-center gap-2">
+                  <Gift className="w-6 h-6 text-[#D4AF37]" />
+                  {language === 'ar' ? 'الخدمات الإضافية المميزة' : 'Premium Add-on Services'}
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {addOnOptions.map((addon) => (
+                    <button
+                      key={addon.id}
+                      onClick={() => toggleAddOn(addon.id)}
+                      className={`p-4 rounded-2xl border-2 transition-all text-left group ${
+                        config.addOns.includes(addon.id)
+                          ? 'border-[#D4AF37] bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 shadow-lg'
+                          : 'border-gray-200 hover:border-[#D4AF37]/50 hover:shadow-md'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                          config.addOns.includes(addon.id) 
+                            ? 'bg-[#D4AF37] text-white' 
+                            : 'bg-gray-100 text-gray-500 group-hover:bg-[#D4AF37]/20 group-hover:text-[#D4AF37]'
+                        }`}>
+                          <addon.icon className="w-5 h-5" />
+                        </div>
+                        {config.addOns.includes(addon.id) && (
+                          <CheckCircle2 className="w-5 h-5 text-[#D4AF37]" />
+                        )}
+                      </div>
+                      <p className="font-medium text-gray-800 text-sm">
+                        {language === 'ar' ? addon.nameAr : addon.nameEn}
+                      </p>
+                      <p className="text-xs text-[#D4AF37] font-bold mt-1">
+                        {typeof addon.price === 'number' ? `$${addon.price}` : language === 'ar' ? 'حسب العدد' : addon.price}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ROI Tab */}
+            {activeTab === 'roi' && (
+              <div className="bg-white rounded-3xl shadow-xl p-8 border border-[#D4AF37]/20">
+                <h3 className="text-xl font-bold text-[#1a5c36] mb-6 flex items-center gap-2">
+                  <TrendingUp className="w-6 h-6 text-[#D4AF37]" />
+                  {language === 'ar' ? 'تحليل العائد على الاستثمار' : 'Return on Investment Analysis'}
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* ROI Gauge */}
+                  <div className="bg-gradient-to-br from-[#1a5c36]/5 to-[#D4AF37]/5 rounded-2xl p-6 text-center">
+                    <div className="relative w-40 h-40 mx-auto mb-4">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle cx="80" cy="80" r="70" stroke="#e5e7eb" strokeWidth="12" fill="none" />
+                        <circle 
+                          cx="80" cy="80" r="70" 
+                          stroke="url(#roiGradient)" 
+                          strokeWidth="12" 
+                          fill="none"
+                          strokeDasharray={`${(pricing.estimatedROI / 300) * 440} 440`}
+                          strokeLinecap="round"
+                        />
+                        <defs>
+                          <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#1a5c36" />
+                            <stop offset="100%" stopColor="#D4AF37" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-4xl font-bold text-[#1a5c36]">{pricing.estimatedROI}%</span>
+                        <span className="text-sm text-gray-500">{language === 'ar' ? 'العائد المتوقع' : 'Expected ROI'}</span>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-sm">
                       {language === 'ar' 
-                        ? 'احسب العائد المتوقع من فعاليتك التجارية'
-                        : 'Calculate the expected return on your business event'}
+                        ? 'بناءً على نوع الفعالية وحجم الضيوف'
+                        : 'Based on event type and guest count'}
                     </p>
                   </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {/* ROI Inputs */}
-                    <div className="space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Target className="w-5 h-5 text-[#2D7A4A]" />
-                            {language === 'ar' ? 'الإيرادات المتوقعة' : 'Expected Revenue'}
-                          </CardTitle>
-                          <CardDescription>
-                            {language === 'ar' 
-                              ? 'الإيرادات المتوقعة من العملاء المحتملين'
-                              : 'Expected revenue from potential clients'}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div className="text-center">
-                              <span className="text-4xl font-bold text-[#2D7A4A]">
-                                {formatCurrency(expectedRevenue[0])}
-                              </span>
-                            </div>
-                            <Slider
-                              value={expectedRevenue}
-                              onValueChange={setExpectedRevenue}
-                              min={1000}
-                              max={500000}
-                              step={1000}
-                              className="w-full"
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Users className="w-5 h-5 text-[#2D7A4A]" />
-                            {language === 'ar' ? 'معدل تحويل العملاء' : 'Lead Conversion Rate'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div className="text-center">
-                              <span className="text-4xl font-bold text-[#2D7A4A]">{leadConversion[0]}%</span>
-                            </div>
-                            <Slider
-                              value={leadConversion}
-                              onValueChange={setLeadConversion}
-                              min={1}
-                              max={50}
-                              step={1}
-                              className="w-full"
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Award className="w-5 h-5 text-[#2D7A4A]" />
-                            {language === 'ar' ? 'تأثير الوعي بالعلامة' : 'Brand Awareness Impact'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div className="text-center">
-                              <span className="text-4xl font-bold text-[#2D7A4A]">{brandAwareness[0]}%</span>
-                            </div>
-                            <Slider
-                              value={brandAwareness}
-                              onValueChange={setBrandAwareness}
-                              min={5}
-                              max={100}
-                              step={5}
-                              className="w-full"
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
+
+                  {/* ROI Breakdown */}
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-600">{language === 'ar' ? 'الاستثمار' : 'Investment'}</span>
+                        <span className="font-bold text-[#1a5c36]">{getDisplayPrice(pricing.finalPrice)}</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-600">{language === 'ar' ? 'القيمة المتوقعة' : 'Expected Value'}</span>
+                        <span className="font-bold text-[#D4AF37]">
+                          {getDisplayPrice(Math.round(pricing.finalPrice * (1 + pricing.estimatedROI / 100)))}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t">
+                        <span className="text-gray-600">{language === 'ar' ? 'صافي الربح' : 'Net Profit'}</span>
+                        <span className="font-bold text-green-600">
+                          +{getDisplayPrice(Math.round(pricing.finalPrice * (pricing.estimatedROI / 100)))}
+                        </span>
+                      </div>
                     </div>
-                    
-                    {/* ROI Results */}
-                    <div className="space-y-6">
-                      <Card className="bg-gradient-to-br from-[#2D7A4A] to-[#1a4d2e] text-white">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <TrendingUp className="w-5 h-5" />
-                            {language === 'ar' ? 'العائد على الاستثمار' : 'Return on Investment'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-center mb-6">
-                            <p className="text-6xl font-bold">
-                              {roiCalculation.roi > 0 ? '+' : ''}{roiCalculation.roi.toFixed(0)}%
-                            </p>
-                            <p className="text-white/80">
-                              {language === 'ar' ? 'العائد المتوقع' : 'Expected ROI'}
-                            </p>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white/10 rounded-lg p-3 text-center">
-                              <p className="text-2xl font-bold">{roiCalculation.leads}</p>
-                              <p className="text-xs text-white/80">
-                                {language === 'ar' ? 'عملاء محتملين' : 'Leads'}
-                              </p>
-                            </div>
-                            <div className="bg-white/10 rounded-lg p-3 text-center">
-                              <p className="text-2xl font-bold">{formatCurrency(roiCalculation.costPerLead)}</p>
-                              <p className="text-xs text-white/80">
-                                {language === 'ar' ? 'تكلفة/عميل' : 'Cost/Lead'}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <PieChart className="w-5 h-5 text-[#2D7A4A]" />
-                            {language === 'ar' ? 'تحليل القيمة' : 'Value Analysis'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center pb-2 border-b">
-                              <span className="text-gray-600">
-                                {language === 'ar' ? 'تكلفة الفعالية' : 'Event Cost'}
-                              </span>
-                              <span className="font-semibold text-red-600">
-                                -{formatCurrency(roiCalculation.eventCost)}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center pb-2 border-b">
-                              <span className="text-gray-600">
-                                {language === 'ar' ? 'الإيرادات المتوقعة' : 'Expected Revenue'}
-                              </span>
-                              <span className="font-semibold text-green-600">
-                                +{formatCurrency(roiCalculation.expectedRevenue)}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center pb-2 border-b">
-                              <span className="text-gray-600">
-                                {language === 'ar' ? 'قيمة العلامة التجارية' : 'Brand Value'}
-                              </span>
-                              <span className="font-semibold text-blue-600">
-                                +{formatCurrency(roiCalculation.brandValue)}
-                              </span>
-                            </div>
-                            <div className="bg-green-50 rounded-xl p-4">
-                              <div className="flex justify-between items-center">
-                                <span className="font-semibold text-green-800">
-                                  {language === 'ar' ? 'القيمة الإجمالية' : 'Total Value'}
-                                </span>
-                                <span className="text-2xl font-bold text-green-600">
-                                  {formatCurrency(roiCalculation.totalValue)}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card className="bg-amber-50 border-amber-200">
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-3">
-                            <Info className="w-5 h-5 text-amber-600 mt-0.5" />
-                            <div>
-                              <p className="font-semibold text-amber-800 mb-1">
-                                {language === 'ar' ? 'ملاحظة' : 'Note'}
-                              </p>
-                              <p className="text-sm text-amber-700">
-                                {language === 'ar' 
-                                  ? 'هذه التقديرات مبنية على افتراضات عامة. النتائج الفعلية قد تختلف بناءً على عوامل متعددة.'
-                                  : 'These estimates are based on general assumptions. Actual results may vary based on multiple factors.'}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+
+                    <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                      <p className="text-sm text-amber-800">
+                        <Info className="w-4 h-4 inline mr-2" />
+                        {language === 'ar' 
+                          ? 'هذا تقدير بناءً على بيانات الصناعة. النتائج الفعلية قد تختلف.'
+                          : 'This is an estimate based on industry data. Actual results may vary.'}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </TabsContent>
-            </Tabs>
+              </div>
+            )}
           </div>
-        </section>
-      </main>
-      
+
+          {/* Pricing Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4 space-y-6">
+              {/* Main Price Card */}
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#D4AF37]/20">
+                <div className="bg-gradient-to-r from-[#1a5c36] to-[#2D7A4A] p-6 text-white relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/20 rounded-full blur-2xl" />
+                  <h3 className="text-sm font-medium opacity-80 mb-1">
+                    {language === 'ar' ? 'التكلفة الإجمالية' : 'Total Cost'}
+                  </h3>
+                  <div className="text-4xl font-bold mb-2">{getDisplayPrice(pricing.finalPrice)}</div>
+                  <div className="text-sm opacity-70">
+                    {currency !== 'USD' && `≈ $${pricing.finalPrice.toLocaleString()} USD`}
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  {/* Price Breakdown Toggle */}
+                  <button
+                    onClick={() => setShowBreakdown(!showBreakdown)}
+                    className="w-full flex items-center justify-between text-gray-700 hover:text-[#1a5c36] transition-colors mb-4"
+                  >
+                    <span className="font-medium">{language === 'ar' ? 'تفاصيل التكلفة' : 'Cost Breakdown'}</span>
+                    {showBreakdown ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  </button>
+                  
+                  {showBreakdown && (
+                    <div className="space-y-3 text-sm border-t pt-4 mb-4">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">{language === 'ar' ? 'السعر الأساسي' : 'Base Price'}</span>
+                        <span className="font-medium">{getDisplayPrice(pricing.basePrice)}</span>
+                      </div>
+                      {pricing.addOnsTotal > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">{language === 'ar' ? 'الإضافات' : 'Add-ons'}</span>
+                          <span className="font-medium">{getDisplayPrice(pricing.addOnsTotal)}</span>
+                        </div>
+                      )}
+                      {pricing.discounts.total > 0 && (
+                        <div className="flex justify-between text-green-600">
+                          <span>{language === 'ar' ? 'الخصومات' : 'Discounts'} ({pricing.discounts.totalRate}%)</span>
+                          <span className="font-medium">-{getDisplayPrice(pricing.discounts.total)}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Sustainability Score */}
+                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-green-800 flex items-center gap-2">
+                        <Leaf className="w-4 h-4" />
+                        {language === 'ar' ? 'نقاط الاستدامة' : 'Sustainability'}
+                      </span>
+                      <span className="text-lg font-bold text-green-600">{pricing.sustainabilityScore}/100</span>
+                    </div>
+                    <div className="w-full h-2 bg-green-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
+                        style={{ width: `${pricing.sustainabilityScore}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Confidence Level */}
+                  <div className="flex items-center justify-between text-sm mb-4">
+                    <span className="text-gray-500 flex items-center gap-2">
+                      <Shield className="w-4 h-4" />
+                      {language === 'ar' ? 'دقة التقدير' : 'Estimate Accuracy'}
+                    </span>
+                    <span className="font-bold text-[#D4AF37]">{pricing.confidenceLevel}%</span>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button className="w-full py-4 bg-gradient-to-r from-[#D4AF37] to-[#c9a432] text-white rounded-xl font-bold hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                      <Download className="w-5 h-5" />
+                      {language === 'ar' ? 'تحميل عرض السعر' : 'Download Quote'}
+                    </button>
+                    <button className="w-full py-4 bg-gradient-to-r from-[#1a5c36] to-[#2D7A4A] text-white rounded-xl font-bold hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                      <ArrowRight className="w-5 h-5" />
+                      {language === 'ar' ? 'احجز الآن' : 'Book Now'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Recommendations */}
+              {pricing.recommendations.length > 0 && (
+                <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border border-amber-200">
+                  <h4 className="font-bold text-amber-800 mb-4 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-amber-500" />
+                    {language === 'ar' ? 'توصيات ذكية' : 'Smart Recommendations'}
+                  </h4>
+                  <ul className="space-y-3">
+                    {pricing.recommendations.slice(0, 3).map((rec, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm text-amber-700">
+                        <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        {rec}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Quick Contact */}
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                <h4 className="font-bold text-gray-800 mb-4">
+                  {language === 'ar' ? 'تحتاج مساعدة؟' : 'Need Help?'}
+                </h4>
+                <div className="space-y-3">
+                  <a href="tel:+967773673918" className="flex items-center gap-3 text-gray-600 hover:text-[#1a5c36] transition-colors">
+                    <Phone className="w-5 h-5" />
+                    +967 773 673 918
+                  </a>
+                  <a href="mailto:info@greenists-events.com" className="flex items-center gap-3 text-gray-600 hover:text-[#1a5c36] transition-colors">
+                    <Mail className="w-5 h-5" />
+                    info@greenists-events.com
+                  </a>
+                  <a href="https://wa.me/967773673918" className="flex items-center gap-3 text-gray-600 hover:text-[#1a5c36] transition-colors">
+                    <MessageCircle className="w-5 h-5" />
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );
