@@ -31,12 +31,20 @@ import HeritageGallery from "./pages/HeritageGallery";
 // Lazy load segment pages
 const Weddings = lazy(() => import("./pages/segments/Weddings"));
 
-// Lazy load sector sub-pages
+// Lazy load all 13 sector sub-pages
 const CorporateSector = lazy(() => import("./pages/sectors/Corporate"));
 const WeddingsSector = lazy(() => import("./pages/sectors/Weddings"));
 const HealthcareSector = lazy(() => import("./pages/sectors/Healthcare"));
 const KidsSector = lazy(() => import("./pages/sectors/Kids"));
 const GovernmentSector = lazy(() => import("./pages/sectors/Government"));
+const BankingSector = lazy(() => import("./pages/sectors/Banking"));
+const NGOSector = lazy(() => import("./pages/sectors/NGO"));
+const EducationSector = lazy(() => import("./pages/sectors/Education"));
+const EntertainmentSector = lazy(() => import("./pages/sectors/Entertainment"));
+const ConstructionSector = lazy(() => import("./pages/sectors/Construction"));
+const EnergySector = lazy(() => import("./pages/sectors/Energy"));
+const TravelSector = lazy(() => import("./pages/sectors/Travel"));
+const CondolencesSector = lazy(() => import("./pages/sectors/Condolences"));
 
 // Loading component
 const PageLoader = () => (
@@ -78,7 +86,7 @@ function Router() {
         </Suspense>
       </Route>
       
-      {/* Sector Sub-Pages */}
+      {/* All 13 Sector Sub-Pages */}
       <Route path="/sectors/corporate">
         <Suspense fallback={<PageLoader />}>
           <CorporateSector />
@@ -102,6 +110,46 @@ function Router() {
       <Route path="/sectors/government">
         <Suspense fallback={<PageLoader />}>
           <GovernmentSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/banking">
+        <Suspense fallback={<PageLoader />}>
+          <BankingSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/ngo">
+        <Suspense fallback={<PageLoader />}>
+          <NGOSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/education">
+        <Suspense fallback={<PageLoader />}>
+          <EducationSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/entertainment">
+        <Suspense fallback={<PageLoader />}>
+          <EntertainmentSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/construction">
+        <Suspense fallback={<PageLoader />}>
+          <ConstructionSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/energy">
+        <Suspense fallback={<PageLoader />}>
+          <EnergySector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/travel">
+        <Suspense fallback={<PageLoader />}>
+          <TravelSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/condolences">
+        <Suspense fallback={<PageLoader />}>
+          <CondolencesSector />
         </Suspense>
       </Route>
       
