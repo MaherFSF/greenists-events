@@ -265,15 +265,25 @@ export default function SubBrands() {
                             </span>
                           ))}
                         </div>
-                        <Link href="/calculator">
-                          <Button 
-                            className="w-full mt-4 text-white"
-                            style={{ backgroundColor: brand.color }}
-                          >
-                            {language === 'ar' ? 'احسب تكلفة فعاليتك' : 'Calculate Event Cost'}
-                            <ArrowRight className="w-4 h-4 ms-2" />
-                          </Button>
-                        </Link>
+                        <div className="flex gap-2 mt-4">
+                          <Link href={`/sectors/${brand.id}`} className="flex-1">
+                            <Button 
+                              className="w-full text-white"
+                              style={{ backgroundColor: brand.color }}
+                            >
+                              {language === 'ar' ? 'استكشف المزيد' : 'Explore More'}
+                              <ArrowRight className="w-4 h-4 ms-2" />
+                            </Button>
+                          </Link>
+                          <Link href="/calculator">
+                            <Button 
+                              variant="outline"
+                              style={{ borderColor: brand.color, color: brand.color }}
+                            >
+                              {language === 'ar' ? 'احسب' : 'Calculate'}
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     )}
                   </CardContent>

@@ -412,6 +412,32 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Promotional Video Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-900 to-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              {language === 'ar' ? 'شاهد إبداعاتنا' : 'Watch Our Magic'}
+            </h2>
+            <p className="text-xl text-gray-300">
+              {language === 'ar' ? 'لمحة عن فعالياتنا المميزة في عدن' : 'A glimpse of our exceptional events in Aden'}
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <video 
+                className="w-full aspect-video"
+                controls
+                poster="/images/video/hero-scene.png"
+              >
+                <source src="/videos/greenists-promo.mp4" type="video/mp4" />
+                {language === 'ar' ? 'متصفحك لا يدعم تشغيل الفيديو' : 'Your browser does not support video playback'}
+              </video>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Characters Section */}
       <section className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">

@@ -108,22 +108,22 @@ export default function Products() {
   
   const products: Product[] = [
     // Stationery
-    { id: 'business-cards', nameEn: 'Business Cards', nameAr: 'بطاقات الأعمال', descriptionEn: 'Premium business cards with gold foil', descriptionAr: 'بطاقات أعمال فاخرة مع طباعة ذهبية', category: 'stationery', icon: FileText },
-    { id: 'letterhead', nameEn: 'Letterhead', nameAr: 'ورق رسمي', descriptionEn: 'Professional letterhead design', descriptionAr: 'تصميم ورق رسمي احترافي', category: 'stationery', icon: FileText },
-    { id: 'notepad', nameEn: 'Notepad A5', nameAr: 'دفتر ملاحظات A5', descriptionEn: 'Branded notepads for meetings', descriptionAr: 'دفاتر ملاحظات للاجتماعات', category: 'stationery', icon: PenTool },
-    { id: 'envelope', nameEn: 'Envelopes', nameAr: 'مظاريف', descriptionEn: 'Professional envelopes DL & C4', descriptionAr: 'مظاريف احترافية DL و C4', category: 'stationery', icon: FileText },
-    { id: 'folder', nameEn: 'Presentation Folder', nameAr: 'مجلد العروض', descriptionEn: 'A4 presentation folders', descriptionAr: 'مجلدات عروض A4', category: 'stationery', icon: FileText },
+    { id: 'business-cards', nameEn: 'Business Cards', nameAr: 'بطاقات الأعمال', descriptionEn: 'Premium business cards with gold foil', descriptionAr: 'بطاقات أعمال فاخرة مع طباعة ذهبية', category: 'stationery', icon: FileText, image: '/images/greenists_business_cards(3).png' },
+    { id: 'letterhead', nameEn: 'Letterhead', nameAr: 'ورق رسمي', descriptionEn: 'Professional letterhead design', descriptionAr: 'تصميم ورق رسمي احترافي', category: 'stationery', icon: FileText, image: '/images/greenists_letterhead(3).png' },
+    { id: 'notepad', nameEn: 'Notepad A5', nameAr: 'دفتر ملاحظات A5', descriptionEn: 'Branded notepads for meetings', descriptionAr: 'دفاتر ملاحظات للاجتماعات', category: 'stationery', icon: PenTool, image: '/images/print_ready_notepad_A5(1).png' },
+    { id: 'envelope', nameEn: 'Envelopes', nameAr: 'مظاريف', descriptionEn: 'Professional envelopes DL & C4', descriptionAr: 'مظاريف احترافية DL و C4', category: 'stationery', icon: FileText, image: '/images/greenists_envelope(3).png' },
+    { id: 'folder', nameEn: 'Presentation Folder', nameAr: 'مجلد العروض', descriptionEn: 'A4 presentation folders', descriptionAr: 'مجلدات عروض A4', category: 'stationery', icon: FileText, image: '/images/greenists_presentation_folder(2).PNG' },
     
     // Apparel
-    { id: 'tshirt', nameEn: 'Staff T-Shirt', nameAr: 'قميص الموظفين', descriptionEn: 'Branded staff uniforms', descriptionAr: 'زي موحد للموظفين', category: 'apparel', icon: Shirt },
-    { id: 'polo', nameEn: 'Polo Shirt', nameAr: 'قميص بولو', descriptionEn: 'Premium polo for management', descriptionAr: 'بولو فاخر للإدارة', category: 'apparel', icon: Shirt },
-    { id: 'cap', nameEn: 'Baseball Cap', nameAr: 'قبعة', descriptionEn: 'Branded caps for events', descriptionAr: 'قبعات للفعاليات', category: 'apparel', icon: Shirt },
-    { id: 'vest', nameEn: 'Event Vest', nameAr: 'سترة الفعاليات', descriptionEn: 'Lightweight vests for staff', descriptionAr: 'سترات خفيفة للموظفين', category: 'apparel', icon: Shirt },
+    { id: 'tshirt', nameEn: 'Staff T-Shirt', nameAr: 'قميص الموظفين', descriptionEn: 'Branded staff uniforms', descriptionAr: 'زي موحد للموظفين', category: 'apparel', icon: Shirt, image: '/images/greenists_tshirt_mockup(3).png' },
+    { id: 'polo', nameEn: 'Polo Shirt', nameAr: 'قميص بولو', descriptionEn: 'Premium polo for management', descriptionAr: 'بولو فاخر للإدارة', category: 'apparel', icon: Shirt, image: '/images/products/polo-shirt-yemen.png' },
+    { id: 'cap', nameEn: 'Baseball Cap', nameAr: 'قبعة', descriptionEn: 'Branded caps for events', descriptionAr: 'قبعات للفعاليات', category: 'apparel', icon: Shirt, image: '/images/greenists_baseball_cap(3).png' },
+    { id: 'vest', nameEn: 'Event Vest', nameAr: 'سترة الفعاليات', descriptionEn: 'Lightweight vests for staff', descriptionAr: 'سترات خفيفة للموظفين', category: 'apparel', icon: Shirt, image: '/images/greenists_vest(3).png' },
     
     // Bags
-    { id: 'tote', nameEn: 'Tote Bag', nameAr: 'حقيبة تسوق', descriptionEn: 'Eco-friendly tote bags', descriptionAr: 'حقائب صديقة للبيئة', category: 'bags', icon: ShoppingBag },
-    { id: 'formal-bag', nameEn: 'Formal Bag', nameAr: 'حقيبة رسمية', descriptionEn: 'Professional document bags', descriptionAr: 'حقائب مستندات احترافية', category: 'bags', icon: Briefcase },
-    { id: 'gift-bag', nameEn: 'Gift Bag', nameAr: 'حقيبة هدايا', descriptionEn: 'Premium gift packaging', descriptionAr: 'تغليف هدايا فاخر', category: 'bags', icon: Gift },
+    { id: 'tote', nameEn: 'Tote Bag', nameAr: 'حقيبة تسوق', descriptionEn: 'Eco-friendly tote bags', descriptionAr: 'حقائب صديقة للبيئة', category: 'bags', icon: ShoppingBag, image: '/images/greenists_tote_bag(3).png' },
+    { id: 'formal-bag', nameEn: 'Formal Bag', nameAr: 'حقيبة رسمية', descriptionEn: 'Professional document bags', descriptionAr: 'حقائب مستندات احترافية', category: 'bags', icon: Briefcase, image: '/images/products/briefcase-yemen.png' },
+    { id: 'gift-bag', nameEn: 'Gift Bag', nameAr: 'حقيبة هدايا', descriptionEn: 'Premium gift packaging', descriptionAr: 'تغليف هدايا فاخر', category: 'bags', icon: Gift, image: '/images/products/gift-box-yemen.png' },
     
     // Promotional
     { id: 'calendar', nameEn: 'Desk Calendar', nameAr: 'تقويم مكتبي', descriptionEn: '2026 desk calendar', descriptionAr: 'تقويم مكتبي 2026', category: 'promotional', icon: Calendar },
@@ -133,9 +133,9 @@ export default function Products() {
     { id: 'car-sticker', nameEn: 'Car Sticker', nameAr: 'ملصق سيارة', descriptionEn: 'Vehicle branding stickers', descriptionAr: 'ملصقات العلامة التجارية للسيارات', category: 'promotional', icon: Sparkles },
     
     // Accessories
-    { id: 'pen', nameEn: 'Executive Pen', nameAr: 'قلم تنفيذي', descriptionEn: 'Premium branded pens', descriptionAr: 'أقلام فاخرة', category: 'accessories', icon: PenTool },
-    { id: 'wallet', nameEn: 'Luxury Wallet', nameAr: 'محفظة فاخرة', descriptionEn: 'Premium leather wallets', descriptionAr: 'محافظ جلدية فاخرة', category: 'accessories', icon: Gift },
-    { id: 'desk-set', nameEn: 'Desk Accessories', nameAr: 'إكسسوارات مكتبية', descriptionEn: 'Complete desk set', descriptionAr: 'مجموعة مكتبية كاملة', category: 'accessories', icon: PenTool },
+    { id: 'pen', nameEn: 'Executive Pen', nameAr: 'قلم تنفيذي', descriptionEn: 'Premium branded pens', descriptionAr: 'أقلام فاخرة', category: 'accessories', icon: PenTool, image: '/images/greenists_luxury_pen_collection(2).png' },
+    { id: 'wallet', nameEn: 'Luxury Wallet', nameAr: 'محفظة فاخرة', descriptionEn: 'Premium leather wallets', descriptionAr: 'محافظ جلدية فاخرة', category: 'accessories', icon: Gift, image: '/images/greenists_luxury_wallet_collection(3).png' },
+    { id: 'desk-set', nameEn: 'Desk Accessories', nameAr: 'إكسسوارات مكتبية', descriptionEn: 'Complete desk set', descriptionAr: 'مجموعة مكتبية كاملة', category: 'accessories', icon: PenTool, image: '/images/01_executive_gift_set_luxury.png' },
   ];
   
   const categories = [
@@ -229,8 +229,12 @@ export default function Products() {
                   className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
                   onClick={() => setSelectedProduct(product)}
                 >
-                  <div className="aspect-square bg-gradient-to-br from-[#2D7A4A]/10 to-[#2D7A4A]/20 flex items-center justify-center">
-                    <product.icon className="w-12 h-12 text-[#2D7A4A] group-hover:scale-110 transition-transform" />
+                  <div className="aspect-square bg-gradient-to-br from-[#2D7A4A]/10 to-[#2D7A4A]/20 flex items-center justify-center overflow-hidden">
+                    {product.image ? (
+                      <img src={product.image} alt={language === 'ar' ? product.nameAr : product.nameEn} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <product.icon className="w-12 h-12 text-[#2D7A4A] group-hover:scale-110 transition-transform" />
+                    )}
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-gray-900 text-sm mb-1">
@@ -254,8 +258,12 @@ export default function Products() {
             </DialogTitle>
             {selectedProduct && (
               <div>
-                <div className="aspect-video bg-gradient-to-br from-[#2D7A4A]/10 to-[#2D7A4A]/20 flex items-center justify-center rounded-lg mb-4">
-                  <selectedProduct.icon className="w-20 h-20 text-[#2D7A4A]" />
+                <div className="aspect-video bg-gradient-to-br from-[#2D7A4A]/10 to-[#2D7A4A]/20 flex items-center justify-center rounded-lg mb-4 overflow-hidden">
+                  {selectedProduct.image ? (
+                    <img src={selectedProduct.image} alt={language === 'ar' ? selectedProduct.nameAr : selectedProduct.nameEn} className="w-full h-full object-cover" />
+                  ) : (
+                    <selectedProduct.icon className="w-20 h-20 text-[#2D7A4A]" />
+                  )}
                 </div>
                 <p className="text-gray-600 mb-4">
                   {language === 'ar' ? selectedProduct.descriptionAr : selectedProduct.descriptionEn}

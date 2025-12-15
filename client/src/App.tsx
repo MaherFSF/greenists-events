@@ -31,6 +31,13 @@ import HeritageGallery from "./pages/HeritageGallery";
 // Lazy load segment pages
 const Weddings = lazy(() => import("./pages/segments/Weddings"));
 
+// Lazy load sector sub-pages
+const CorporateSector = lazy(() => import("./pages/sectors/Corporate"));
+const WeddingsSector = lazy(() => import("./pages/sectors/Weddings"));
+const HealthcareSector = lazy(() => import("./pages/sectors/Healthcare"));
+const KidsSector = lazy(() => import("./pages/sectors/Kids"));
+const GovernmentSector = lazy(() => import("./pages/sectors/Government"));
+
 // Loading component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white">
@@ -68,6 +75,33 @@ function Router() {
       <Route path="/weddings">
         <Suspense fallback={<PageLoader />}>
           <Weddings />
+        </Suspense>
+      </Route>
+      
+      {/* Sector Sub-Pages */}
+      <Route path="/sectors/corporate">
+        <Suspense fallback={<PageLoader />}>
+          <CorporateSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/weddings">
+        <Suspense fallback={<PageLoader />}>
+          <WeddingsSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/healthcare">
+        <Suspense fallback={<PageLoader />}>
+          <HealthcareSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/kids">
+        <Suspense fallback={<PageLoader />}>
+          <KidsSector />
+        </Suspense>
+      </Route>
+      <Route path="/sectors/government">
+        <Suspense fallback={<PageLoader />}>
+          <GovernmentSector />
         </Suspense>
       </Route>
       
