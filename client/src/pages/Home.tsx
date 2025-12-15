@@ -13,21 +13,21 @@ import {
   Globe, Target, TrendingUp, Shield, Gem, Crown
 } from 'lucide-react';
 
-// Sector data with unique colors and icons
+// Sector data with unique colors and real images
 const sectors = [
-  { id: 'corporate', nameEn: 'Corporate', nameAr: 'الشركات', icon: Building2, color: '#1E3A5F', gradient: 'from-[#1E3A5F] to-[#2E5A8F]' },
-  { id: 'weddings', nameEn: 'Weddings', nameAr: 'الأعراس', icon: Heart, color: '#C41E3A', gradient: 'from-[#C41E3A] to-[#E91E63]' },
-  { id: 'government', nameEn: 'Government', nameAr: 'الحكومة', icon: Building, color: '#1B4332', gradient: 'from-[#1B4332] to-[#2D6A4F]' },
-  { id: 'healthcare', nameEn: 'Healthcare', nameAr: 'الصحة', icon: Stethoscope, color: '#0077B6', gradient: 'from-[#0077B6] to-[#00B4D8]' },
-  { id: 'education', nameEn: 'Education', nameAr: 'التعليم', icon: GraduationCap, color: '#7B2CBF', gradient: 'from-[#7B2CBF] to-[#9D4EDD]' },
-  { id: 'kids', nameEn: 'Kids', nameAr: 'الأطفال', icon: Baby, color: '#FF6B6B', gradient: 'from-[#FF6B6B] to-[#FFE66D]' },
-  { id: 'banking', nameEn: 'Banking', nameAr: 'البنوك', icon: Banknote, color: '#0A4D68', gradient: 'from-[#0A4D68] to-[#088395]' },
-  { id: 'ngo', nameEn: 'NGO', nameAr: 'المنظمات', icon: Globe, color: '#2D7A4A', gradient: 'from-[#2D7A4A] to-[#52B788]' },
-  { id: 'entertainment', nameEn: 'Entertainment', nameAr: 'الترفيه', icon: Laugh, color: '#FF006E', gradient: 'from-[#FF006E] to-[#FB5607]' },
-  { id: 'construction', nameEn: 'Construction', nameAr: 'البناء', icon: HardHat, color: '#E85D04', gradient: 'from-[#E85D04] to-[#FAA307]' },
-  { id: 'energy', nameEn: 'Energy', nameAr: 'الطاقة', icon: Zap, color: '#023E8A', gradient: 'from-[#023E8A] to-[#0077B6]' },
-  { id: 'travel', nameEn: 'Travel', nameAr: 'السياحة', icon: Plane, color: '#006D77', gradient: 'from-[#006D77] to-[#83C5BE]' },
-  { id: 'condolences', nameEn: 'Condolences', nameAr: 'العزاء', icon: Heart, color: '#495057', gradient: 'from-[#495057] to-[#6C757D]' },
+  { id: 'corporate', nameEn: 'Corporate', nameAr: 'الشركات', image: '/images/event-types/corporate-event.png', mascot: '/images/mascots/corporate-mascot-aden.png', color: '#1E3A5F', gradient: 'from-[#1E3A5F] to-[#2E5A8F]' },
+  { id: 'weddings', nameEn: 'Weddings', nameAr: 'الأعراس', image: '/images/event-types/wedding-event.png', mascot: '/images/mascots/weddings-mascot-aden.png', color: '#C41E3A', gradient: 'from-[#C41E3A] to-[#E91E63]' },
+  { id: 'government', nameEn: 'Government', nameAr: 'الحكومة', image: '/images/event-types/government-event.png', mascot: '/images/mascots/government-mascot-aden.png', color: '#1B4332', gradient: 'from-[#1B4332] to-[#2D6A4F]' },
+  { id: 'healthcare', nameEn: 'Healthcare', nameAr: 'الصحة', image: '/images/event-types/healthcare-event.png', mascot: '/images/mascots/healthcare-mascot-aden.png', color: '#0077B6', gradient: 'from-[#0077B6] to-[#00B4D8]' },
+  { id: 'education', nameEn: 'Education', nameAr: 'التعليم', image: '/images/event-types/education-event.png', mascot: '/images/mascots/education-mascot-aden.png', color: '#7B2CBF', gradient: 'from-[#7B2CBF] to-[#9D4EDD]' },
+  { id: 'kids', nameEn: 'Kids', nameAr: 'الأطفال', image: '/images/event-types/kids-event.png', mascot: '/images/mascots/kids-mascot-aden.png', color: '#FF6B6B', gradient: 'from-[#FF6B6B] to-[#FFE66D]' },
+  { id: 'banking', nameEn: 'Banking', nameAr: 'البنوك', image: '/images/event-types/banking-event.png', mascot: '/images/mascots/banking-mascot-aden.png', color: '#0A4D68', gradient: 'from-[#0A4D68] to-[#088395]' },
+  { id: 'ngo', nameEn: 'NGO', nameAr: 'المنظمات', image: '/images/sectors/ngo-yemen.png', mascot: '/images/mascots/ngo-mascot-aden.png', color: '#2D7A4A', gradient: 'from-[#2D7A4A] to-[#52B788]' },
+  { id: 'entertainment', nameEn: 'Entertainment', nameAr: 'الترفيه', image: '/images/event-types/entertainment-event.png', mascot: '/images/mascots/entertainment-mascot-aden.png', color: '#FF006E', gradient: 'from-[#FF006E] to-[#FB5607]' },
+  { id: 'construction', nameEn: 'Construction', nameAr: 'البناء', image: '/images/sectors/construction-yemen.png', mascot: '/images/mascots/construction-mascot-aden.png', color: '#E85D04', gradient: 'from-[#E85D04] to-[#FAA307]' },
+  { id: 'energy', nameEn: 'Energy', nameAr: 'الطاقة', image: '/images/sectors/energy-yemen.png', mascot: '/images/mascots/energy-mascot-aden.png', color: '#023E8A', gradient: 'from-[#023E8A] to-[#0077B6]' },
+  { id: 'travel', nameEn: 'Travel', nameAr: 'السياحة', image: '/images/sectors/travel-yemen.png', mascot: '/images/mascots/travel-mascot-aden.png', color: '#006D77', gradient: 'from-[#006D77] to-[#83C5BE]' },
+  { id: 'condolences', nameEn: 'Condolences', nameAr: 'العزاء', image: '/images/sectors/condolences-yemen.png', mascot: '/images/mascots/condolences-mascot-aden.png', color: '#495057', gradient: 'from-[#495057] to-[#6C757D]' },
 ];
 
 // Hero images
@@ -286,7 +286,9 @@ export default function Home() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
-                  <sector.icon className="w-12 h-12 mb-4 group-hover:scale-110 transition-transform" />
+                  <div className="w-full h-32 mb-4 rounded-xl overflow-hidden group-hover:scale-105 transition-transform">
+                    <img src={sector.image} alt={sector.nameEn} className="w-full h-full object-cover" />
+                  </div>
                   <h3 className="text-lg font-bold mb-1">
                     {language === 'ar' ? sector.nameAr : sector.nameEn}
                   </h3>

@@ -207,14 +207,16 @@ export default function Calculator() {
   const pricing = useMemo(() => calculateEventCost(config), [config]);
 
   const eventTypes = [
-    { id: 'corporate', icon: Building2, nameAr: 'شركات', nameEn: 'Corporate', color: 'from-blue-500 to-blue-700' },
-    { id: 'wedding', icon: Heart, nameAr: 'زفاف', nameEn: 'Wedding', color: 'from-pink-500 to-rose-600' },
-    { id: 'government', icon: Landmark, nameAr: 'حكومي', nameEn: 'Government', color: 'from-amber-500 to-amber-700' },
-    { id: 'healthcare', icon: Stethoscope, nameAr: 'صحي', nameEn: 'Healthcare', color: 'from-teal-500 to-teal-700' },
-    { id: 'education', icon: GraduationCap, nameAr: 'تعليمي', nameEn: 'Education', color: 'from-indigo-500 to-indigo-700' },
-    { id: 'kids', icon: Baby, nameAr: 'أطفال', nameEn: 'Kids', color: 'from-orange-400 to-orange-600' },
-    { id: 'banking', icon: Banknote, nameAr: 'بنوك', nameEn: 'Banking', color: 'from-emerald-500 to-emerald-700' },
-    { id: 'entertainment', icon: Music, nameAr: 'ترفيهي', nameEn: 'Entertainment', color: 'from-purple-500 to-purple-700' },
+    { id: 'corporate', image: '/images/event-types/corporate-event.png', nameAr: 'شركات', nameEn: 'Corporate', color: 'from-blue-500 to-blue-700' },
+    { id: 'wedding', image: '/images/event-types/wedding-event.png', nameAr: 'زفاف', nameEn: 'Wedding', color: 'from-pink-500 to-rose-600' },
+    { id: 'conference', image: '/images/event-types/conference-event.png', nameAr: 'مؤتمر', nameEn: 'Conference', color: 'from-green-500 to-green-700' },
+    { id: 'government', image: '/images/event-types/government-event.png', nameAr: 'حكومي', nameEn: 'Government', color: 'from-amber-500 to-amber-700' },
+    { id: 'exhibition', image: '/images/event-types/exhibition-event.png', nameAr: 'معرض', nameEn: 'Exhibition', color: 'from-cyan-500 to-cyan-700' },
+    { id: 'education', image: '/images/event-types/education-event.png', nameAr: 'تعليمي', nameEn: 'Education', color: 'from-indigo-500 to-indigo-700' },
+    { id: 'entertainment', image: '/images/event-types/entertainment-event.png', nameAr: 'ترفيهي', nameEn: 'Entertainment', color: 'from-purple-500 to-purple-700' },
+    { id: 'kids', image: '/images/event-types/kids-event.png', nameAr: 'أطفال', nameEn: 'Kids', color: 'from-orange-400 to-orange-600' },
+    { id: 'healthcare', image: '/images/event-types/healthcare-event.png', nameAr: 'صحي', nameEn: 'Healthcare', color: 'from-teal-500 to-teal-700' },
+    { id: 'banking', image: '/images/event-types/banking-event.png', nameAr: 'بنوك', nameEn: 'Banking', color: 'from-emerald-500 to-emerald-700' },
   ];
 
   const addOnOptions = [
@@ -346,8 +348,8 @@ export default function Calculator() {
                             : 'border-gray-200 hover:border-[#D4AF37]/50 hover:shadow-md'
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform`}>
-                          <type.icon className="w-5 h-5 text-white" />
+                        <div className="w-16 h-16 rounded-xl overflow-hidden mb-2 mx-auto group-hover:scale-110 transition-transform shadow-md">
+                          <img src={type.image} alt={type.nameEn} className="w-full h-full object-cover" />
                         </div>
                         <p className="text-xs font-medium text-gray-700 text-center">
                           {language === 'ar' ? type.nameAr : type.nameEn}
