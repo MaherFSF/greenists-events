@@ -17,6 +17,8 @@ export function Navigation() {
     { path: '/calculator', label: t('nav.calculator') },
     { path: '/gallery', label: t('nav.gallery') },
     { path: '/contact', label: t('nav.contact') },
+    { path: '/products', label: t('nav.products') },
+    { path: '/ai-planner', label: t('nav.ai') },
   ];
   
   const toggleLanguage = () => {

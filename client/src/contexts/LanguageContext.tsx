@@ -18,6 +18,8 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.gallery': 'Gallery',
     'nav.calculator': 'Event Calculator',
     'nav.contact': 'Contact',
+    'nav.products': 'Products',
+    'nav.ai': 'AI Planner',
     'nav.login': 'Login',
     'nav.portal': 'Client Portal',
     
@@ -92,6 +94,8 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.gallery': 'معرض الصور',
     'nav.calculator': 'حاسبة الفعاليات',
     'nav.contact': 'اتصل بنا',
+    'nav.products': 'المنتجات',
+    'nav.ai': 'المخطط الذكي',
     'nav.login': 'تسجيل الدخول',
     'nav.portal': 'بوابة العملاء',
     

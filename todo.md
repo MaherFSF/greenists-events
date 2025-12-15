@@ -11,7 +11,7 @@
 
 ## Event Cost Calculator
 - [x] Build event type selector (Corporate, Wedding, Conference, Government, Trade Show)
-- [x] Create pricing calculator with YER currency (1 USD = 1700 YER)
+- [x] Create pricing calculator with 3 currencies (USD, YER, SAR)
 - [x] Add guest count, venue, catering options
 - [ ] Generate instant quote PDF
 
@@ -23,7 +23,7 @@
 - [ ] Add document upload/download functionality
 
 ## AI Features
-- [ ] Integrate AI event planning suggestions
+- [x] Integrate AI event planning suggestions (AI Planner page)
 - [ ] Add AI-powered budget optimization
 - [ ] Create AI chatbot for inquiries
 
@@ -43,5 +43,11 @@
 - [x] Set up database schema for events and clients
 - [ ] Configure authentication
 - [x] Add API routes for calculator
-- [ ] Implement responsive design
+- [x] Implement responsive design
 - [ ] Add SEO optimization
+
+## Products & Collections
+- [x] Create Products page with all brand products
+- [x] Add product categories filter
+- [x] Display event collections (Corporate, Wedding, Government, Ramadan, Yemen Cultural, Luxury)
+- [x] Add product detail modal

@@ -13,6 +13,8 @@ import Services from "./pages/Services";
 import Calculator from "./pages/Calculator";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
+import Products from "./pages/Products";
+import AIPlanner from "./pages/AIPlanner";
 
 function Router() {
   return (
@@ -23,6 +25,8 @@ function Router() {
       <Route path="/calculator" component={Calculator} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/contact" component={Contact} />
+      <Route path="/products" component={Products} />
+      <Route path="/ai-planner" component={AIPlanner} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
