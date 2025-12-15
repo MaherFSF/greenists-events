@@ -22,6 +22,9 @@ import ClientPortal from "./pages/ClientPortal";
 import Booking from "./pages/Booking";
 import StaffPortal from "./pages/StaffPortal";
 import SpecializedSectors from "./pages/SpecializedSectors";
+import Store from "./pages/Store";
+import Volunteer from "./pages/Volunteer";
+import Team from "./pages/Team";
 
 // Lazy load segment pages
 const Weddings = lazy(() => import("./pages/segments/Weddings"));
@@ -53,6 +56,9 @@ function Router() {
       <Route path="/booking" component={Booking} />
       <Route path="/staff" component={StaffPortal} />
       <Route path="/sectors" component={SpecializedSectors} />
+      <Route path="/store" component={Store} />
+      <Route path="/volunteer" component={Volunteer} />
+      <Route path="/team" component={Team} />
       
       {/* Segment Pages */}
       <Route path="/weddings">

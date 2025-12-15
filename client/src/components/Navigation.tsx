@@ -22,6 +22,9 @@ export function Navigation() {
     { path: '/brands', label: t('nav.brands') },
     { path: '/suppliers', label: t('nav.suppliers') },
     { path: '/sectors', label: t('nav.sectors') },
+    { path: '/store', label: t('nav.store') },
+    { path: '/volunteer', label: t('nav.volunteer') },
+    { path: '/team', label: t('nav.team') },
   ];
   
   const toggleLanguage = () => {

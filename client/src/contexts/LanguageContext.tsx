@@ -23,6 +23,9 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.suppliers': 'Suppliers',
     'nav.brands': 'Our Brands',
     'nav.sectors': 'Sectors',
+    'nav.store': 'Store',
+    'nav.volunteer': 'Volunteer',
+    'nav.team': 'Our Team',
     'nav.login': 'Login',
     'nav.portal': 'Client Portal',
     
@@ -102,6 +105,9 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.suppliers': 'الموردون',
     'nav.brands': 'علاماتنا',
     'nav.sectors': 'القطاعات',
+    'nav.store': 'المتجر',
+    'nav.volunteer': 'التطوع',
+    'nav.team': 'فريقنا',
     'nav.login': 'تسجيل الدخول',
     'nav.portal': 'بوابة العملاء',
     
