@@ -1,437 +1,656 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'wouter';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Link } from 'wouter';
 import { 
-  ArrowRight, ArrowLeft, Phone, Mail, MapPin, Calendar, Users, Award, Leaf, Star,
-  CheckCircle2, Building2, Heart, Landmark, GraduationCap, Globe2, Sparkles,
-  ChevronDown, TrendingUp, Shield, Clock, Play, Store, Truck, Camera, Music,
-  Utensils, Gift, Baby, Moon, Sun, Mountain, Waves, TreePine, Palmtree
+  ArrowLeft, ArrowRight, Star, Users, Calendar, Award, Leaf, Heart, 
+  Sparkles, Building2, PartyPopper, Briefcase, GraduationCap, Baby,
+  Music, Utensils, Camera, Flower2, MapPin, Phone, Mail, Clock,
+  CheckCircle2, Play, ChevronDown
 } from 'lucide-react';
 
-// Animated Counter Hook
-function useCounter(end: number, duration: number = 2000, startOnView: boolean = true) {
+// Content data
+const content = {
+  en: {
+    heroTagline: "Events Experts & Business Innovators",
+    heroSubtitle: "From Aden to the World - Creating Unforgettable Moments Since 2015",
+    heroCTA: "Plan Your Event",
+    heroSecondary: "Explore Our Work",
+    
+    // Adeni greeting
+    greeting: "Ahlan wa Sahlan! Welcome to Greenists",
+    greetingSubtitle: "Where Yemeni hospitality meets world-class event management",
+    
+    // Stats
+    stats: [
+      { value: "500+", label: "Events Delivered", icon: Calendar },
+      { value: "50+", label: "Corporate Clients", icon: Building2 },
+      { value: "10+", label: "Years Experience", icon: Award },
+      { value: "98%", label: "Client Satisfaction", icon: Heart },
+    ],
+    
+    // About section
+    aboutTitle: "Why Greenists?",
+    aboutSubtitle: "We're not just event planners - we're storytellers who bring your vision to life",
+    aboutText: "Born in the heart of Aden, Greenists combines the warmth of Yemeni hospitality with international standards of excellence. Our team of passionate professionals understands the unique cultural nuances that make every celebration special in our beloved Yemen.",
+    
+    // Mission & Vision
+    missionTitle: "Our Mission",
+    missionText: "To transform every event into an unforgettable experience that honors our rich Yemeni heritage while embracing innovation and sustainability.",
+    visionTitle: "Our Vision",
+    visionText: "To be the leading sustainable event management company in Yemen and the Arabian Peninsula, setting new standards for excellence, creativity, and environmental responsibility.",
+    
+    // Values
+    valuesTitle: "Our Values",
+    values: [
+      { icon: Leaf, title: "Sustainability", text: "Eco-friendly practices in every event" },
+      { icon: Heart, title: "Hospitality", text: "Authentic Yemeni warmth and care" },
+      { icon: Sparkles, title: "Excellence", text: "World-class standards, local expertise" },
+      { icon: Users, title: "Inclusivity", text: "Events for everyone, by everyone" },
+    ],
+    
+    // Services
+    servicesTitle: "Our Services",
+    servicesSubtitle: "Comprehensive event solutions for every occasion",
+    services: [
+      { icon: PartyPopper, title: "Weddings", titleAr: "الأعراس", desc: "Traditional & modern Yemeni weddings", color: "#E91E63" },
+      { icon: Building2, title: "Corporate", titleAr: "الشركات", desc: "Conferences, launches & seminars", color: "#2196F3" },
+      { icon: Briefcase, title: "Government", titleAr: "الحكومة", desc: "Official ceremonies & state events", color: "#4CAF50" },
+      { icon: GraduationCap, title: "Education", titleAr: "التعليم", desc: "Graduations & academic events", color: "#FF9800" },
+      { icon: Baby, title: "Family", titleAr: "العائلة", desc: "Baby showers, birthdays & more", color: "#9C27B0" },
+      { icon: Heart, title: "Condolences", titleAr: "العزاء", desc: "Dignified memorial services", color: "#607D8B" },
+    ],
+    
+    // Packages
+    packagesTitle: "Event Packages",
+    packagesSubtitle: "Choose the perfect package for your celebration",
+    packages: [
+      { 
+        name: "Essential", nameAr: "الأساسية",
+        price: "500", priceYER: "850,000",
+        desc: "Perfect for intimate gatherings",
+        features: ["Up to 50 guests", "Basic decoration", "Sound system", "Event coordinator", "4-hour duration"],
+        color: "#78909C"
+      },
+      { 
+        name: "Silver", nameAr: "الفضية",
+        price: "1,500", priceYER: "2,550,000",
+        desc: "Ideal for medium celebrations",
+        features: ["Up to 150 guests", "Premium decoration", "Full AV setup", "Catering included", "Photography", "6-hour duration"],
+        color: "#9E9E9E",
+        popular: false
+      },
+      { 
+        name: "Gold", nameAr: "الذهبية",
+        price: "3,500", priceYER: "5,950,000",
+        desc: "For memorable occasions",
+        features: ["Up to 300 guests", "Luxury decoration", "Live entertainment", "Full catering", "Photo & video", "Kids corner", "8-hour duration"],
+        color: "#D4AF37",
+        popular: true
+      },
+      { 
+        name: "Diamond", nameAr: "الماسية",
+        price: "7,000+", priceYER: "11,900,000+",
+        desc: "Ultimate luxury experience",
+        features: ["Unlimited guests", "Bespoke design", "Celebrity entertainment", "Gourmet catering", "Drone coverage", "VIP services", "Multi-day events"],
+        color: "#00BCD4"
+      },
+    ],
+    
+    // Add-ons
+    addonsTitle: "Premium Add-ons",
+    addonsSubtitle: "Customize your event with these special touches",
+    addons: [
+      { name: "Saffron Water Service", nameAr: "ماء الزعفران", price: "50", icon: "🌸" },
+      { name: "Honey Water Service", nameAr: "ماء العسل", price: "40", icon: "🍯" },
+      { name: "Kids Corner + Nurse", nameAr: "ركن أطفال + ممرضة", price: "200", icon: "👶" },
+      { name: "Yemeni Coffee Station", nameAr: "ركن القهوة اليمنية", price: "150", icon: "☕" },
+      { name: "Bakhoor & Oud Corner", nameAr: "ركن البخور والعود", price: "100", icon: "🪔" },
+      { name: "Drone Photography", nameAr: "تصوير بالدرون", price: "300", icon: "🚁" },
+      { name: "Live Band / DJ", nameAr: "فرقة موسيقية / DJ", price: "500", icon: "🎵" },
+      { name: "Valet Parking", nameAr: "خدمة صف السيارات", price: "150", icon: "🚗" },
+      { name: "Ladies Gift Bags", nameAr: "حقائب هدايا للسيدات", price: "10/bag", icon: "👜" },
+      { name: "Fresh Flower Arrangements", nameAr: "تنسيقات زهور طبيعية", price: "200", icon: "💐" },
+    ],
+    
+    // Characters section
+    charactersTitle: "Meet the Greenists Family",
+    charactersSubtitle: "Our mascots represent the diversity and warmth of Aden",
+    characters: [
+      { name: "Salim", nameAr: "سالم", role: "The Wise Elder", desc: "Represents our respect for tradition and Yemeni heritage" },
+      { name: "Noor", nameAr: "نور", role: "The Professional", desc: "Embodies modern excellence and business innovation" },
+      { name: "Faris", nameAr: "فارس", role: "The Coordinator", desc: "Your dedicated event partner, always ready to help" },
+      { name: "Yasmin", nameAr: "ياسمين", role: "The Creative", desc: "Brings artistic vision and beauty to every event" },
+      { name: "Little Aden", nameAr: "عدن الصغير", role: "The Future", desc: "Represents our commitment to the next generation" },
+    ],
+    
+    // Store announcement
+    storeTitle: "Greenists Store",
+    storeSubtitle: "Coming June 2026",
+    storeText: "Visit our flagship store in Khor Maksar for all your event supplies, branded merchandise, and consultation services.",
+    
+    // Testimonials
+    testimonialsTitle: "What Our Clients Say",
+    testimonials: [
+      { name: "Ahmed Al-Hadrami", event: "Wedding", text: "Greenists made our wedding day absolutely magical. The attention to detail and respect for our traditions was exceptional.", rating: 5 },
+      { name: "Fatima Hassan", event: "Corporate Conference", text: "Professional, punctual, and perfect execution. They understood our brand and delivered beyond expectations.", rating: 5 },
+      { name: "Mohammed Al-Ahdal", event: "Government Ceremony", text: "The team handled a complex state event with grace and precision. Highly recommended for official functions.", rating: 5 },
+    ],
+    
+    // CTA
+    ctaTitle: "Ready to Create Something Amazing?",
+    ctaSubtitle: "Let's bring your vision to life together",
+    ctaButton: "Get Free Consultation",
+    
+    // Contact
+    contactTitle: "Visit Us",
+    address: "Next to Relax Hotel, Khor Maksar, Aden, Yemen",
+    phone: "+967 773 673 918",
+    email: "info@greenists-events.com",
+    hours: "Saturday - Thursday: 9:00 AM - 6:00 PM",
+  },
+  ar: {
+    heroTagline: "خبراء الفعاليات ومبتكرو الأعمال",
+    heroSubtitle: "من عدن إلى العالم - نصنع لحظات لا تُنسى منذ 2015",
+    heroCTA: "خطط لفعاليتك",
+    heroSecondary: "استكشف أعمالنا",
+    
+    greeting: "أهلاً وسهلاً! مرحباً بكم في جرينستس",
+    greetingSubtitle: "حيث تلتقي الضيافة اليمنية بإدارة الفعاليات العالمية",
+    
+    stats: [
+      { value: "+500", label: "فعالية منفذة", icon: Calendar },
+      { value: "+50", label: "عميل مؤسسي", icon: Building2 },
+      { value: "+10", label: "سنوات خبرة", icon: Award },
+      { value: "98%", label: "رضا العملاء", icon: Heart },
+    ],
+    
+    aboutTitle: "لماذا جرينستس؟",
+    aboutSubtitle: "لسنا مجرد منظمي فعاليات - نحن رواة قصص نحول رؤيتك إلى واقع",
+    aboutText: "ولدنا في قلب عدن، جرينستس تجمع بين دفء الضيافة اليمنية ومعايير التميز العالمية. فريقنا من المحترفين المتحمسين يفهم الفروق الثقافية الدقيقة التي تجعل كل احتفال مميزاً في يمننا الحبيب.",
+    
+    missionTitle: "رسالتنا",
+    missionText: "تحويل كل فعالية إلى تجربة لا تُنسى تكرم تراثنا اليمني الغني مع احتضان الابتكار والاستدامة.",
+    visionTitle: "رؤيتنا",
+    visionText: "أن نكون الشركة الرائدة في إدارة الفعاليات المستدامة في اليمن والجزيرة العربية، ونضع معايير جديدة للتميز والإبداع والمسؤولية البيئية.",
+    
+    valuesTitle: "قيمنا",
+    values: [
+      { icon: Leaf, title: "الاستدامة", text: "ممارسات صديقة للبيئة في كل فعالية" },
+      { icon: Heart, title: "الضيافة", text: "دفء ورعاية يمنية أصيلة" },
+      { icon: Sparkles, title: "التميز", text: "معايير عالمية، خبرة محلية" },
+      { icon: Users, title: "الشمولية", text: "فعاليات للجميع، من الجميع" },
+    ],
+    
+    servicesTitle: "خدماتنا",
+    servicesSubtitle: "حلول فعاليات شاملة لكل مناسبة",
+    services: [
+      { icon: PartyPopper, title: "الأعراس", desc: "أعراس يمنية تقليدية وعصرية", color: "#E91E63" },
+      { icon: Building2, title: "الشركات", desc: "مؤتمرات وإطلاقات وندوات", color: "#2196F3" },
+      { icon: Briefcase, title: "الحكومة", desc: "مراسم رسمية وفعاليات دولة", color: "#4CAF50" },
+      { icon: GraduationCap, title: "التعليم", desc: "تخرجات وفعاليات أكاديمية", color: "#FF9800" },
+      { icon: Baby, title: "العائلة", desc: "استقبال مواليد وأعياد ميلاد", color: "#9C27B0" },
+      { icon: Heart, title: "العزاء", desc: "خدمات تأبين كريمة", color: "#607D8B" },
+    ],
+    
+    packagesTitle: "باقات الفعاليات",
+    packagesSubtitle: "اختر الباقة المثالية لاحتفالك",
+    packages: [
+      { 
+        name: "الأساسية", 
+        price: "500", priceYER: "850,000",
+        desc: "مثالية للتجمعات الصغيرة",
+        features: ["حتى 50 ضيف", "ديكور أساسي", "نظام صوت", "منسق فعاليات", "4 ساعات"],
+        color: "#78909C"
+      },
+      { 
+        name: "الفضية",
+        price: "1,500", priceYER: "2,550,000",
+        desc: "مثالية للاحتفالات المتوسطة",
+        features: ["حتى 150 ضيف", "ديكور فاخر", "نظام صوت ومرئيات", "ضيافة شاملة", "تصوير فوتوغرافي", "6 ساعات"],
+        color: "#9E9E9E"
+      },
+      { 
+        name: "الذهبية",
+        price: "3,500", priceYER: "5,950,000",
+        desc: "للمناسبات المميزة",
+        features: ["حتى 300 ضيف", "ديكور فاخر", "ترفيه حي", "ضيافة كاملة", "تصوير فوتو وفيديو", "ركن أطفال", "8 ساعات"],
+        color: "#D4AF37",
+        popular: true
+      },
+      { 
+        name: "الماسية",
+        price: "+7,000", priceYER: "+11,900,000",
+        desc: "تجربة فاخرة مطلقة",
+        features: ["ضيوف بلا حدود", "تصميم حسب الطلب", "ترفيه نجوم", "ضيافة فاخرة", "تصوير درون", "خدمات VIP", "فعاليات متعددة الأيام"],
+        color: "#00BCD4"
+      },
+    ],
+    
+    addonsTitle: "إضافات مميزة",
+    addonsSubtitle: "خصص فعاليتك بهذه اللمسات الخاصة",
+    addons: [
+      { name: "ماء الزعفران", price: "50", icon: "🌸" },
+      { name: "ماء العسل", price: "40", icon: "🍯" },
+      { name: "ركن أطفال + ممرضة", price: "200", icon: "👶" },
+      { name: "ركن القهوة اليمنية", price: "150", icon: "☕" },
+      { name: "ركن البخور والعود", price: "100", icon: "🪔" },
+      { name: "تصوير بالدرون", price: "300", icon: "🚁" },
+      { name: "فرقة موسيقية / DJ", price: "500", icon: "🎵" },
+      { name: "خدمة صف السيارات", price: "150", icon: "🚗" },
+      { name: "حقائب هدايا للسيدات", price: "10/حقيبة", icon: "👜" },
+      { name: "تنسيقات زهور طبيعية", price: "200", icon: "💐" },
+    ],
+    
+    charactersTitle: "تعرف على عائلة جرينستس",
+    charactersSubtitle: "شخصياتنا تمثل تنوع ودفء عدن",
+    characters: [
+      { name: "سالم", role: "الحكيم", desc: "يمثل احترامنا للتقاليد والتراث اليمني" },
+      { name: "نور", role: "المحترفة", desc: "تجسد التميز العصري والابتكار في الأعمال" },
+      { name: "فارس", role: "المنسق", desc: "شريكك المخلص في الفعاليات، دائماً جاهز للمساعدة" },
+      { name: "ياسمين", role: "المبدعة", desc: "تضيف الرؤية الفنية والجمال لكل فعالية" },
+      { name: "عدن الصغير", role: "المستقبل", desc: "يمثل التزامنا بالجيل القادم" },
+    ],
+    
+    storeTitle: "متجر جرينستس",
+    storeSubtitle: "قريباً - يونيو 2026",
+    storeText: "زوروا متجرنا الرئيسي في خور مكسر لجميع مستلزمات الفعاليات والمنتجات ذات العلامة التجارية وخدمات الاستشارة.",
+    
+    testimonialsTitle: "ماذا يقول عملاؤنا",
+    testimonials: [
+      { name: "أحمد الحضرمي", event: "زفاف", text: "جرينستس جعلت يوم زفافنا ساحراً تماماً. الاهتمام بالتفاصيل واحترام تقاليدنا كان استثنائياً.", rating: 5 },
+      { name: "فاطمة حسن", event: "مؤتمر شركات", text: "احترافية ودقة في المواعيد وتنفيذ مثالي. فهموا علامتنا التجارية وتجاوزوا التوقعات.", rating: 5 },
+      { name: "محمد الأهدل", event: "مراسم حكومية", text: "الفريق تعامل مع فعالية دولة معقدة بأناقة ودقة. أنصح بهم بشدة للمناسبات الرسمية.", rating: 5 },
+    ],
+    
+    ctaTitle: "مستعد لصنع شيء مذهل؟",
+    ctaSubtitle: "دعنا نحول رؤيتك إلى واقع معاً",
+    ctaButton: "احصل على استشارة مجانية",
+    
+    contactTitle: "زورونا",
+    address: "بجانب فندق ريلاكس، خور مكسر، عدن، اليمن",
+    phone: "+967 773 673 918",
+    email: "info@greenists-events.com",
+    hours: "السبت - الخميس: 9:00 صباحاً - 6:00 مساءً",
+  }
+};
+
+// Animated counter component
+function AnimatedCounter({ value, duration = 2000 }: { value: string; duration?: number }) {
   const [count, setCount] = useState(0);
-  const [hasStarted, setHasStarted] = useState(!startOnView);
-  const ref = useRef<HTMLDivElement>(null);
-
+  const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+  const suffix = value.replace(/[0-9]/g, '');
+  
   useEffect(() => {
-    if (!startOnView) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setHasStarted(true); },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [startOnView]);
-
-  useEffect(() => {
-    if (!hasStarted) return;
-    let startTime: number;
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-      setCount(Math.floor(progress * end));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  }, [end, duration, hasStarted]);
-
-  return { count, ref };
-}
-
-// Stat Counter Component
-function StatCounter({ value, suffix, label, labelAr, icon: Icon }: { 
-  value: number; suffix: string; label: string; labelAr: string; icon: React.ElementType 
-}) {
-  const { language } = useLanguage();
-  const { count, ref } = useCounter(value);
-  return (
-    <div ref={ref} className="text-center group">
-      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/5 flex items-center justify-center group-hover:scale-110 transition-transform">
-        <Icon className="w-8 h-8 text-[#D4AF37]" />
-      </div>
-      <div className="text-4xl md:text-5xl font-bold text-white mb-2">{count.toLocaleString()}{suffix}</div>
-      <div className="text-white/70 text-sm md:text-base">{language === 'ar' ? labelAr : label}</div>
-    </div>
-  );
-}
-
-// Service Card Component
-function ServiceCard({ icon: Icon, color, nameEn, nameAr, descEn, descAr, image }: {
-  icon: React.ElementType; color: string; nameEn: string; nameAr: string; 
-  descEn: string; descAr: string; image?: string;
-}) {
-  const { language } = useLanguage();
-  return (
-    <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-white">
-      {image && (
-        <div className="h-48 overflow-hidden">
-          <img src={image} alt={nameEn} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-        </div>
-      )}
-      <CardContent className="p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110" 
-               style={{ backgroundColor: `${color}15` }}>
-            <Icon className="w-7 h-7" style={{ color }} />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2D7A4A] transition-colors">
-              {language === 'ar' ? nameAr : nameEn}
-            </h3>
-            <p className="text-gray-600 text-sm">{language === 'ar' ? descAr : descEn}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// City Character Component - Representing South Yemen Cities
-function CityCharacter({ city, cityAr, icon: Icon, color, description, descriptionAr }: {
-  city: string; cityAr: string; icon: React.ElementType; color: string; 
-  description: string; descriptionAr: string;
-}) {
-  const { language } = useLanguage();
-  return (
-    <div className="text-center group cursor-pointer">
-      <div className="w-24 h-24 mx-auto mb-4 rounded-full flex items-center justify-center transition-all group-hover:scale-110 group-hover:shadow-xl"
-           style={{ background: `linear-gradient(135deg, ${color}20, ${color}40)`, border: `3px solid ${color}` }}>
-        <Icon className="w-12 h-12" style={{ color }} />
-      </div>
-      <h4 className="font-bold text-lg text-gray-900 mb-1">{language === 'ar' ? cityAr : city}</h4>
-      <p className="text-sm text-gray-600">{language === 'ar' ? descriptionAr : description}</p>
-    </div>
-  );
+    let start = 0;
+    const increment = numericValue / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= numericValue) {
+        setCount(numericValue);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [numericValue, duration]);
+  
+  return <span>{count.toLocaleString()}{suffix}</span>;
 }
 
 export default function Home() {
   const { language } = useLanguage();
   const isRTL = language === 'ar';
-  const Arrow = isRTL ? ArrowLeft : ArrowRight;
+  const t = content[language as keyof typeof content] || content.en;
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const heroSlides = [
-    { image: '/images/hero-aden-skyline.png', titleEn: 'From Aden to the World', titleAr: 'من عدن إلى العالم' },
-    { image: '/images/luxury-wedding-venue.png', titleEn: 'Luxury Weddings', titleAr: 'حفلات زفاف فاخرة' },
-    { image: '/images/corporate-conference.png', titleEn: 'Corporate Excellence', titleAr: 'التميز المؤسسي' },
+  
+  const heroImages = [
+    '/images/hero-aden-skyline.png',
+    '/images/luxury-wedding-venue.png',
+    '/images/corporate-conference.png',
   ];
-
+  
   useEffect(() => {
-    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length), 5000);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
-
-  const services = [
-    { icon: Building2, color: '#1E3A5F', nameEn: 'Greenists Corporate', nameAr: 'جرينستس للشركات', descEn: 'Conferences, product launches, seminars, and corporate gatherings', descAr: 'مؤتمرات، إطلاق منتجات، ندوات، واجتماعات الشركات', image: '/images/corporate-conference.png' },
-    { icon: Heart, color: '#B76E79', nameEn: 'Greenists Weddings', nameAr: 'جرينستس للأعراس', descEn: 'Luxury multi-day celebrations with cultural authenticity', descAr: 'احتفالات فاخرة متعددة الأيام بأصالة ثقافية', image: '/images/luxury-wedding-venue.png' },
-    { icon: Landmark, color: '#D4AF37', nameEn: 'Greenists Government', nameAr: 'جرينستس الحكومية', descEn: 'Official ceremonies, diplomatic events, national celebrations', descAr: 'مراسم رسمية، فعاليات دبلوماسية، احتفالات وطنية' },
-    { icon: Globe2, color: '#2D7A4A', nameEn: 'Greenists NGO', nameAr: 'جرينستس للمنظمات', descEn: 'Humanitarian conferences, development workshops', descAr: 'مؤتمرات إنسانية، ورش عمل تنموية' },
-    { icon: GraduationCap, color: '#FF8C00', nameEn: 'Greenists Education', nameAr: 'جرينستس التعليمية', descEn: 'Graduations, academic conferences, school events', descAr: 'حفلات تخرج، مؤتمرات أكاديمية، فعاليات مدرسية' },
-    { icon: Moon, color: '#9B59B6', nameEn: 'Greenists Ramadan', nameAr: 'جرينستس رمضان', descEn: 'Iftar gatherings, Eid celebrations, spiritual events', descAr: 'موائد إفطار، احتفالات العيد، فعاليات روحانية' },
-    { icon: Baby, color: '#E91E63', nameEn: 'Greenists Kids', nameAr: 'جرينستس للأطفال', descEn: 'Birthday parties, children entertainment, family events', descAr: 'حفلات أعياد ميلاد، ترفيه أطفال، فعاليات عائلية' },
-    { icon: Gift, color: '#00BCD4', nameEn: 'Greenists Condolences', nameAr: 'جرينستس للعزاء', descEn: 'Dignified memorial services with cultural sensitivity', descAr: 'خدمات تأبين كريمة بحساسية ثقافية' },
-  ];
-
-  const cityCharacters = [
-    { city: 'Aden', cityAr: 'عدن', icon: Waves, color: '#0077B6', description: 'Gateway to Yemen', descriptionAr: 'بوابة اليمن' },
-    { city: 'Mukalla', cityAr: 'المكلا', icon: Palmtree, color: '#2D7A4A', description: 'Pearl of the Sea', descriptionAr: 'لؤلؤة البحر' },
-    { city: 'Socotra', cityAr: 'سقطرى', icon: TreePine, color: '#8B4513', description: 'Island of Wonders', descriptionAr: 'جزيرة العجائب' },
-    { city: 'Hadramout', cityAr: 'حضرموت', icon: Mountain, color: '#D4AF37', description: 'Valley of Heritage', descriptionAr: 'وادي التراث' },
-  ];
-
-  const features = [
-    { icon: Leaf, titleEn: 'Eco-Friendly', titleAr: 'صديق للبيئة', descEn: 'Sustainable materials & practices', descAr: 'مواد وممارسات مستدامة' },
-    { icon: Star, titleEn: 'Yemeni Heritage', titleAr: 'تراث يمني', descEn: 'Authentic cultural elements', descAr: 'عناصر ثقافية أصيلة' },
-    { icon: Shield, titleEn: 'Full Service', titleAr: 'خدمة متكاملة', descEn: 'Planning to execution', descAr: 'من التخطيط للتنفيذ' },
-    { icon: TrendingUp, titleEn: 'Green Impact Score', titleAr: 'مقياس الأثر الأخضر', descEn: 'Track your event sustainability', descAr: 'تتبع استدامة فعاليتك' },
-  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      {/* Hero Section with Slideshow */}
-      <section className="relative h-screen overflow-hidden">
-        {heroSlides.map((slide, index) => (
-          <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}>
-            <img src={slide.image} alt={slide.titleEn} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Background Slideshow */}
+        {heroImages.map((img, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              currentSlide === index ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img src={img} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
           </div>
         ))}
         
-        {/* Gold accent lines */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent z-20" />
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent z-20" />
-        
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="container mx-auto px-4 text-center">
+        {/* Hero Content */}
+        <div className="relative z-10 container mx-auto px-4 py-20">
+          <div className="max-w-3xl">
             {/* Logo */}
-            <div className="mb-8 flex justify-center">
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border-2 border-[#D4AF37] p-3 shadow-2xl">
-                <img src="/images/greenists-logo.png" alt="Greenists" className="w-full h-full object-contain" />
+            <div className="flex items-center gap-4 mb-8">
+              <img src="/images/greenists_logo.png" alt="Greenists" className="h-20 w-auto" />
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold">
+                  <span className="text-[#2D7A4A]">Green</span>
+                  <span className="text-white">ists</span>
+                </h1>
+                <p className="text-[#D4AF37] font-semibold text-lg">{t.heroTagline}</p>
               </div>
             </div>
-
-            {/* Brand Name */}
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 tracking-tight drop-shadow-2xl">
-              <span className="text-[#90EE90]">Green</span><span>ists</span>
-            </h1>
-
-            {/* Tagline */}
-            <p className="text-2xl md:text-3xl text-[#D4AF37] font-medium mb-6 drop-shadow-lg">
-              {isRTL ? 'خبراء الفعاليات ومبتكرو الأعمال' : 'Event Experts & Business Innovators'}
+            
+            <p className="text-white/90 text-xl md:text-2xl mb-8 leading-relaxed">
+              {t.heroSubtitle}
             </p>
-
-            {/* Dynamic Title */}
-            <h2 className="text-3xl md:text-5xl text-white font-light mb-8 leading-relaxed drop-shadow-lg">
-              {isRTL ? heroSlides[currentSlide].titleAr : heroSlides[currentSlide].titleEn}
-            </h2>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            
+            <div className="flex flex-wrap gap-4">
               <Link href="/booking">
-                <Button size="lg" className="bg-[#D4AF37] hover:bg-[#C4A030] text-black font-bold px-10 py-7 text-xl rounded-full shadow-2xl hover:scale-105 transition-all">
-                  <Calendar className="w-6 h-6 mr-3" />
-                  {isRTL ? 'احجز فعاليتك' : 'Book Your Event'}
+                <Button size="lg" className="bg-[#D4AF37] hover:bg-[#c9a432] text-black font-bold text-lg px-8 py-6 rounded-full shadow-lg">
+                  {t.heroCTA}
+                  {isRTL ? <ArrowLeft className="w-5 h-5 ms-2" /> : <ArrowRight className="w-5 h-5 ms-2" />}
                 </Button>
               </Link>
-              <Link href="/calculator">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#2D7A4A] font-bold px-10 py-7 text-xl rounded-full backdrop-blur-sm">
-                  <Sparkles className="w-6 h-6 mr-3" />
-                  {isRTL ? 'احسب التكلفة' : 'Get Quote'}
+              <Link href="/gallery">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-black font-bold text-lg px-8 py-6 rounded-full">
+                  <Play className="w-5 h-5 me-2" />
+                  {t.heroSecondary}
                 </Button>
               </Link>
-            </div>
-
-            {/* Slide Indicators */}
-            <div className="flex justify-center gap-3">
-              {heroSlides.map((_, index) => (
-                <button key={index} onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? 'bg-[#D4AF37] w-8' : 'bg-white/50 hover:bg-white/80'}`} />
-              ))}
             </div>
           </div>
         </div>
-
+        
+        {/* Slide Indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                currentSlide === index ? 'bg-[#D4AF37] w-8' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+        
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-          <ChevronDown className="w-10 h-10 text-[#D4AF37]" />
+        <div className="absolute bottom-8 right-8 animate-bounce z-10">
+          <ChevronDown className="w-8 h-8 text-white" />
         </div>
       </section>
-
+      
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-[#1a4d2e] via-[#2D7A4A] to-[#1a4d2e] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 10L50 30L70 30L55 45L60 65L40 52L20 65L25 45L10 30L30 30Z' fill='%23D4AF37'/%3E%3C/svg%3E")`,
-        }} />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            <StatCounter value={500} suffix="+" label="Events Completed" labelAr="فعالية منجزة" icon={Calendar} />
-            <StatCounter value={50} suffix="+" label="Corporate Clients" labelAr="عميل من الشركات" icon={Building2} />
-            <StatCounter value={10} suffix="+" label="Years Experience" labelAr="سنوات خبرة" icon={Award} />
-            <StatCounter value={98} suffix="%" label="Client Satisfaction" labelAr="رضا العملاء" icon={Heart} />
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-12 bg-[#2D7A4A]">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <span className="inline-block px-6 py-2 bg-[#2D7A4A]/10 text-[#2D7A4A] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
-              {isRTL ? 'علاماتنا التجارية' : 'Our Brands'}
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              {isRTL ? 'فعاليات لكل مناسبة' : 'Events for Every Occasion'}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {isRTL ? 'ثمانية علامات تجارية متخصصة تحت مظلة جرينستس، كل منها مصممة لتقديم تجربة استثنائية' : 'Eight specialized brands under the Greenists umbrella, each designed to deliver an exceptional experience'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <ServiceCard key={index} {...service} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {t.stats.map((stat, index) => (
+              <div key={index} className="text-center text-white">
+                <stat.icon className="w-10 h-10 mx-auto mb-3 text-[#D4AF37]" />
+                <div className="text-4xl md:text-5xl font-bold mb-2">
+                  <AnimatedCounter value={stat.value} />
+                </div>
+                <p className="text-white/80">{stat.label}</p>
+              </div>
             ))}
           </div>
-
-          <div className="text-center mt-12">
-            <Link href="/brands">
-              <Button className="bg-[#2D7A4A] hover:bg-[#236339] px-10 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
-                {isRTL ? 'استكشف جميع العلامات' : 'Explore All Brands'}
-                <Arrow className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+        </div>
+      </section>
+      
+      {/* Characters Section */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.charactersTitle}</h2>
+            <p className="text-xl text-gray-600">{t.charactersSubtitle}</p>
+          </div>
+          
+          <div className="flex justify-center mb-8">
+            <img 
+              src="/images/characters/greenists_mascot_family.png" 
+              alt="Greenists Family" 
+              className="max-w-full md:max-w-4xl rounded-2xl shadow-2xl"
+            />
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+            {t.characters.map((char, index) => (
+              <div key={index} className="text-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="font-bold text-[#2D7A4A]">{char.name}</h3>
+                <p className="text-sm text-[#D4AF37] font-medium">{char.role}</p>
+                <p className="text-xs text-gray-500 mt-1">{char.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
-
-      {/* Store Opening Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      
+      {/* Services Section */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[#D4AF37] rounded-3xl" />
-              <img src="/images/greenists-store-interior.png" alt="Greenists Store" className="rounded-3xl shadow-2xl relative z-10" />
-              <div className="absolute -bottom-6 -right-6 bg-[#D4AF37] text-black font-bold px-8 py-4 rounded-2xl shadow-xl z-20">
-                <span className="text-2xl">{isRTL ? 'يونيو 2026' : 'June 2026'}</span>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.servicesTitle}</h2>
+            <p className="text-xl text-gray-600">{t.servicesSubtitle}</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {t.services.map((service, index) => (
+              <Link key={index} href="/services">
+                <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 overflow-hidden">
+                  <CardContent className="p-6 text-center">
+                    <div 
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: `${service.color}15` }}
+                    >
+                      <service.icon className="w-8 h-8" style={{ color: service.color }} />
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-2">{service.title}</h3>
+                    <p className="text-sm text-gray-500">{service.desc}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Packages Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.packagesTitle}</h2>
+            <p className="text-xl text-gray-600">{t.packagesSubtitle}</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {t.packages.map((pkg, index) => (
+              <Card 
+                key={index} 
+                className={`relative overflow-hidden transition-all duration-300 hover:-translate-y-2 ${
+                  pkg.popular ? 'ring-2 ring-[#D4AF37] shadow-xl' : 'hover:shadow-xl'
+                }`}
+              >
+                {pkg.popular && (
+                  <div className="absolute top-0 right-0 bg-[#D4AF37] text-black text-xs font-bold px-4 py-1 rounded-bl-lg">
+                    {isRTL ? 'الأكثر طلباً' : 'Most Popular'}
+                  </div>
+                )}
+                <CardContent className="p-6">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
+                    style={{ backgroundColor: pkg.color }}
+                  >
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">{pkg.name}</h3>
+                  <p className="text-sm text-gray-500 mb-4">{pkg.desc}</p>
+                  <div className="mb-4">
+                    <span className="text-3xl font-bold text-[#2D7A4A]">${pkg.price}</span>
+                    <span className="text-gray-400 text-sm block">{pkg.priceYER} YER</span>
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    {pkg.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle2 className="w-4 h-4 text-[#2D7A4A] flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/calculator">
+                    <Button className="w-full bg-[#2D7A4A] hover:bg-[#236339]">
+                      {isRTL ? 'احسب التكلفة' : 'Calculate Cost'}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Add-ons Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.addonsTitle}</h2>
+            <p className="text-xl text-gray-600">{t.addonsSubtitle}</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+            {t.addons.map((addon, index) => (
+              <div key={index} className="bg-gray-50 rounded-xl p-4 text-center hover:bg-[#2D7A4A]/5 transition-colors">
+                <span className="text-3xl mb-2 block">{addon.icon}</span>
+                <h4 className="font-medium text-gray-900 text-sm mb-1">{addon.name}</h4>
+                <p className="text-[#2D7A4A] font-bold">${addon.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Store Announcement */}
+      <section className="py-20 bg-gradient-to-r from-[#2D7A4A] to-[#1a4d2e] text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex-1">
+              <span className="inline-block px-4 py-1 bg-[#D4AF37] text-black font-bold rounded-full text-sm mb-4">
+                {t.storeSubtitle}
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.storeTitle}</h2>
+              <p className="text-white/80 text-lg mb-6">{t.storeText}</p>
+              <div className="flex items-center gap-4 text-white/70">
+                <MapPin className="w-5 h-5" />
+                <span>{t.address}</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <img 
+                src="/images/Store.png" 
+                alt="Greenists Store" 
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Testimonials */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.testimonialsTitle}</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {t.testimonials.map((testimonial, index) => (
+              <Card key={index} className="border-0 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-[#D4AF37] text-[#D4AF37]" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-[#2D7A4A]/10 flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#2D7A4A]" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-500">{testimonial.event}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* CTA Section */}
+      <section className="py-20 bg-[#2D7A4A]">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t.ctaTitle}</h2>
+          <p className="text-xl text-white/80 mb-8">{t.ctaSubtitle}</p>
+          <Link href="/contact">
+            <Button size="lg" className="bg-[#D4AF37] hover:bg-[#c9a432] text-black font-bold text-lg px-12 py-6 rounded-full">
+              {t.ctaButton}
+            </Button>
+          </Link>
+        </div>
+      </section>
+      
+      {/* Contact Info */}
+      <section className="py-12 bg-gray-900 text-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-start">
+            <div>
+              <h3 className="font-bold text-[#D4AF37] mb-4">{t.contactTitle}</h3>
+              <div className="flex items-center gap-2 justify-center md:justify-start text-white/70">
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm">{t.address}</span>
               </div>
             </div>
             <div>
-              <span className="inline-block px-6 py-2 bg-[#D4AF37]/10 text-[#D4AF37] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
-                {isRTL ? 'قريباً' : 'Coming Soon'}
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                {isRTL ? 'متجر جرينستس' : 'Greenists Store'}
-              </h2>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                {isRTL 
-                  ? 'نفتتح أول متجر متخصص في مستلزمات الفعاليات في عدن. تسوق من مجموعاتنا الحصرية، واحصل على استشارات مجانية من خبرائنا.'
-                  : 'Opening our first specialized event supplies store in Aden. Shop from our exclusive collections and get free consultations from our experts.'}
-              </p>
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
-                  <span>{isRTL ? 'مستلزمات فعاليات حصرية' : 'Exclusive Event Supplies'}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-700">
-                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
-                  <span>{isRTL ? 'استشارات مجانية' : 'Free Consultations'}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-700">
-                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
-                  <span>{isRTL ? 'منتجات صديقة للبيئة' : 'Eco-Friendly Products'}</span>
-                </div>
-              </div>
-              <Link href="/store">
-                <Button className="bg-[#2D7A4A] hover:bg-[#236339] px-8 py-6 text-lg rounded-full">
-                  <Store className="w-5 h-5 mr-2" />
-                  {isRTL ? 'اكتشف المتجر' : 'Discover the Store'}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* South Yemen Cities Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <span className="inline-block px-6 py-2 bg-[#D4AF37]/20 text-[#D4AF37] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
-              {isRTL ? 'نخدم جنوب اليمن' : 'Serving South Yemen'}
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              {isRTL ? 'من كل مدينة، لكل مناسبة' : 'From Every City, For Every Occasion'}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {cityCharacters.map((city, index) => (
-              <CityCharacter key={index} {...city} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Yemeni Hospitality Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <span className="inline-block px-6 py-2 bg-[#2D7A4A]/10 text-[#2D7A4A] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
-                {isRTL ? 'تراثنا' : 'Our Heritage'}
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                {isRTL ? 'ضيافة يمنية أصيلة' : 'Authentic Yemeni Hospitality'}
-              </h2>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                {isRTL 
-                  ? 'نحتفي بتراث الضيافة اليمنية العريق في كل فعالية. من القهوة العربية الأصيلة إلى البخور والتمر، نضمن تجربة لا تُنسى لضيوفك.'
-                  : 'We celebrate the rich heritage of Yemeni hospitality in every event. From authentic Arabic coffee to incense and dates, we ensure an unforgettable experience for your guests.'}
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#2D7A4A]/10 flex items-center justify-center shrink-0">
-                      <feature.icon className="w-5 h-5 text-[#2D7A4A]" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900">{isRTL ? feature.titleAr : feature.titleEn}</h4>
-                      <p className="text-sm text-gray-600">{isRTL ? feature.descAr : feature.descEn}</p>
-                    </div>
-                  </div>
-                ))}
+              <h3 className="font-bold text-[#D4AF37] mb-4">{isRTL ? 'اتصل بنا' : 'Call Us'}</h3>
+              <div className="flex items-center gap-2 justify-center md:justify-start text-white/70">
+                <Phone className="w-4 h-4" />
+                <span className="text-sm">{t.phone}</span>
               </div>
             </div>
-            <div className="order-1 lg:order-2">
-              <img src="/images/traditional-yemeni-hospitality.png" alt="Yemeni Hospitality" className="rounded-3xl shadow-2xl" />
+            <div>
+              <h3 className="font-bold text-[#D4AF37] mb-4">{isRTL ? 'راسلنا' : 'Email Us'}</h3>
+              <div className="flex items-center gap-2 justify-center md:justify-start text-white/70">
+                <Mail className="w-4 h-4" />
+                <span className="text-sm">{t.email}</span>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-bold text-[#D4AF37] mb-4">{isRTL ? 'ساعات العمل' : 'Working Hours'}</h3>
+              <div className="flex items-center gap-2 justify-center md:justify-start text-white/70">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">{t.hours}</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/images/hero-aden-skyline.png" alt="Aden" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2D7A4A]/95 to-[#1a4d2e]/95" />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              {isRTL ? 'هل أنت مستعد لفعاليتك القادمة؟' : 'Ready for Your Next Event?'}
-            </h2>
-            <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              {isRTL 
-                ? 'تواصل معنا اليوم واحصل على استشارة مجانية. فريقنا جاهز لتحويل رؤيتك إلى واقع.'
-                : 'Contact us today and get a free consultation. Our team is ready to turn your vision into reality.'}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/booking">
-                <Button size="lg" className="bg-[#D4AF37] hover:bg-[#C4A030] text-black font-bold px-10 py-7 text-xl rounded-full shadow-2xl">
-                  <Calendar className="w-6 h-6 mr-3" />
-                  {isRTL ? 'احجز الآن' : 'Book Now'}
-                </Button>
-              </Link>
-              <a href="tel:+967773673918">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#2D7A4A] font-bold px-10 py-7 text-xl rounded-full">
-                  <Phone className="w-6 h-6 mr-3" />
-                  +967 773 673 918
-                </Button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Bar */}
-      <section className="py-6 bg-gray-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#D4AF37]" />
-              <span className="text-sm">{isRTL ? 'شارع الكورنيش، بجانب فندق ريلاكس، خور ماكسر، عدن' : 'Next to Relax Hotel, Khor Maksar, Aden'}</span>
-            </div>
-            <div className="flex items-center gap-6">
-              <a href="tel:+967773673918" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
-                <Phone className="w-5 h-5" />
-                <span>+967 773 673 918</span>
-              </a>
-              <a href="mailto:info@greenists-events.com" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
-                <Mail className="w-5 h-5" />
-                <span>info@greenists-events.com</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
       <Footer />
     </div>
   );
