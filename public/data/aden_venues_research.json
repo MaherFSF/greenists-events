@@ -1,0 +1,116 @@
+{
+  "results": [
+    {
+      "input": "Wedding halls and ballrooms",
+      "output": {
+        "category": "Wedding Halls and Hotel Ballrooms",
+        "venues_list": "Coral Hotel - Aden, Gold Mohur Hotel & Resort, Al Amira Hall, Qasr Al Arab, Jouri Palace, Al Fakhama Hall, Golden Palace Hall",
+        "price_range_usd": "$1,500-$5,000 per event (Full Package Estimate)",
+        "price_range_yer": "2,550,000-8,500,000 YER (Full Package Estimate)",
+        "capacity_range": "150-800 guests",
+        "top_recommendation": "Gold Mohur Hotel & Resort - Best for large, luxury weddings with a scenic coastal location, high capacity (up to 800 for banquet), and comprehensive 5-star hotel services.",
+        "key_details": "The Aden wedding venue market is segmented into high-end hotel ballrooms and more budget-friendly independent halls. Premium hotel venues like the Gold Mohur Hotel and Coral Hotel offer comprehensive services including onsite catering, airport shuttles, and multiple event spaces, with the Gold Mohur Ballroom accommodating up to 800 guests for a banquet setup. Independent halls like Al Amira Hall and Al Fakhama Hall offer high capacity (up to 600 guests) primarily as a hall rental service, with prices for the hall rental only ranging from approximately 240,000 YER to 1,200,000 YER ($140 to $700 USD). Hotel packages, which include catering and full service, are estimated to be significantly higher. Most venues offer air conditioning and are located in key areas like Khormaksar and Ma'alla.",
+        "contact_info": "Coral Hotel: +967 2 272 746, Khormaksar Road P.O.Box:4720; Gold Mohur Hotel: +967 2 204010, Hai Althawra P.O. Box 13040; Qasr Al Arab: 248889, Ma'alla area; Jouri Palace: 777123678"
+      },
+      "error": ""
+    },
+    {
+      "input": "Hotels with event facilities",
+      "output": {
+        "category": "Hotels with Event Facilities",
+        "venues_list": "Coral Hotel - Aden, Gold Mohur Hotel & Resort, Aden, CC Royal Hotel",
+        "price_range_usd": "$3,000-$10,000 per event (Estimate)",
+        "price_range_yer": "5,100,000-17,000,000 YER (Estimate)",
+        "capacity_range": "100-500 guests",
+        "top_recommendation": "Gold Mohur Hotel & Resort, Aden - Best for large-scale, high-profile events and weddings due to its resort setting, private beach access, and larger estimated capacity, offering a unique and luxurious backdrop on the Gulf of Aden.",
+        "key_details": "The primary venues are the 5-star Coral Hotel and the Gold Mohur Hotel & Resort, both offering comprehensive event services. Coral Hotel provides 400 sq meters of flexible space across multiple halls (Petra, Al Khaymah, etc.), equipped with modern technology, and is conveniently located near the airport in Khormaksar. Gold Mohur Hotel & Resort is a resort-style venue situated on a peninsula overlooking the Gulf of Aden, offering a unique setting with potential for outdoor events and a large ballroom. CC Royal Hotel also features a large banquet hall and modern meeting rooms. All venues offer full-service event planning, catering, and accommodation, which is crucial for large-scale events in Aden. The Gold Mohur's resort setting and the Coral Hotel's proximity to the airport are key differentiators.",
+        "contact_info": "Coral Hotel: +967 776 365 267, fo@coral-aden.com; CC Royal Hotel: +967 779 944 887, ccroyalhotel@gmail.com"
+      },
+      "error": ""
+    },
+    {
+      "input": "Outdoor beach venues and resorts",
+      "output": {
+        "category": "Outdoor Beach Venues and Resorts for Event Planning",
+        "venues_list": "Gold Mohur Hotel & Resort, Coral Hotel - Aden, استراحة فرح لاند (Farah Land Resort)",
+        "price_range_usd": "$450 - $12,000 per event",
+        "price_range_yer": "765,000 - 20,400,000 YER per event",
+        "capacity_range": "100-2000 guests (depending on venue type and setup)",
+        "top_recommendation": "Gold Mohur Hotel & Resort - Best for large-scale, luxury events with full-service catering and accommodation, offering an iconic coastal location.",
+        "key_details": "The Aden event market is characterized by a mix of historic, full-service resorts and modern, private chalets. The Gold Mohur Hotel & Resort is the premier, full-service option, offering a private beach, extensive conference facilities, and a high-capacity ballroom (up to 2000 guests). It is ideal for large, formal events requiring accommodation and catering. The Coral Hotel offers a similar high-end hotel experience with a large banquet space (up to 400 sq. meters) and proximity to the airport. For budget-conscious or more casual events, Farah Land Resort offers a large, private chalet/rest house model with pools and outdoor space for a low base rental fee ($200 per period), requiring the event planner to manage all external services like catering and decor. The estimated price range reflects the significant difference between a full-service hotel package and a venue-only rental.",
+        "contact_info": "Gold Mohur: +967 2 204010, +967 2 204170 (Hai Althawra, Tawahi area) | Farah Land: +967 780333999, +967 779033514 (Bir Ahmed, Al-Qalou'a)"
+      },
+      "error": ""
+    },
+    {
+      "input": "Catering companies and services",
+      "output": {
+        "category": "Catering",
+        "venues_list": "Yemen Catering & Support Services International (YCI), Aden Quality for Services, Al Nokhba for Events, Moniaty Event Organizer",
+        "price_range_usd": "$15-$35 per person (estimated)",
+        "price_range_yer": "25,500-59,500 YER per person (estimated)",
+        "capacity_range": "N/A for services",
+        "top_recommendation": "Yemen Catering & Support Services International (YCI) - Best for large-scale, high-volume, and corporate event catering due to their established logistics, international standards, and long-standing experience in the region.",
+        "key_details": "The catering market in Aden is primarily divided into two segments: large-scale corporate/industrial catering (e.g., YCI, Aden Quality) and smaller, event-focused organizers (e.g., Al Nokhba, Moniaty). Corporate caterers offer full-service, high-volume meal plans for remote sites, airlines, and institutions, focusing on quality and logistics. Event organizers specialize in private functions like weddings and parties, offering decoration, coordination, and food services with a focus on traditional Yemeni and Middle Eastern cuisine. Capacity is generally flexible, with corporate caterers handling thousands of meals daily and event organizers scaling to hundreds of guests. The lack of transparent public pricing necessitates estimation based on regional averages.",
+        "contact_info": "YCI: +967 2 236669 (Aden office), Aden Quality: +967 777 976 781"
+      },
+      "error": ""
+    },
+    {
+      "input": "Photography and videography services",
+      "output": {
+        "category": "Photography and Videography Services",
+        "venues_list": "استديو الفن الحديث, الليث, استديو السماح, استديو الوحدة, استديو ليلتي, SAMA ADEN, Weem Art Studio, المصوره آلائـــــي, مصورة اعراس منيره محمد, استوديو الأفراح",
+        "price_range_usd": "$588-$1765 per event (Estimated)",
+        "price_range_yer": "1,000,000-3,000,000 YER (Estimated)",
+        "capacity_range": "N/A for services",
+        "top_recommendation": "Weem Art Studio - Best for modern, active social media presence and clear WhatsApp contact for immediate inquiries.",
+        "key_details": "Photography and videography services in Aden are primarily focused on weddings and social events, with many providers operating as small studios or individual female photographers (e.g., Al-A'la'i, Munira Mohammed) to cater to gender-segregated events. Services typically include full event coverage, studio sessions (e.g., newborn, family), and digital photo/video editing. Studios like SAMA ADEN and استوديو سما عدن emphasize a fully female staff for privacy and security. The market is characterized by high price variability, with a significant increase in recent years. The estimated price range reflects a professional, full-service package, which may include multiple photographers/videographers and high-quality deliverables.",
+        "contact_info": "Weem Art Studio: WhatsApp +967 770 510 374; SAMA ADEN: +967 730 355 634; استوديو الأفراح: +967 02357331, +967 780072407"
+      },
+      "error": ""
+    },
+    {
+      "input": "Decoration and flower arrangement services",
+      "output": {
+        "category": "Decoration and Flower Arrangement Services",
+        "venues_list": "Rose Group (روز لتنسيق وتنظيم المناسبات), Hanan Store (حنان ستور), Little Aden (كل ماتحتاجين لتكتمل اناقتك رنوش), Sultan Al-Koushat (سلطان الكوشات), T.D.C (شركة تنسيق وتنظيم)",
+        "price_range_usd": "$200-$1,500 per event (Decoration only)",
+        "price_range_yer": "340,000-2,550,000 YER per event (Decoration only)",
+        "capacity_range": "N/A",
+        "top_recommendation": "Rose Group (روز لتنسيق وتنظيم المناسبات) - Best for luxury, full-service wedding and high-end event decoration, with a strong portfolio showcased on social media.",
+        "key_details": "The Aden event decoration market is primarily served by specialized event organizers who offer comprehensive packages including kousha (bridal stage), lighting, sound, and floral arrangements. Rose Group and Hanan Store are established providers known for high-end, luxurious designs, particularly for weddings and engagements. Little Aden (Ranoosh) and Sultan Al-Koushat offer more budget-friendly and customizable options. Services typically include natural and artificial flower arrangements, custom kousha design, table centerpieces, lighting effects, and full event coordination. Pricing is highly variable based on the scale of the event, the complexity of the design, and the use of fresh versus artificial flowers. The market is heavily reliant on social media (Facebook, Instagram, TikTok) for showcasing portfolios and initial contact.",
+        "contact_info": "Rose Group: +967 781 272 172 (WhatsApp/Phone); Hanan Store: +967 778 672 275 (WhatsApp/Phone); Little Aden (Ranoosh): +967 778 974 973 (WhatsApp)"
+      },
+      "error": ""
+    },
+    {
+      "input": "Sound and lighting equipment rental",
+      "output": {
+        "category": "Sound and Lighting Equipment Rental",
+        "venues_list": "فرقة الاخوة الموسيقية (Al-Ikhwa Musical Band) / المهندس جمال العراقي",
+        "price_range_usd": "$300-$1,000 per event (Estimated)",
+        "price_range_yer": "510,000-1,700,000 YER (Estimated)",
+        "capacity_range": "N/A for service provider; equipment is capable of supporting large-scale events (e.g., theaters, large wedding halls).",
+        "top_recommendation": "فرقة الاخوة الموسيقية (Al-Ikhwa Musical Band) / المهندس جمال العراقي - Best for professional, large-scale sound and lighting setups, proven by their work on the Raed Taha Theater.",
+        "key_details": "The primary recommended provider, Al-Ikhwa Musical Band, led by Engineer Jamal Al-Iraqi, is a highly reputable and established service in Aden. They specialize in the rental and sale of professional sound and lighting equipment, as well as musical instruments, catering to weddings, concerts, and various events. Their expertise is highlighted by their selection to provide and install the sound and lighting systems for the re-rehabilitation of the Raed Taha Theater in Aden, indicating the capacity to handle large, complex, and high-quality technical setups. Services include full setup, installation, and operation of sound systems (microphones, speakers, mixers) and lighting systems (LEDs, lasers, effect lighting). Pricing is an estimate based on regional market rates for a professional, mid-to-large event package.",
+        "contact_info": "Primary Provider (Al-Ikhwa): Locations in Crater and Khor Maksar, Aden. General Aden Contact (ADEN SERVICES CO.): +967-773508298"
+      },
+      "error": ""
+    },
+    {
+      "input": "Transportation and valet services",
+      "output": {
+        "category": "Transportation and Valet Services",
+        "venues_list": "City Cars for Car Rental, Cabs Yemen, Al-Baraka International Transport, Limitless Valet (Regional)",
+        "price_range_usd": "$50-$500 per event",
+        "price_range_yer": "85,000-850,000 YER",
+        "capacity_range": "N/A for services",
+        "top_recommendation": "City Cars for Car Rental - Best for luxury car rental for weddings and VIP transport due to local presence and explicit event service offering.",
+        "key_details": "The Aden market for event transportation is primarily served by car rental agencies offering luxury vehicles for weddings and private drivers for groups. Dedicated, local valet parking companies are not easily found online, suggesting this service is often provided by the event venue or a regional company. City Cars for Car Rental offers luxury vehicles for events, emphasizing a prestigious look. For large groups, companies like Al-Baraka International Transport offer modern, air-conditioned coaches (up to 50+ guests) with amenities like Wi-Fi and charging ports, suitable for guest shuttles. The lack of online presence for valet services means event planners should budget for a regional provider or coordinate with a major hotel.",
+        "contact_info": "City Cars for Car Rental: +967 778 832 713 (WhatsApp), Al-Mansoura Corniche, Aden. Al-Baraka Transport: +967 770 066 609 (Ibb office, use for general inquiry)."
+      },
+      "error": ""
+    }
+  ]
+}
