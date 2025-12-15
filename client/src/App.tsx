@@ -15,6 +15,10 @@ import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
 import AIPlanner from "./pages/AIPlanner";
+import SupplierPortal from "./pages/SupplierPortal";
+import SubBrands from "./pages/SubBrands";
+import ClientPortal from "./pages/ClientPortal";
+import Booking from "./pages/Booking";
 
 function Router() {
   return (
@@ -27,6 +31,10 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/products" component={Products} />
       <Route path="/ai-planner" component={AIPlanner} />
+      <Route path="/suppliers" component={SupplierPortal} />
+      <Route path="/brands" component={SubBrands} />
+      <Route path="/portal" component={ClientPortal} />
+      <Route path="/booking" component={Booking} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

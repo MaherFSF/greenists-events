@@ -19,6 +19,8 @@ export function Navigation() {
     { path: '/contact', label: t('nav.contact') },
     { path: '/products', label: t('nav.products') },
     { path: '/ai-planner', label: t('nav.ai') },
+    { path: '/brands', label: t('nav.brands') },
+    { path: '/suppliers', label: t('nav.suppliers') },
   ];
   
   const toggleLanguage = () => {

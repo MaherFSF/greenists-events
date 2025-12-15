@@ -16,16 +16,25 @@
 - [ ] Generate instant quote PDF
 
 ## Client Portal
-- [ ] Create client registration system
-- [ ] Generate unique client IDs
-- [ ] Build event progress tracking dashboard
-- [ ] Create event timeline view
+- [x] Create client registration system
+- [x] Generate unique client IDs
+- [x] Build event progress tracking dashboard
+- [x] Create event timeline view
 - [ ] Add document upload/download functionality
 
 ## AI Features
 - [x] Integrate AI event planning suggestions (AI Planner page)
 - [ ] Add AI-powered budget optimization
 - [ ] Create AI chatbot for inquiries
+
+## Event Booking System (NEW)
+- [x] Create multi-step booking wizard
+- [x] Add event type selection (8 types)
+- [x] Add venue options with pricing
+- [x] Add catering packages
+- [x] Add additional services selection
+- [x] Add contact information form
+- [x] Create booking review with 3-currency pricing
 
 ## Admin Dashboard
 - [ ] Create internal planning page
@@ -51,3 +60,40 @@
 - [x] Add product categories filter
 - [x] Display event collections (Corporate, Wedding, Government, Ramadan, Yemen Cultural, Luxury)
 - [x] Add product detail modal
+
+## Supplier Portal (NEW)
+- [x] Create supplier registration page
+- [x] Add supplier categories (Hotels, Catering, Decoration, Photography, Transportation, Venues)
+- [x] Implement sustainability certification requirements
+- [x] Add green standards adherence pledge form
+- [ ] Create supplier dashboard for approved partners
+- [ ] Add eco-friendly supplier badges system
+
+## Enhanced Design (NEW)
+- [x] Add gold accents throughout the design
+- [x] Update contact info to match letterhead exactly
+- [ ] Ensure domain references www.greenists-events.com
+- [ ] Add sustainability focus sections
+- [ ] Create green certification levels display
+
+## Procurement System (NEW)
+- [x] Create comprehensive RFP document for China suppliers
+- [ ] Add modular reusable system specifications
+- [ ] Include 2-year quantity calculations
+- [ ] Add material options with eco-friendly focus
+
+## Sub-Brands (NEW)
+- [x] Create 13 specialized sub-brands page
+- [x] Greenists Corporate
+- [x] Greenists Weddings
+- [x] Greenists Condolences
+- [x] Greenists Banking
+- [x] Greenists NGO
+- [x] Greenists Education
+- [x] Greenists Government
+- [x] Greenists Kids
+- [x] Greenists Entertainment
+- [x] Greenists Healthcare
+- [x] Greenists Construction
+- [x] Greenists Energy
+- [x] Greenists Travel
