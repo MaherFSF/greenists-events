@@ -187,3 +187,33 @@
 - [x] New pages tests (25)
 - [x] Greenists API tests (19)
 - [x] Auth tests (1)
+
+
+## Store Page (NEW)
+- [x] Create Greenists Store page with shopping functionality
+- [x] Add 14 products with prices in USD and YER
+- [x] Add product categories (Stationery, Clothing, Gift Sets, Event Supplies, Yemeni Heritage)
+- [x] Add eco-friendly badges on sustainable products
+- [x] Add store opening announcement (June 2026)
+- [x] Add bulk order section for corporate clients
+
+## Volunteer Page (NEW)
+- [x] Create "Supported by Greenists" volunteer page
+- [x] Add "Challenges as Opportunities" philosophy section
+- [x] Add 4 beach cleanup events with registration
+- [x] Add volunteer supplies section (t-shirt, cap, water with carton caps)
+- [x] Add 4 environmental initiatives with achievements
+- [x] Add contact form for new initiative ideas
+
+## Team Page (NEW)
+- [x] Create Team page with Maher Faidal Saeed Farea as CEO
+- [x] Add Executive Leadership section with 3 leaders
+- [x] Add 8 departments with 25+ team members
+- [x] Add team uniforms section
+- [x] Add careers section
+
+## Final Testing (NEW)
+- [x] Test Store page via browser - Working
+- [x] Test Volunteer page via browser - Working
+- [x] Test Team page via browser - Working
+- [x] All 128 unit tests passing
