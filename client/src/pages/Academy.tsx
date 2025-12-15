@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 import { 
   GraduationCap, 
   Leaf, 
@@ -22,7 +23,15 @@ import {
   CheckCircle,
   ArrowRight,
   Building2,
-  Handshake
+  Handshake,
+  Play,
+  Clock,
+  Star,
+  Trophy,
+  Zap,
+  FileText,
+  Video,
+  Download
 } from 'lucide-react';
 
 // Environmental awareness days calendar
@@ -41,7 +50,7 @@ const environmentalDays = [
   { date: 'December 5', name: { en: 'World Soil Day', ar: 'اليوم العالمي للتربة' }, icon: Leaf, color: 'bg-amber-700' },
 ];
 
-// Sustainability courses
+// Enhanced sustainability courses with more details
 const courses = [
   {
     id: 1,
@@ -52,14 +61,28 @@ const courses = [
     },
     duration: { en: '4 weeks', ar: '4 أسابيع' },
     level: { en: 'Professional', ar: 'احترافي' },
+    price: { en: '$299', ar: '299 دولار' },
+    students: 234,
+    rating: 4.9,
+    lessons: 24,
+    certificate: true,
     topics: [
       { en: 'Understanding ISO 20121 framework', ar: 'فهم إطار عمل ISO 20121' },
       { en: 'Implementing sustainability policies', ar: 'تنفيذ سياسات الاستدامة' },
       { en: 'Measuring environmental impact', ar: 'قياس الأثر البيئي' },
       { en: 'Certification process', ar: 'عملية الحصول على الشهادة' },
     ],
+    modules: [
+      { en: 'Introduction to ISO 20121', ar: 'مقدمة في ISO 20121', duration: '2h' },
+      { en: 'Sustainability Policy Development', ar: 'تطوير سياسة الاستدامة', duration: '3h' },
+      { en: 'Stakeholder Engagement', ar: 'إشراك أصحاب المصلحة', duration: '2.5h' },
+      { en: 'Environmental Impact Assessment', ar: 'تقييم الأثر البيئي', duration: '4h' },
+      { en: 'Implementation & Monitoring', ar: 'التنفيذ والمراقبة', duration: '3h' },
+      { en: 'Certification Preparation', ar: 'التحضير للشهادة', duration: '2h' },
+    ],
     icon: Award,
     color: 'from-green-600 to-emerald-500',
+    image: '/images/courses/iso-20121.png',
   },
   {
     id: 2,
@@ -70,14 +93,26 @@ const courses = [
     },
     duration: { en: '2 weeks', ar: 'أسبوعان' },
     level: { en: 'Beginner', ar: 'مبتدئ' },
+    price: { en: '$149', ar: '149 دولار' },
+    students: 567,
+    rating: 4.8,
+    lessons: 16,
+    certificate: true,
     topics: [
       { en: 'Waste reduction strategies', ar: 'استراتيجيات تقليل النفايات' },
       { en: 'Sustainable catering options', ar: 'خيارات التموين المستدام' },
       { en: 'Eco-friendly venue selection', ar: 'اختيار الأماكن الصديقة للبيئة' },
       { en: 'Carbon footprint calculation', ar: 'حساب البصمة الكربونية' },
     ],
+    modules: [
+      { en: 'What is Green Events?', ar: 'ما هي الفعاليات الخضراء؟', duration: '1.5h' },
+      { en: 'Sustainable Venue Selection', ar: 'اختيار المكان المستدام', duration: '2h' },
+      { en: 'Zero-Waste Strategies', ar: 'استراتيجيات صفر نفايات', duration: '2.5h' },
+      { en: 'Green Catering & Food', ar: 'التموين والطعام الأخضر', duration: '2h' },
+    ],
     icon: Leaf,
     color: 'from-lime-600 to-green-500',
+    image: '/images/courses/green-planning.png',
   },
   {
     id: 3,
@@ -88,14 +123,26 @@ const courses = [
     },
     duration: { en: '3 weeks', ar: '3 أسابيع' },
     level: { en: 'Intermediate', ar: 'متوسط' },
+    price: { en: '$199', ar: '199 دولار' },
+    students: 189,
+    rating: 4.7,
+    lessons: 20,
+    certificate: true,
     topics: [
       { en: 'Climate hazards in Aden region', ar: 'المخاطر المناخية في منطقة عدن' },
       { en: 'Water scarcity solutions', ar: 'حلول ندرة المياه' },
       { en: 'Heat-resilient event planning', ar: 'تخطيط فعاليات مقاومة للحرارة' },
       { en: 'Flood risk management', ar: 'إدارة مخاطر الفيضانات' },
     ],
+    modules: [
+      { en: 'Climate Science Basics', ar: 'أساسيات علم المناخ', duration: '2h' },
+      { en: 'Yemen Climate Challenges', ar: 'تحديات المناخ في اليمن', duration: '3h' },
+      { en: 'Adaptation Strategies', ar: 'استراتيجيات التكيف', duration: '2.5h' },
+      { en: 'Case Studies from Aden', ar: 'دراسات حالة من عدن', duration: '2h' },
+    ],
     icon: Sun,
     color: 'from-amber-600 to-orange-500',
+    image: '/images/courses/climate-yemen.png',
   },
   {
     id: 4,
@@ -106,14 +153,86 @@ const courses = [
     },
     duration: { en: '1 week', ar: 'أسبوع واحد' },
     level: { en: 'All Levels', ar: 'جميع المستويات' },
+    price: { en: '$79', ar: '79 دولار' },
+    students: 892,
+    rating: 4.9,
+    lessons: 8,
+    certificate: true,
     topics: [
       { en: 'Alternative materials', ar: 'المواد البديلة' },
       { en: 'Supplier partnerships', ar: 'شراكات الموردين' },
       { en: 'Guest communication', ar: 'التواصل مع الضيوف' },
       { en: 'Waste management systems', ar: 'أنظمة إدارة النفايات' },
     ],
+    modules: [
+      { en: 'The Plastic Problem', ar: 'مشكلة البلاستيك', duration: '1h' },
+      { en: 'Sustainable Alternatives', ar: 'البدائل المستدامة', duration: '2h' },
+      { en: 'Implementation Guide', ar: 'دليل التنفيذ', duration: '1.5h' },
+      { en: 'Measuring Success', ar: 'قياس النجاح', duration: '1h' },
+    ],
     icon: Recycle,
     color: 'from-teal-600 to-cyan-500',
+    image: '/images/courses/plastic-free.png',
+  },
+  {
+    id: 5,
+    title: { en: 'Corporate Event Management Masterclass', ar: 'ماستركلاس إدارة فعاليات الشركات' },
+    description: { 
+      en: 'Comprehensive training on managing large-scale corporate events with sustainability focus.',
+      ar: 'تدريب شامل على إدارة فعاليات الشركات الكبيرة مع التركيز على الاستدامة.'
+    },
+    duration: { en: '6 weeks', ar: '6 أسابيع' },
+    level: { en: 'Advanced', ar: 'متقدم' },
+    price: { en: '$499', ar: '499 دولار' },
+    students: 156,
+    rating: 4.8,
+    lessons: 36,
+    certificate: true,
+    topics: [
+      { en: 'Corporate event strategy', ar: 'استراتيجية فعاليات الشركات' },
+      { en: 'Budget management', ar: 'إدارة الميزانية' },
+      { en: 'Vendor negotiations', ar: 'التفاوض مع الموردين' },
+      { en: 'ROI measurement', ar: 'قياس العائد على الاستثمار' },
+    ],
+    modules: [
+      { en: 'Corporate Event Fundamentals', ar: 'أساسيات فعاليات الشركات', duration: '4h' },
+      { en: 'Strategic Planning', ar: 'التخطيط الاستراتيجي', duration: '5h' },
+      { en: 'Budget & Finance', ar: 'الميزانية والمالية', duration: '4h' },
+      { en: 'Execution Excellence', ar: 'التميز في التنفيذ', duration: '5h' },
+    ],
+    icon: Building2,
+    color: 'from-blue-600 to-indigo-500',
+    image: '/images/courses/corporate.png',
+  },
+  {
+    id: 6,
+    title: { en: 'Wedding Planning Certification', ar: 'شهادة تخطيط حفلات الزفاف' },
+    description: { 
+      en: 'Become a certified wedding planner with expertise in Yemeni traditions and modern sustainability.',
+      ar: 'احصل على شهادة مخطط حفلات زفاف مع خبرة في التقاليد اليمنية والاستدامة الحديثة.'
+    },
+    duration: { en: '8 weeks', ar: '8 أسابيع' },
+    level: { en: 'Professional', ar: 'احترافي' },
+    price: { en: '$599', ar: '599 دولار' },
+    students: 312,
+    rating: 4.9,
+    lessons: 48,
+    certificate: true,
+    topics: [
+      { en: 'Yemeni wedding traditions', ar: 'تقاليد الزفاف اليمنية' },
+      { en: 'Sustainable decorations', ar: 'الديكورات المستدامة' },
+      { en: 'Vendor management', ar: 'إدارة الموردين' },
+      { en: 'Client relations', ar: 'علاقات العملاء' },
+    ],
+    modules: [
+      { en: 'Wedding Industry Overview', ar: 'نظرة عامة على صناعة الزفاف', duration: '3h' },
+      { en: 'Yemeni Traditions & Culture', ar: 'التقاليد والثقافة اليمنية', duration: '4h' },
+      { en: 'Sustainable Wedding Design', ar: 'تصميم زفاف مستدام', duration: '5h' },
+      { en: 'Business & Marketing', ar: 'الأعمال والتسويق', duration: '4h' },
+    ],
+    icon: Heart,
+    color: 'from-pink-600 to-rose-500',
+    image: '/images/courses/wedding.png',
   },
 ];
 
@@ -180,26 +299,58 @@ const climateFacts = [
   },
 ];
 
+// Certifications offered
+const certifications = [
+  {
+    name: { en: 'Certified Sustainable Event Professional (CSEP)', ar: 'محترف فعاليات مستدامة معتمد' },
+    description: { en: 'Industry-recognized certification for sustainable event management', ar: 'شهادة معترف بها في الصناعة لإدارة الفعاليات المستدامة' },
+    requirements: { en: '3 courses + final exam', ar: '3 دورات + امتحان نهائي' },
+    icon: Trophy,
+  },
+  {
+    name: { en: 'Green Event Planner Certificate', ar: 'شهادة مخطط الفعاليات الخضراء' },
+    description: { en: 'Foundation certification for eco-friendly event planning', ar: 'شهادة أساسية لتخطيط الفعاليات الصديقة للبيئة' },
+    requirements: { en: '2 courses + project', ar: 'دورتان + مشروع' },
+    icon: Leaf,
+  },
+  {
+    name: { en: 'ISO 20121 Lead Implementer', ar: 'قائد تنفيذ ISO 20121' },
+    description: { en: 'Advanced certification for ISO 20121 implementation', ar: 'شهادة متقدمة لتنفيذ ISO 20121' },
+    requirements: { en: 'ISO course + 2 years experience', ar: 'دورة ISO + سنتان خبرة' },
+    icon: Award,
+  },
+];
+
 export default function Academy() {
   const { language } = useLanguage();
   const isRTL = language === 'ar';
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState('courses');
 
   return (
     <div className={`min-h-screen bg-gradient-to-b from-green-50 to-white ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-green-700 via-green-600 to-emerald-600 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ 
-            backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.4"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
-          }} />
+      {/* Hero Section with Video Background */}
+      <section className="relative py-24 bg-gradient-to-r from-green-800 via-green-700 to-emerald-700 text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover opacity-20"
+          >
+            <source src="/videos/greenists-hero.mp4" type="video/mp4" />
+          </video>
         </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-green-900/80 to-emerald-900/80" />
+        
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <GraduationCap className="w-16 h-16" />
-            <Leaf className="w-12 h-12" />
+            <div className="p-4 bg-white/10 rounded-full backdrop-blur-sm">
+              <GraduationCap className="w-12 h-12" />
+            </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-center mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-center mb-4 font-serif">
             {isRTL ? 'أكاديمية جرينستس' : 'Greenists Academy'}
           </h1>
           <p className="text-xl md:text-2xl text-center text-green-100 max-w-3xl mx-auto mb-8">
@@ -208,380 +359,297 @@ export default function Academy() {
               : 'Center of Excellence for Environmental Education & Sustainable Event Management in Yemen'
             }
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Badge className="bg-white/20 text-white text-lg px-4 py-2">
-              <Award className="w-5 h-5 mr-2" />
-              {isRTL ? 'معتمد ISO 20121' : 'ISO 20121 Certified'}
-            </Badge>
-            <Badge className="bg-white/20 text-white text-lg px-4 py-2">
-              <Users className="w-5 h-5 mr-2" />
-              {isRTL ? '+500 متدرب' : '500+ Trainees'}
-            </Badge>
-            <Badge className="bg-white/20 text-white text-lg px-4 py-2">
-              <Globe className="w-5 h-5 mr-2" />
-              {isRTL ? 'شراكات دولية' : 'Global Partnerships'}
-            </Badge>
+          
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12">
+            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-amber-400">6+</div>
+              <div className="text-sm text-green-100">{isRTL ? 'دورات معتمدة' : 'Certified Courses'}</div>
+            </div>
+            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-amber-400">2,350+</div>
+              <div className="text-sm text-green-100">{isRTL ? 'متدرب' : 'Students'}</div>
+            </div>
+            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-amber-400">4.8</div>
+              <div className="text-sm text-green-100">{isRTL ? 'متوسط التقييم' : 'Avg Rating'}</div>
+            </div>
+            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-amber-400">3</div>
+              <div className="text-sm text-green-100">{isRTL ? 'شهادات مهنية' : 'Certifications'}</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <Tabs defaultValue="courses" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="courses" className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4" />
-              {isRTL ? 'الدورات' : 'Courses'}
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              {isRTL ? 'التقويم البيئي' : 'Eco Calendar'}
-            </TabsTrigger>
-            <TabsTrigger value="climate" className="flex items-center gap-2">
-              <Sun className="w-4 h-4" />
-              {isRTL ? 'المناخ واليمن' : 'Climate & Yemen'}
-            </TabsTrigger>
-            <TabsTrigger value="partners" className="flex items-center gap-2">
-              <Handshake className="w-4 h-4" />
-              {isRTL ? 'الشركاء' : 'Partners'}
-            </TabsTrigger>
-          </TabsList>
+      {/* Main Content Tabs */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-12">
+              <TabsTrigger value="courses" className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                {isRTL ? 'الدورات' : 'Courses'}
+              </TabsTrigger>
+              <TabsTrigger value="certifications" className="flex items-center gap-2">
+                <Trophy className="w-4 h-4" />
+                {isRTL ? 'الشهادات' : 'Certifications'}
+              </TabsTrigger>
+              <TabsTrigger value="calendar" className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                {isRTL ? 'التقويم' : 'Calendar'}
+              </TabsTrigger>
+              <TabsTrigger value="partners" className="flex items-center gap-2">
+                <Handshake className="w-4 h-4" />
+                {isRTL ? 'الشركاء' : 'Partners'}
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Courses Tab */}
-          <TabsContent value="courses">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-green-800 mb-4">
-                {isRTL ? 'دورات الاستدامة والفعاليات الخضراء' : 'Sustainability & Green Events Courses'}
-              </h2>
-              <p className="text-gray-600 max-w-3xl">
-                {isRTL 
-                  ? 'برامج تدريبية شاملة مصممة لتأهيل المحترفين في مجال إدارة الفعاليات المستدامة وفق أعلى المعايير الدولية.'
-                  : 'Comprehensive training programs designed to qualify professionals in sustainable event management according to the highest international standards.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {courses.map((course) => (
-                <Card 
-                  key={course.id} 
-                  className={`overflow-hidden hover:shadow-xl transition-all cursor-pointer ${selectedCourse === course.id ? 'ring-2 ring-green-500' : ''}`}
-                  onClick={() => setSelectedCourse(selectedCourse === course.id ? null : course.id)}
-                >
-                  <div className={`h-2 bg-gradient-to-r ${course.color}`} />
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className={`p-3 rounded-xl bg-gradient-to-r ${course.color} text-white`}>
-                        <course.icon className="w-6 h-6" />
+            {/* Courses Tab */}
+            <TabsContent value="courses">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {courses.map((course) => (
+                  <Card 
+                    key={course.id} 
+                    className="group overflow-hidden hover:shadow-2xl transition-all duration-500 border-0 bg-white"
+                  >
+                    <div className={`h-48 bg-gradient-to-br ${course.color} relative overflow-hidden`}>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <course.icon className="w-20 h-20 text-white/30" />
                       </div>
-                      <div className="flex gap-2">
-                        <Badge variant="outline">{course.level[language]}</Badge>
-                        <Badge variant="secondary">{course.duration[language]}</Badge>
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-white/90 text-gray-800">
+                          {course.level[language]}
+                        </Badge>
+                      </div>
+                      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+                        <div className="flex items-center gap-1 text-white">
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <span className="font-semibold">{course.rating}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-white/80 text-sm">
+                          <Users className="w-4 h-4" />
+                          <span>{course.students}</span>
+                        </div>
                       </div>
                     </div>
-                    <CardTitle className="text-xl mt-4">{course.title[language]}</CardTitle>
-                    <CardDescription>{course.description[language]}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <p className="font-semibold text-sm text-gray-700">
-                        {isRTL ? 'المواضيع المغطاة:' : 'Topics Covered:'}
-                      </p>
-                      <ul className="space-y-1">
-                        {course.topics.map((topic, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                            {topic[language]}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {selectedCourse === course.id && (
-                      <Button className="w-full mt-4 bg-green-600 hover:bg-green-700">
-                        {isRTL ? 'سجل الآن' : 'Enroll Now'}
-                        <ArrowRight className={`w-4 h-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    
+                    <CardHeader>
+                      <CardTitle className="text-xl group-hover:text-green-600 transition-colors">
+                        {course.title[language]}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-2">
+                        {course.description[language]}
+                      </CardDescription>
+                    </CardHeader>
+                    
+                    <CardContent>
+                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {course.duration[language]}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Video className="w-4 h-4" />
+                          {course.lessons} {isRTL ? 'درس' : 'lessons'}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-green-600">{course.price[language]}</span>
+                        <Button className="bg-green-600 hover:bg-green-700">
+                          {isRTL ? 'سجل الآن' : 'Enroll Now'}
+                          <ArrowRight className={`w-4 h-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                        </Button>
+                      </div>
+                      
+                      {course.certificate && (
+                        <div className="mt-4 pt-4 border-t flex items-center gap-2 text-sm text-amber-600">
+                          <Award className="w-4 h-4" />
+                          {isRTL ? 'شهادة معتمدة' : 'Certificate Included'}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
-            {/* ISO 20121 Section */}
-            <Card className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-green-600 rounded-xl text-white">
-                    <Award className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl text-green-800">
-                      {isRTL ? 'شهادة ISO 20121' : 'ISO 20121 Certification'}
-                    </CardTitle>
-                    <CardDescription className="text-green-700">
-                      {isRTL 
-                        ? 'المعيار الدولي الرائد لأنظمة إدارة استدامة الفعاليات'
-                        : 'The leading international standard for event sustainability management systems'
-                      }
-                    </CardDescription>
-                  </div>
+            {/* Certifications Tab */}
+            <TabsContent value="certifications">
+              <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    {isRTL ? 'الشهادات المهنية' : 'Professional Certifications'}
+                  </h2>
+                  <p className="text-gray-600">
+                    {isRTL 
+                      ? 'احصل على شهادات معترف بها دولياً في مجال إدارة الفعاليات المستدامة'
+                      : 'Earn internationally recognized certifications in sustainable event management'
+                    }
+                  </p>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-4 gap-4">
-                  {['Plan', 'Do', 'Check', 'Act'].map((step, idx) => (
-                    <div key={step} className="text-center p-4 bg-white rounded-lg shadow-sm">
-                      <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-lg">
-                        {idx + 1}
-                      </div>
-                      <p className="font-semibold text-green-800">{step}</p>
-                      <p className="text-sm text-gray-600">
-                        {isRTL 
-                          ? ['التخطيط', 'التنفيذ', 'التحقق', 'التصحيح'][idx]
-                          : ['Planning', 'Implementation', 'Verification', 'Improvement'][idx]
-                        }
-                      </p>
-                    </div>
+                
+                <div className="space-y-6">
+                  {certifications.map((cert, index) => (
+                    <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-6">
+                          <div className="p-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl text-white">
+                            <cert.icon className="w-8 h-8" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">
+                              {cert.name[language]}
+                            </h3>
+                            <p className="text-gray-600 mb-4">
+                              {cert.description[language]}
+                            </p>
+                            <div className="flex items-center gap-4">
+                              <Badge variant="outline" className="text-green-600 border-green-600">
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                {cert.requirements[language]}
+                              </Badge>
+                              <Button variant="outline" className="text-green-600 border-green-600 hover:bg-green-50">
+                                {isRTL ? 'تعرف أكثر' : 'Learn More'}
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </div>
+            </TabsContent>
 
-          {/* Environmental Calendar Tab */}
-          <TabsContent value="calendar">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-green-800 mb-4">
-                {isRTL ? 'تقويم الأيام البيئية العالمية' : 'International Environmental Days Calendar'}
-              </h2>
-              <p className="text-gray-600 max-w-3xl">
-                {isRTL 
-                  ? 'أيام التوعية البيئية العالمية التي نحتفل بها ونستخدمها لنشر الوعي من خلال فعالياتنا.'
-                  : 'Global environmental awareness days that we celebrate and use to spread awareness through our events.'
-                }
-              </p>
-            </div>
-
-            {/* World Environment Day 2025 Highlight */}
-            <Card className="mb-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-              <CardContent className="p-8">
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                  <div className="p-6 bg-white/20 rounded-full">
-                    <Globe className="w-16 h-16" />
-                  </div>
-                  <div className="flex-1 text-center md:text-start">
-                    <Badge className="bg-white/30 text-white mb-2">
-                      {isRTL ? '5 يونيو 2025' : 'June 5, 2025'}
-                    </Badge>
-                    <h3 className="text-2xl font-bold mb-2">
-                      {isRTL ? 'يوم البيئة العالمي 2025' : 'World Environment Day 2025'}
-                    </h3>
-                    <p className="text-green-100 mb-4">
-                      {isRTL 
-                        ? 'الموضوع: إنهاء التلوث البلاستيكي - تستضيفه جمهورية كوريا'
-                        : 'Theme: Ending Plastic Pollution - Hosted by Republic of Korea'
-                      }
-                    </p>
-                    <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                      <div className="text-center">
-                        <p className="text-3xl font-bold">400M</p>
-                        <p className="text-sm text-green-200">{isRTL ? 'طن بلاستيك/سنة' : 'tons plastic/year'}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-3xl font-bold">9%</p>
-                        <p className="text-sm text-green-200">{isRTL ? 'فقط يتم إعادة تدويره' : 'only recycled'}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-3xl font-bold">23M</p>
-                        <p className="text-sm text-green-200">{isRTL ? 'طن تتسرب للمحيطات' : 'tons leak to oceans'}</p>
-                      </div>
-                    </div>
-                  </div>
+            {/* Calendar Tab */}
+            <TabsContent value="calendar">
+              <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    {isRTL ? 'تقويم الأيام البيئية العالمية' : 'Environmental Awareness Calendar'}
+                  </h2>
+                  <p className="text-gray-600">
+                    {isRTL 
+                      ? 'أيام التوعية البيئية المهمة التي نحتفل بها ونقدم فعاليات خاصة لها'
+                      : 'Important environmental awareness days we celebrate with special events'
+                    }
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {environmentalDays.map((day, idx) => (
-                <Card key={idx} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`p-2 rounded-lg ${day.color} text-white`}>
-                        <day.icon className="w-5 h-5" />
-                      </div>
-                      <Badge variant="outline" className="text-xs">{day.date}</Badge>
-                    </div>
-                    <p className="font-semibold text-gray-800 text-sm">{day.name[language]}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Climate & Yemen Tab */}
-          <TabsContent value="climate">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-green-800 mb-4">
-                {isRTL ? 'التغير المناخي وتأثيره على اليمن' : 'Climate Change Impact on Yemen'}
-              </h2>
-              <p className="text-gray-600 max-w-3xl">
-                {isRTL 
-                  ? 'اليمن من أكثر الدول تأثراً بالتغير المناخي. نعمل على رفع الوعي وتطوير حلول مستدامة.'
-                  : 'Yemen is one of the most climate-vulnerable countries. We work to raise awareness and develop sustainable solutions.'
-                }
-              </p>
-            </div>
-
-            {/* Climate Statistics */}
-            <div className="grid md:grid-cols-4 gap-4 mb-8">
-              {climateFacts.map((fact, idx) => (
-                <Card key={idx} className="text-center bg-gradient-to-b from-amber-50 to-orange-50 border-amber-200">
-                  <CardContent className="p-6">
-                    <p className="text-4xl font-bold text-amber-600 mb-2">{fact.stat}</p>
-                    <p className="text-sm text-gray-600">{fact.label[language]}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Climate Challenges */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-amber-700">
-                    <Sun className="w-5 h-5" />
-                    {isRTL ? 'التحديات المناخية في عدن' : 'Climate Challenges in Aden'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {[
-                      { en: 'Rising temperatures faster than global average', ar: 'ارتفاع درجات الحرارة أسرع من المعدل العالمي' },
-                      { en: 'Increased frequency of flash floods', ar: 'زيادة تكرار الفيضانات المفاجئة' },
-                      { en: 'Water scarcity and drought conditions', ar: 'ندرة المياه وظروف الجفاف' },
-                      { en: 'Coastal erosion and sea level rise', ar: 'تآكل السواحل وارتفاع مستوى البحر' },
-                      { en: 'Heat waves affecting outdoor events', ar: 'موجات الحر تؤثر على الفعاليات الخارجية' },
-                    ].map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Target className="w-4 h-4 text-amber-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-700">{item[language]}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-700">
-                    <Leaf className="w-5 h-5" />
-                    {isRTL ? 'حلول جرينستس المستدامة' : 'Greenists Sustainable Solutions'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {[
-                      { en: 'Solar-powered event equipment', ar: 'معدات فعاليات تعمل بالطاقة الشمسية' },
-                      { en: 'Water-efficient event planning', ar: 'تخطيط فعاليات موفرة للمياه' },
-                      { en: 'Climate-resilient venue selection', ar: 'اختيار أماكن مقاومة للمناخ' },
-                      { en: 'Carbon offset programs', ar: 'برامج تعويض الكربون' },
-                      { en: 'Waste reduction and recycling', ar: 'تقليل النفايات وإعادة التدوير' },
-                    ].map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-700">{item[language]}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Holm Akhdar Research Highlight */}
-            <Card className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 border-green-300">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                  <div className="text-6xl">🌿</div>
-                  <div>
-                    <h3 className="text-xl font-bold text-green-800 mb-2">
-                      {isRTL ? 'بحث حلم أخضر (مايو 2025)' : 'Holm Akhdar Research (May 2025)'}
-                    </h3>
-                    <p className="text-gray-700 mb-4">
-                      {isRTL 
-                        ? 'وجدت دراسة حلم أخضر أن حوالي 13.9% من النزوح في اليمن كان بسبب التغير المناخي، مع تأثر 69.8% من النازحين بأضرار الفيضانات على مصادر المياه.'
-                        : 'A Holm Akhdar study found that approximately 13.9% of displacement in Yemen was due to climate change, with 69.8% of IDPs affected by flood damage to water sources.'
-                      }
-                    </p>
-                    <div className="flex gap-4">
-                      <Badge className="bg-green-600">13.9% {isRTL ? 'نزوح مناخي' : 'Climate Displacement'}</Badge>
-                      <Badge className="bg-blue-600">69.8% {isRTL ? 'تأثر بالفيضانات' : 'Flood Affected'}</Badge>
-                    </div>
-                  </div>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {environmentalDays.map((day, index) => (
+                    <Card key={index} className="overflow-hidden hover:shadow-lg transition-all group">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-4">
+                          <div className={`p-3 ${day.color} rounded-xl text-white group-hover:scale-110 transition-transform`}>
+                            <day.icon className="w-6 h-6" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-800">{day.name[language]}</div>
+                            <div className="text-sm text-gray-500">{day.date}</div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </div>
+            </TabsContent>
 
-          {/* Partners Tab */}
-          <TabsContent value="partners">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-green-800 mb-4">
-                {isRTL ? 'شركاؤنا في الاستدامة' : 'Our Sustainability Partners'}
-              </h2>
-              <p className="text-gray-600 max-w-3xl">
-                {isRTL 
-                  ? 'نتعاون مع منظمات محلية ودولية رائدة لتعزيز الاستدامة البيئية في اليمن.'
-                  : 'We collaborate with leading local and international organizations to promote environmental sustainability in Yemen.'
-                }
-              </p>
-            </div>
+            {/* Partners Tab */}
+            <TabsContent value="partners">
+              <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    {isRTL ? 'شركاؤنا' : 'Our Partners'}
+                  </h2>
+                  <p className="text-gray-600">
+                    {isRTL 
+                      ? 'نتعاون مع منظمات رائدة في مجال البيئة والاستدامة'
+                      : 'We collaborate with leading organizations in environment and sustainability'
+                    }
+                  </p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-6">
+                  {partners.map((partner, index) => (
+                    <Card key={index} className="overflow-hidden hover:shadow-lg transition-all">
+                      <CardHeader className="text-center">
+                        <div className="text-5xl mb-4">{partner.logo}</div>
+                        <CardTitle>{partner.name[language]}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-600 text-sm mb-4">
+                          {partner.description[language]}
+                        </p>
+                        <div className="space-y-2">
+                          {partner.services.map((service, i) => (
+                            <Badge key={i} variant="outline" className="mr-2 mb-2">
+                              {service[language]}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {partners.map((partner, idx) => (
-                <Card key={idx} className="hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <div className="text-5xl mb-4">{partner.logo}</div>
-                    <CardTitle className="text-xl">{partner.name[language]}</CardTitle>
-                    <CardDescription>{partner.description[language]}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="font-semibold text-sm text-gray-700 mb-2">
-                      {isRTL ? 'الخدمات:' : 'Services:'}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {partner.services.map((service, sidx) => (
-                        <Badge key={sidx} variant="secondary" className="text-xs">
-                          {service[language]}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+      {/* Climate Facts Section */}
+      <section className="py-16 bg-gradient-to-r from-amber-600 to-orange-600 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">
+              {isRTL ? 'التغير المناخي في اليمن' : 'Climate Change in Yemen'}
+            </h2>
+            <p className="text-amber-100 max-w-2xl mx-auto">
+              {isRTL 
+                ? 'حقائق مهمة عن تأثير التغير المناخي على اليمن ولماذا الفعاليات المستدامة مهمة'
+                : 'Important facts about climate change impact on Yemen and why sustainable events matter'
+              }
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-6">
+            {climateFacts.map((fact, index) => (
+              <div key={index} className="text-center p-6 bg-white/10 rounded-xl backdrop-blur-sm">
+                <div className="text-4xl font-bold text-white mb-2">{fact.stat}</div>
+                <div className="text-amber-100 text-sm">{fact.label[language]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* Call to Action */}
-            <Card className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-              <CardContent className="p-8 text-center">
-                <Building2 className="w-16 h-16 mx-auto mb-4 opacity-80" />
-                <h3 className="text-2xl font-bold mb-4">
-                  {isRTL ? 'انضم إلى شبكة شركاء جرينستس' : 'Join the Greenists Partner Network'}
-                </h3>
-                <p className="text-green-100 mb-6 max-w-2xl mx-auto">
-                  {isRTL 
-                    ? 'هل أنت منظمة بيئية أو شركة ملتزمة بالاستدامة؟ انضم إلينا لبناء مستقبل أخضر لليمن.'
-                    : 'Are you an environmental organization or a company committed to sustainability? Join us to build a green future for Yemen.'
-                  }
-                </p>
-                <Button size="lg" variant="secondary" className="bg-white text-green-700 hover:bg-green-50">
-                  {isRTL ? 'تواصل معنا' : 'Contact Us'}
-                  <ArrowRight className={`w-4 h-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-green-700 to-emerald-700 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            {isRTL ? 'ابدأ رحلتك في الاستدامة اليوم' : 'Start Your Sustainability Journey Today'}
+          </h2>
+          <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+            {isRTL 
+              ? 'انضم إلى آلاف المتدربين الذين يصنعون فرقاً في مجال الفعاليات المستدامة'
+              : 'Join thousands of trainees making a difference in sustainable events'
+            }
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button size="lg" className="bg-white text-green-700 hover:bg-green-50">
+              {isRTL ? 'تصفح الدورات' : 'Browse Courses'}
+              <ArrowRight className={`w-5 h-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+            </Button>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              {isRTL ? 'تحدث مع مستشار' : 'Talk to Advisor'}
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
