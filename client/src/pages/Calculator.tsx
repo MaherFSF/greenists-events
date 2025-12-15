@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { trpc } from '@/lib/trpc';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -93,6 +94,66 @@ export default function CalculatorPage() {
   const [expectedRevenue, setExpectedRevenue] = useState([50000]);
   const [leadConversion, setLeadConversion] = useState([15]);
   const [brandAwareness, setBrandAwareness] = useState([30]);
+  
+  // Quote state
+  const [quoteNumber, setQuoteNumber] = useState<string | null>(null);
+  const [isSavingQuote, setIsSavingQuote] = useState(false);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [clientInfo, setClientInfo] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+  });
+  
+  // tRPC mutation for saving quotes
+  const createQuoteMutation = trpc.greenists.quotes.create.useMutation({
+    onSuccess: (data) => {
+      setQuoteNumber(data.quoteNumber);
+      setIsSavingQuote(false);
+    },
+    onError: (error) => {
+      console.error('Failed to save quote:', error);
+      setIsSavingQuote(false);
+    },
+  });
+  
+  // Save quote to database
+  const handleSaveQuote = async () => {
+    setIsSavingQuote(true);
+    
+    createQuoteMutation.mutate({
+      clientName: clientInfo.name || undefined,
+      clientEmail: clientInfo.email || undefined,
+      clientPhone: clientInfo.phone || undefined,
+      clientCompany: clientInfo.company || undefined,
+      eventType,
+      guestCount: guestCount[0],
+      venueType,
+      cateringLevel,
+      decorationLevel,
+      addOns: selectedAddOns,
+      baseCostUsd: breakdown.subtotal - breakdown.addOnsCost,
+      addOnsCostUsd: breakdown.addOnsCost,
+      subtotalUsd: breakdown.subtotal,
+      taxUsd: 0,
+      totalUsd: breakdown.total,
+      displayCurrency: currency,
+      expectedRevenue: expectedRevenue[0],
+      expectedRoi: roiCalculation.roi,
+      sustainabilityScore: breakdown.sustainabilityScore,
+    });
+  };
+  
+  // Download quote as PDF (opens in new tab)
+  const handleDownloadQuote = () => {
+    if (quoteNumber) {
+      window.open(`/api/quotes/${quoteNumber}/pdf`, '_blank');
+    } else {
+      // Save quote first, then download
+      setShowQuoteModal(true);
+    }
+  };
   
   // Pricing data (in USD)
   const eventPrices: Record<string, { base: number; perGuest: number; icon: React.ElementType; labelEn: string; labelAr: string }> = {
@@ -599,10 +660,26 @@ export default function CalculatorPage() {
                           
                           {/* Actions */}
                           <div className="space-y-3 mt-6">
-                            <Button className="w-full bg-[#2D7A4A] hover:bg-[#236339]">
+                            <Button 
+                              className="w-full bg-[#2D7A4A] hover:bg-[#236339]"
+                              onClick={() => setShowQuoteModal(true)}
+                              disabled={isSavingQuote}
+                            >
                               <Download className="w-4 h-4 me-2" />
-                              {language === 'ar' ? 'تحميل عرض السعر' : 'Download Quote'}
+                              {isSavingQuote 
+                                ? (language === 'ar' ? 'جاري الحفظ...' : 'Saving...')
+                                : quoteNumber 
+                                  ? (language === 'ar' ? 'تحميل عرض السعر' : 'Download Quote')
+                                  : (language === 'ar' ? 'حفظ وتحميل عرض السعر' : 'Save & Download Quote')
+                              }
                             </Button>
+                            {quoteNumber && (
+                              <div className="text-center mt-2">
+                                <Badge variant="outline" className="text-green-600 border-green-600">
+                                  {language === 'ar' ? 'رقم العرض: ' : 'Quote #'}{quoteNumber}
+                                </Badge>
+                              </div>
+                            )}
                             <Button variant="outline" className="w-full border-[#2D7A4A] text-[#2D7A4A]" onClick={resetCalculator}>
                               <RefreshCw className="w-4 h-4 me-2" />
                               {language === 'ar' ? 'إعادة تعيين' : 'Reset'}

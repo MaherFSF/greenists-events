@@ -15,6 +15,13 @@
       "when": 1765529442765,
       "tag": "0001_plain_vulcan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1765810185857,
+      "tag": "0002_harsh_solo",
+      "breakpoints": true
     }
   ]
 }

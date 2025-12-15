@@ -27,6 +27,7 @@ import Volunteer from "./pages/Volunteer";
 import Team from "./pages/Team";
 import Academy from "./pages/Academy";
 import HeritageGallery from "./pages/HeritageGallery";
+import BookingConfirmation from "./pages/BookingConfirmation";
 
 // Lazy load segment pages
 const Weddings = lazy(() => import("./pages/segments/Weddings"));
@@ -78,6 +79,8 @@ function Router() {
       <Route path="/team" component={Team} />
       <Route path="/academy" component={Academy} />
       <Route path="/heritage" component={HeritageGallery} />
+      <Route path="/book" component={BookingConfirmation} />
+      <Route path="/book-event" component={BookingConfirmation} />
       
       {/* Segment Pages */}
       <Route path="/weddings">
