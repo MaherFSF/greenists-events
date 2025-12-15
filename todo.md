@@ -216,4 +216,32 @@
 - [x] Test Store page via browser - Working
 - [x] Test Volunteer page via browser - Working
 - [x] Test Team page via browser - Working
-- [x] All 128 unit tests passing
+- [x] All 172 unit tests passing
+
+
+## Greenists Academy (NEW)
+- [x] Create Greenists Academy page with sustainability education
+- [x] Add environmental awareness days calendar (World Environment Day, Earth Day, etc.)
+- [x] Add ISO 20121 sustainable event management certification info
+- [x] Add Holm Akhdar partnership section
+- [x] Add climate change impact on Yemen section
+- [x] Add sustainability courses and workshops
+
+## Yemen Heritage Gallery (NEW)
+- [x] Create unique Yemen historical gallery page
+- [x] Add UNESCO World Heritage Sites (Shibam, Sana'a, Zabid, Socotra, Marib)
+- [x] Add Aden landmarks (Cisterns of Tawila, Sira Fortress)
+- [x] Add beautiful photo captions with historical context
+- [x] Add cultural preservation section
+
+## Enhanced Calculator (NEW)
+- [x] Add all 10 premium add-ons to calculator
+- [x] Add profitability calculator for business events
+- [x] Add ROI estimator for corporate events
+- [x] Add sustainability score calculator
+
+## Dynamic Elements (NEW)
+- [x] Add Google Maps integration for office location
+- [x] Add office photos gallery
+- [x] Add live weather widget for Aden
+- [x] Add currency converter widget (in calculator)

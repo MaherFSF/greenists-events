@@ -25,6 +25,8 @@ export function Navigation() {
     { path: '/store', label: t('nav.store') },
     { path: '/volunteer', label: t('nav.volunteer') },
     { path: '/team', label: t('nav.team') },
+    { path: '/academy', label: language === 'ar' ? 'الأكاديمية' : 'Academy' },
+    { path: '/heritage', label: language === 'ar' ? 'التراث' : 'Heritage' },
   ];
   
   const toggleLanguage = () => {
