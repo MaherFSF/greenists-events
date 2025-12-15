@@ -1,482 +1,437 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'wouter';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { GreenistsLogo, GreenistsLeaf } from '@/components/GreenistsLogo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link } from 'wouter';
 import { 
-  Calendar, 
-  Users, 
-  Award, 
-  Leaf, 
-  ArrowRight,
-  Building2,
-  Heart,
-  Briefcase,
-  GraduationCap,
-  PartyPopper,
-  Globe,
-  Phone,
-  Mail,
-  MapPin,
-  Star,
-  Sparkles,
-  TrendingUp,
-  Shield,
-  Clock,
-  CheckCircle
+  ArrowRight, ArrowLeft, Phone, Mail, MapPin, Calendar, Users, Award, Leaf, Star,
+  CheckCircle2, Building2, Heart, Landmark, GraduationCap, Globe2, Sparkles,
+  ChevronDown, TrendingUp, Shield, Clock, Play, Store, Truck, Camera, Music,
+  Utensils, Gift, Baby, Moon, Sun, Mountain, Waves, TreePine, Palmtree
 } from 'lucide-react';
 
-// Animated counter component
-function AnimatedCounter({ end, duration = 2000, suffix = '' }: { end: number; duration?: number; suffix?: string }) {
+// Animated Counter Hook
+function useCounter(end: number, duration: number = 2000, startOnView: boolean = true) {
   const [count, setCount] = useState(0);
-  
+  const [hasStarted, setHasStarted] = useState(!startOnView);
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    if (!startOnView) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setHasStarted(true); },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [startOnView]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
     let startTime: number;
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       setCount(Math.floor(progress * end));
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+      if (progress < 1) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
-  }, [end, duration]);
-  
-  return <span>{count.toLocaleString()}{suffix}</span>;
+  }, [end, duration, hasStarted]);
+
+  return { count, ref };
+}
+
+// Stat Counter Component
+function StatCounter({ value, suffix, label, labelAr, icon: Icon }: { 
+  value: number; suffix: string; label: string; labelAr: string; icon: React.ElementType 
+}) {
+  const { language } = useLanguage();
+  const { count, ref } = useCounter(value);
+  return (
+    <div ref={ref} className="text-center group">
+      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+        <Icon className="w-8 h-8 text-[#D4AF37]" />
+      </div>
+      <div className="text-4xl md:text-5xl font-bold text-white mb-2">{count.toLocaleString()}{suffix}</div>
+      <div className="text-white/70 text-sm md:text-base">{language === 'ar' ? labelAr : label}</div>
+    </div>
+  );
+}
+
+// Service Card Component
+function ServiceCard({ icon: Icon, color, nameEn, nameAr, descEn, descAr, image }: {
+  icon: React.ElementType; color: string; nameEn: string; nameAr: string; 
+  descEn: string; descAr: string; image?: string;
+}) {
+  const { language } = useLanguage();
+  return (
+    <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-white">
+      {image && (
+        <div className="h-48 overflow-hidden">
+          <img src={image} alt={nameEn} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+        </div>
+      )}
+      <CardContent className="p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110" 
+               style={{ backgroundColor: `${color}15` }}>
+            <Icon className="w-7 h-7" style={{ color }} />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2D7A4A] transition-colors">
+              {language === 'ar' ? nameAr : nameEn}
+            </h3>
+            <p className="text-gray-600 text-sm">{language === 'ar' ? descAr : descEn}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// City Character Component - Representing South Yemen Cities
+function CityCharacter({ city, cityAr, icon: Icon, color, description, descriptionAr }: {
+  city: string; cityAr: string; icon: React.ElementType; color: string; 
+  description: string; descriptionAr: string;
+}) {
+  const { language } = useLanguage();
+  return (
+    <div className="text-center group cursor-pointer">
+      <div className="w-24 h-24 mx-auto mb-4 rounded-full flex items-center justify-center transition-all group-hover:scale-110 group-hover:shadow-xl"
+           style={{ background: `linear-gradient(135deg, ${color}20, ${color}40)`, border: `3px solid ${color}` }}>
+        <Icon className="w-12 h-12" style={{ color }} />
+      </div>
+      <h4 className="font-bold text-lg text-gray-900 mb-1">{language === 'ar' ? cityAr : city}</h4>
+      <p className="text-sm text-gray-600">{language === 'ar' ? descriptionAr : description}</p>
+    </div>
+  );
 }
 
 export default function Home() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const isRTL = language === 'ar';
-  
-  const stats = [
-    { 
-      value: 500, 
-      suffix: '+', 
-      labelEn: 'Events Delivered', 
-      labelAr: 'فعالية منفذة',
-      icon: Calendar 
-    },
-    { 
-      value: 50, 
-      suffix: '+', 
-      labelEn: 'Happy Clients', 
-      labelAr: 'عميل سعيد',
-      icon: Users 
-    },
-    { 
-      value: 10, 
-      suffix: '+', 
-      labelEn: 'Years Experience', 
-      labelAr: 'سنوات خبرة',
-      icon: Award 
-    },
-    { 
-      value: 100, 
-      suffix: '%', 
-      labelEn: 'Eco-Friendly', 
-      labelAr: 'صديق للبيئة',
-      icon: Leaf 
-    },
+  const Arrow = isRTL ? ArrowLeft : ArrowRight;
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const heroSlides = [
+    { image: '/images/hero-aden-skyline.png', titleEn: 'From Aden to the World', titleAr: 'من عدن إلى العالم' },
+    { image: '/images/luxury-wedding-venue.png', titleEn: 'Luxury Weddings', titleAr: 'حفلات زفاف فاخرة' },
+    { image: '/images/corporate-conference.png', titleEn: 'Corporate Excellence', titleAr: 'التميز المؤسسي' },
   ];
-  
-  const eventTypes = [
-    {
-      icon: Building2,
-      titleEn: 'Corporate Events',
-      titleAr: 'فعاليات الشركات',
-      descEn: 'Professional conferences, seminars, and business gatherings',
-      descAr: 'مؤتمرات احترافية وندوات واجتماعات أعمال',
-    },
-    {
-      icon: Heart,
-      titleEn: 'Weddings',
-      titleAr: 'حفلات الزفاف',
-      descEn: 'Elegant and memorable wedding celebrations',
-      descAr: 'حفلات زفاف أنيقة ولا تُنسى',
-    },
-    {
-      icon: Briefcase,
-      titleEn: 'Government Events',
-      titleAr: 'الفعاليات الحكومية',
-      descEn: 'Official ceremonies and public sector events',
-      descAr: 'احتفالات رسمية وفعاليات القطاع العام',
-    },
-    {
-      icon: GraduationCap,
-      titleEn: 'Educational',
-      titleAr: 'التعليمية',
-      descEn: 'Workshops, training sessions, and academic events',
-      descAr: 'ورش عمل ودورات تدريبية وفعاليات أكاديمية',
-    },
-    {
-      icon: PartyPopper,
-      titleEn: 'Entertainment',
-      titleAr: 'الترفيهية',
-      descEn: 'Festivals, concerts, and entertainment shows',
-      descAr: 'مهرجانات وحفلات وعروض ترفيهية',
-    },
-    {
-      icon: Globe,
-      titleEn: 'Trade Shows',
-      titleAr: 'المعارض التجارية',
-      descEn: 'Exhibitions, expos, and trade fairs',
-      descAr: 'معارض ومعارض تجارية',
-    },
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length), 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const services = [
+    { icon: Building2, color: '#1E3A5F', nameEn: 'Greenists Corporate', nameAr: 'جرينستس للشركات', descEn: 'Conferences, product launches, seminars, and corporate gatherings', descAr: 'مؤتمرات، إطلاق منتجات، ندوات، واجتماعات الشركات', image: '/images/corporate-conference.png' },
+    { icon: Heart, color: '#B76E79', nameEn: 'Greenists Weddings', nameAr: 'جرينستس للأعراس', descEn: 'Luxury multi-day celebrations with cultural authenticity', descAr: 'احتفالات فاخرة متعددة الأيام بأصالة ثقافية', image: '/images/luxury-wedding-venue.png' },
+    { icon: Landmark, color: '#D4AF37', nameEn: 'Greenists Government', nameAr: 'جرينستس الحكومية', descEn: 'Official ceremonies, diplomatic events, national celebrations', descAr: 'مراسم رسمية، فعاليات دبلوماسية، احتفالات وطنية' },
+    { icon: Globe2, color: '#2D7A4A', nameEn: 'Greenists NGO', nameAr: 'جرينستس للمنظمات', descEn: 'Humanitarian conferences, development workshops', descAr: 'مؤتمرات إنسانية، ورش عمل تنموية' },
+    { icon: GraduationCap, color: '#FF8C00', nameEn: 'Greenists Education', nameAr: 'جرينستس التعليمية', descEn: 'Graduations, academic conferences, school events', descAr: 'حفلات تخرج، مؤتمرات أكاديمية، فعاليات مدرسية' },
+    { icon: Moon, color: '#9B59B6', nameEn: 'Greenists Ramadan', nameAr: 'جرينستس رمضان', descEn: 'Iftar gatherings, Eid celebrations, spiritual events', descAr: 'موائد إفطار، احتفالات العيد، فعاليات روحانية' },
+    { icon: Baby, color: '#E91E63', nameEn: 'Greenists Kids', nameAr: 'جرينستس للأطفال', descEn: 'Birthday parties, children entertainment, family events', descAr: 'حفلات أعياد ميلاد، ترفيه أطفال، فعاليات عائلية' },
+    { icon: Gift, color: '#00BCD4', nameEn: 'Greenists Condolences', nameAr: 'جرينستس للعزاء', descEn: 'Dignified memorial services with cultural sensitivity', descAr: 'خدمات تأبين كريمة بحساسية ثقافية' },
   ];
-  
-  const whyChooseUs = [
-    {
-      icon: Leaf,
-      titleEn: 'Eco-Friendly Approach',
-      titleAr: 'نهج صديق للبيئة',
-      descEn: 'We prioritize sustainable practices in every event we organize',
-      descAr: 'نعطي الأولوية للممارسات المستدامة في كل فعالية ننظمها',
-    },
-    {
-      icon: Star,
-      titleEn: 'Premium Quality',
-      titleAr: 'جودة متميزة',
-      descEn: 'World-class standards with attention to every detail',
-      descAr: 'معايير عالمية مع الاهتمام بكل التفاصيل',
-    },
-    {
-      icon: Shield,
-      titleEn: 'Trusted Partner',
-      titleAr: 'شريك موثوق',
-      descEn: 'Reliable service with transparent pricing',
-      descAr: 'خدمة موثوقة مع تسعير شفاف',
-    },
-    {
-      icon: Clock,
-      titleEn: 'On-Time Delivery',
-      titleAr: 'التسليم في الوقت المحدد',
-      descEn: 'We respect deadlines and deliver as promised',
-      descAr: 'نحترم المواعيد النهائية ونسلم كما وعدنا',
-    },
+
+  const cityCharacters = [
+    { city: 'Aden', cityAr: 'عدن', icon: Waves, color: '#0077B6', description: 'Gateway to Yemen', descriptionAr: 'بوابة اليمن' },
+    { city: 'Mukalla', cityAr: 'المكلا', icon: Palmtree, color: '#2D7A4A', description: 'Pearl of the Sea', descriptionAr: 'لؤلؤة البحر' },
+    { city: 'Socotra', cityAr: 'سقطرى', icon: TreePine, color: '#8B4513', description: 'Island of Wonders', descriptionAr: 'جزيرة العجائب' },
+    { city: 'Hadramout', cityAr: 'حضرموت', icon: Mountain, color: '#D4AF37', description: 'Valley of Heritage', descriptionAr: 'وادي التراث' },
+  ];
+
+  const features = [
+    { icon: Leaf, titleEn: 'Eco-Friendly', titleAr: 'صديق للبيئة', descEn: 'Sustainable materials & practices', descAr: 'مواد وممارسات مستدامة' },
+    { icon: Star, titleEn: 'Yemeni Heritage', titleAr: 'تراث يمني', descEn: 'Authentic cultural elements', descAr: 'عناصر ثقافية أصيلة' },
+    { icon: Shield, titleEn: 'Full Service', titleAr: 'خدمة متكاملة', descEn: 'Planning to execution', descAr: 'من التخطيط للتنفيذ' },
+    { icon: TrendingUp, titleEn: 'Green Impact Score', titleAr: 'مقياس الأثر الأخضر', descEn: 'Track your event sustainability', descAr: 'تتبع استدامة فعاليتك' },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      <main className="flex-1">
-        {/* Hero Section - Unique Design */}
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-          {/* Animated Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2D7A4A] via-[#236339] to-[#1a4d2e]">
-            {/* Decorative Elements */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-              <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-20 right-10 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-              <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-            </div>
-            {/* Leaf Pattern Overlay */}
-            <div className="absolute inset-0 opacity-5" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5C30 5 20 15 20 30C20 45 30 55 30 55C30 55 40 45 40 30C40 15 30 5 30 5Z' fill='white'/%3E%3C/svg%3E")`,
-              backgroundSize: '60px 60px',
-            }} />
+      {/* Hero Section with Slideshow */}
+      <section className="relative h-screen overflow-hidden">
+        {heroSlides.map((slide, index) => (
+          <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}>
+            <img src={slide.image} alt={slide.titleEn} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
           </div>
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-4xl mx-auto text-center text-white">
-              {/* Logo */}
-              <div className="mb-8 flex justify-center">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 inline-block">
-                  <GreenistsLeaf className="w-20 h-20 text-white" />
+        ))}
+        
+        {/* Gold accent lines */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent z-20" />
+        
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="container mx-auto px-4 text-center">
+            {/* Logo */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border-2 border-[#D4AF37] p-3 shadow-2xl">
+                <img src="/images/greenists-logo.png" alt="Greenists" className="w-full h-full object-contain" />
+              </div>
+            </div>
+
+            {/* Brand Name */}
+            <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 tracking-tight drop-shadow-2xl">
+              <span className="text-[#90EE90]">Green</span><span>ists</span>
+            </h1>
+
+            {/* Tagline */}
+            <p className="text-2xl md:text-3xl text-[#D4AF37] font-medium mb-6 drop-shadow-lg">
+              {isRTL ? 'خبراء الفعاليات ومبتكرو الأعمال' : 'Event Experts & Business Innovators'}
+            </p>
+
+            {/* Dynamic Title */}
+            <h2 className="text-3xl md:text-5xl text-white font-light mb-8 leading-relaxed drop-shadow-lg">
+              {isRTL ? heroSlides[currentSlide].titleAr : heroSlides[currentSlide].titleEn}
+            </h2>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Link href="/booking">
+                <Button size="lg" className="bg-[#D4AF37] hover:bg-[#C4A030] text-black font-bold px-10 py-7 text-xl rounded-full shadow-2xl hover:scale-105 transition-all">
+                  <Calendar className="w-6 h-6 mr-3" />
+                  {isRTL ? 'احجز فعاليتك' : 'Book Your Event'}
+                </Button>
+              </Link>
+              <Link href="/calculator">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#2D7A4A] font-bold px-10 py-7 text-xl rounded-full backdrop-blur-sm">
+                  <Sparkles className="w-6 h-6 mr-3" />
+                  {isRTL ? 'احسب التكلفة' : 'Get Quote'}
+                </Button>
+              </Link>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="flex justify-center gap-3">
+              {heroSlides.map((_, index) => (
+                <button key={index} onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? 'bg-[#D4AF37] w-8' : 'bg-white/50 hover:bg-white/80'}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+          <ChevronDown className="w-10 h-10 text-[#D4AF37]" />
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 bg-gradient-to-br from-[#1a4d2e] via-[#2D7A4A] to-[#1a4d2e] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 10L50 30L70 30L55 45L60 65L40 52L20 65L25 45L10 30L30 30Z' fill='%23D4AF37'/%3E%3C/svg%3E")`,
+        }} />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            <StatCounter value={500} suffix="+" label="Events Completed" labelAr="فعالية منجزة" icon={Calendar} />
+            <StatCounter value={50} suffix="+" label="Corporate Clients" labelAr="عميل من الشركات" icon={Building2} />
+            <StatCounter value={10} suffix="+" label="Years Experience" labelAr="سنوات خبرة" icon={Award} />
+            <StatCounter value={98} suffix="%" label="Client Satisfaction" labelAr="رضا العملاء" icon={Heart} />
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="inline-block px-6 py-2 bg-[#2D7A4A]/10 text-[#2D7A4A] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
+              {isRTL ? 'علاماتنا التجارية' : 'Our Brands'}
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              {isRTL ? 'فعاليات لكل مناسبة' : 'Events for Every Occasion'}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {isRTL ? 'ثمانية علامات تجارية متخصصة تحت مظلة جرينستس، كل منها مصممة لتقديم تجربة استثنائية' : 'Eight specialized brands under the Greenists umbrella, each designed to deliver an exceptional experience'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service, index) => (
+              <ServiceCard key={index} {...service} />
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/brands">
+              <Button className="bg-[#2D7A4A] hover:bg-[#236339] px-10 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
+                {isRTL ? 'استكشف جميع العلامات' : 'Explore All Brands'}
+                <Arrow className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Store Opening Section */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[#D4AF37] rounded-3xl" />
+              <img src="/images/greenists-store-interior.png" alt="Greenists Store" className="rounded-3xl shadow-2xl relative z-10" />
+              <div className="absolute -bottom-6 -right-6 bg-[#D4AF37] text-black font-bold px-8 py-4 rounded-2xl shadow-xl z-20">
+                <span className="text-2xl">{isRTL ? 'يونيو 2026' : 'June 2026'}</span>
+              </div>
+            </div>
+            <div>
+              <span className="inline-block px-6 py-2 bg-[#D4AF37]/10 text-[#D4AF37] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
+                {isRTL ? 'قريباً' : 'Coming Soon'}
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                {isRTL ? 'متجر جرينستس' : 'Greenists Store'}
+              </h2>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                {isRTL 
+                  ? 'نفتتح أول متجر متخصص في مستلزمات الفعاليات في عدن. تسوق من مجموعاتنا الحصرية، واحصل على استشارات مجانية من خبرائنا.'
+                  : 'Opening our first specialized event supplies store in Aden. Shop from our exclusive collections and get free consultations from our experts.'}
+              </p>
+              <div className="flex flex-wrap gap-4 mb-8">
+                <div className="flex items-center gap-2 text-gray-700">
+                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
+                  <span>{isRTL ? 'مستلزمات فعاليات حصرية' : 'Exclusive Event Supplies'}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-700">
+                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
+                  <span>{isRTL ? 'استشارات مجانية' : 'Free Consultations'}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-700">
+                  <CheckCircle2 className="w-5 h-5 text-[#2D7A4A]" />
+                  <span>{isRTL ? 'منتجات صديقة للبيئة' : 'Eco-Friendly Products'}</span>
                 </div>
               </div>
-              
-              {/* Company Name */}
-              <h1 className="text-5xl md:text-7xl font-bold mb-4">
-                {language === 'ar' ? (
-                  <>
-                    <span className="text-white">جرين</span>
-                    <span className="text-white/80">ستس</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-white">Green</span>
-                    <span className="text-white/80">ists</span>
-                  </>
-                )}
-              </h1>
-              
-              {/* Tagline */}
-              <p className="text-lg md:text-xl text-white/90 mb-6 font-medium">
-                {language === 'ar' ? 'خبراء الفعاليات ومبتكرو الأعمال' : 'Event Experts & Business Innovators'}
-              </p>
-              
-              {/* Main Headline */}
-              <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
-                {language === 'ar' 
-                  ? 'نصنع فعاليات استثنائية تترك أثراً'
-                  : 'Creating Exceptional Events That Leave a Legacy'}
+              <Link href="/store">
+                <Button className="bg-[#2D7A4A] hover:bg-[#236339] px-8 py-6 text-lg rounded-full">
+                  <Store className="w-5 h-5 mr-2" />
+                  {isRTL ? 'اكتشف المتجر' : 'Discover the Store'}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* South Yemen Cities Section */}
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="inline-block px-6 py-2 bg-[#D4AF37]/20 text-[#D4AF37] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
+              {isRTL ? 'نخدم جنوب اليمن' : 'Serving South Yemen'}
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              {isRTL ? 'من كل مدينة، لكل مناسبة' : 'From Every City, For Every Occasion'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {cityCharacters.map((city, index) => (
+              <CityCharacter key={index} {...city} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Yemeni Hospitality Section */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <span className="inline-block px-6 py-2 bg-[#2D7A4A]/10 text-[#2D7A4A] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">
+                {isRTL ? 'تراثنا' : 'Our Heritage'}
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                {isRTL ? 'ضيافة يمنية أصيلة' : 'Authentic Yemeni Hospitality'}
               </h2>
-              
-              {/* Subheadline */}
-              <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-                {language === 'ar'
-                  ? 'من عدن إلى العالم، نقدم خدمات فعاليات مستدامة بمعايير عالمية'
-                  : 'From Aden to the World, Delivering Sustainable Events with World-Class Standards'}
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                {isRTL 
+                  ? 'نحتفي بتراث الضيافة اليمنية العريق في كل فعالية. من القهوة العربية الأصيلة إلى البخور والتمر، نضمن تجربة لا تُنسى لضيوفك.'
+                  : 'We celebrate the rich heritage of Yemeni hospitality in every event. From authentic Arabic coffee to incense and dates, we ensure an unforgettable experience for your guests.'}
               </p>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/calculator">
-                  <Button size="lg" className="bg-white text-[#2D7A4A] hover:bg-white/90 text-lg px-8 py-6 rounded-full shadow-xl">
-                    <Sparkles className="w-5 h-5 me-2" />
-                    {language === 'ar' ? 'احسب تكلفة فعاليتك' : 'Calculate Your Event Cost'}
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 rounded-full">
-                    <Phone className="w-5 h-5 me-2" />
-                    {language === 'ar' ? 'تواصل معنا' : 'Contact Us'}
-                  </Button>
-                </Link>
-              </div>
-              
-              {/* Location Badge */}
-              <div className="mt-12 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
-                <MapPin className="w-5 h-5" />
-                <span>{language === 'ar' ? 'خور ماكسر، عدن، اليمن' : 'Khor Maksar, Aden, Yemen'}</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <div className="w-8 h-12 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-              <div className="w-1.5 h-3 bg-white rounded-full animate-pulse" />
-            </div>
-          </div>
-        </section>
-        
-        {/* Stats Section */}
-        <section className="py-16 bg-white relative -mt-20 z-20">
-          <div className="container mx-auto px-4">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-[#2D7A4A]/10 flex items-center justify-center mx-auto mb-4">
-                      <stat.icon className="w-8 h-8 text-[#2D7A4A]" />
+              <div className="grid grid-cols-2 gap-4">
+                {features.map((feature, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#2D7A4A]/10 flex items-center justify-center shrink-0">
+                      <feature.icon className="w-5 h-5 text-[#2D7A4A]" />
                     </div>
-                    <div className="text-4xl md:text-5xl font-bold text-[#2D7A4A] mb-2">
-                      <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                    <div>
+                      <h4 className="font-bold text-gray-900">{isRTL ? feature.titleAr : feature.titleEn}</h4>
+                      <p className="text-sm text-gray-600">{isRTL ? feature.descAr : feature.descEn}</p>
                     </div>
-                    <p className="text-gray-600 font-medium">
-                      {language === 'ar' ? stat.labelAr : stat.labelEn}
-                    </p>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </section>
-        
-        {/* Event Types Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <span className="inline-block bg-[#2D7A4A]/10 text-[#2D7A4A] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                {language === 'ar' ? 'خدماتنا' : 'Our Services'}
-              </span>
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-                {language === 'ar' ? 'أنواع الفعاليات التي ننظمها' : 'Events We Organize'}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                {language === 'ar'
-                  ? 'من المؤتمرات الحكومية إلى حفلات الزفاف الفاخرة، نقدم خدمات شاملة لجميع أنواع الفعاليات'
-                  : 'From government conferences to luxury weddings, we provide comprehensive services for all event types'}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {eventTypes.map((event, index) => (
-                <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
-                  <CardContent className="p-8">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2D7A4A] to-[#236339] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <event.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
-                      {language === 'ar' ? event.titleAr : event.titleEn}
-                    </h3>
-                    <p className="text-gray-600">
-                      {language === 'ar' ? event.descAr : event.descEn}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="text-center mt-12">
-              <Link href="/services">
-                <Button size="lg" className="bg-[#2D7A4A] hover:bg-[#236339] rounded-full px-8">
-                  {language === 'ar' ? 'عرض جميع الخدمات' : 'View All Services'}
-                  <ArrowRight className={`w-5 h-5 ${isRTL ? 'me-2 rotate-180' : 'ms-2'}`} />
-                </Button>
-              </Link>
+            <div className="order-1 lg:order-2">
+              <img src="/images/traditional-yemeni-hospitality.png" alt="Yemeni Hospitality" className="rounded-3xl shadow-2xl" />
             </div>
           </div>
-        </section>
-        
-        {/* Why Choose Us Section */}
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <span className="inline-block bg-[#2D7A4A]/10 text-[#2D7A4A] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                  {language === 'ar' ? 'لماذا نحن' : 'Why Choose Us'}
-                </span>
-                <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
-                  {language === 'ar' 
-                    ? 'الشريك الأمثل لفعالياتك'
-                    : 'Your Ideal Event Partner'}
-                </h2>
-                <p className="text-xl text-gray-600 mb-8">
-                  {language === 'ar'
-                    ? 'نجمع بين الخبرة المحلية والمعايير العالمية لنقدم لك تجربة فعاليات لا مثيل لها'
-                    : 'We combine local expertise with global standards to deliver an unparalleled event experience'}
-                </p>
-                
-                <div className="space-y-6">
-                  {whyChooseUs.map((item, index) => (
-                    <div key={index} className="flex gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#2D7A4A]/10 flex items-center justify-center flex-shrink-0">
-                        <item.icon className="w-6 h-6 text-[#2D7A4A]" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-gray-900 mb-1">
-                          {language === 'ar' ? item.titleAr : item.titleEn}
-                        </h3>
-                        <p className="text-gray-600">
-                          {language === 'ar' ? item.descAr : item.descEn}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Brand Showcase */}
-              <div className="relative">
-                <div className="bg-gradient-to-br from-[#2D7A4A] to-[#1a4d2e] rounded-3xl p-8 text-white">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold mb-2">
-                      {language === 'ar' ? 'رؤيتنا 2030' : 'Our Vision 2030'}
-                    </h3>
-                    <p className="text-white/80">
-                      {language === 'ar'
-                        ? 'أن نكون الشركة الرائدة في تنظيم الفعاليات المستدامة في اليمن والمنطقة'
-                        : 'To be the leading sustainable event management company in Yemen and the region'}
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/10 rounded-xl p-4 text-center">
-                      <TrendingUp className="w-8 h-8 mx-auto mb-2" />
-                      <p className="text-sm font-medium">
-                        {language === 'ar' ? 'نمو مستمر' : 'Continuous Growth'}
-                      </p>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-4 text-center">
-                      <Leaf className="w-8 h-8 mx-auto mb-2" />
-                      <p className="text-sm font-medium">
-                        {language === 'ar' ? 'استدامة بيئية' : 'Environmental Sustainability'}
-                      </p>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-4 text-center">
-                      <Globe className="w-8 h-8 mx-auto mb-2" />
-                      <p className="text-sm font-medium">
-                        {language === 'ar' ? 'معايير عالمية' : 'Global Standards'}
-                      </p>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-4 text-center">
-                      <Users className="w-8 h-8 mx-auto mb-2" />
-                      <p className="text-sm font-medium">
-                        {language === 'ar' ? 'فريق محترف' : 'Professional Team'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <Link href="/calculator">
-                      <Button size="lg" className="w-full bg-white text-[#2D7A4A] hover:bg-white/90">
-                        <Sparkles className="w-5 h-5 me-2" />
-                        {language === 'ar' ? 'احسب تكلفة فعاليتك' : 'Calculate Event Cost'}
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-                
-                {/* Decorative Elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#2D7A4A]/20 rounded-full blur-xl" />
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#2D7A4A]/20 rounded-full blur-xl" />
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-[#2D7A4A] to-[#1a4d2e] text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              {language === 'ar' 
-                ? 'جاهز لتنظيم فعاليتك القادمة؟'
-                : 'Ready to Plan Your Next Event?'}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/images/hero-aden-skyline.png" alt="Aden" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2D7A4A]/95 to-[#1a4d2e]/95" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              {isRTL ? 'هل أنت مستعد لفعاليتك القادمة؟' : 'Ready for Your Next Event?'}
             </h2>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              {language === 'ar'
-                ? 'احصل على تقدير فوري لتكلفة فعاليتك باستخدام حاسبتنا الذكية'
-                : 'Get an instant estimate for your event cost using our smart calculator'}
+              {isRTL 
+                ? 'تواصل معنا اليوم واحصل على استشارة مجانية. فريقنا جاهز لتحويل رؤيتك إلى واقع.'
+                : 'Contact us today and get a free consultation. Our team is ready to turn your vision into reality.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/calculator">
-                <Button size="lg" className="bg-white text-[#2D7A4A] hover:bg-white/90 text-lg px-8 py-6 rounded-full">
-                  <Sparkles className="w-5 h-5 me-2" />
-                  {language === 'ar' ? 'احسب التكلفة الآن' : 'Calculate Cost Now'}
+              <Link href="/booking">
+                <Button size="lg" className="bg-[#D4AF37] hover:bg-[#C4A030] text-black font-bold px-10 py-7 text-xl rounded-full shadow-2xl">
+                  <Calendar className="w-6 h-6 mr-3" />
+                  {isRTL ? 'احجز الآن' : 'Book Now'}
                 </Button>
               </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 rounded-full">
-                  {language === 'ar' ? 'تحدث مع خبير' : 'Talk to an Expert'}
+              <a href="tel:+967773673918">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#2D7A4A] font-bold px-10 py-7 text-xl rounded-full">
+                  <Phone className="w-6 h-6 mr-3" />
+                  +967 773 673 918
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
-        </section>
-        
-        {/* Contact Info Bar */}
-        <section className="py-8 bg-gray-900 text-white">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#2D7A4A]" />
-                <span dir="ltr">+967 773 673 918</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#2D7A4A]" />
+        </div>
+      </section>
+
+      {/* Contact Bar */}
+      <section className="py-6 bg-gray-900 text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-[#D4AF37]" />
+              <span className="text-sm">{isRTL ? 'شارع الكورنيش، بجانب فندق ريلاكس، خور ماكسر، عدن' : 'Next to Relax Hotel, Khor Maksar, Aden'}</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a href="tel:+967773673918" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
+                <Phone className="w-5 h-5" />
+                <span>+967 773 673 918</span>
+              </a>
+              <a href="mailto:info@greenists-events.com" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
+                <Mail className="w-5 h-5" />
                 <span>info@greenists-events.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-[#2D7A4A]" />
-                <span>
-                  {language === 'ar' 
-                    ? 'خور ماكسر، عدن، اليمن'
-                    : 'Khor Maksar, Aden, Yemen'}
-                </span>
-              </div>
+              </a>
             </div>
           </div>
-        </section>
-      </main>
-      
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

@@ -1,6 +1,8 @@
 # Greenists Website - Project TODO
 
 ## Core Website Features
+- [x] Create stunning homepage with Aden skyline hero slideshow
+- [x] Add AI-generated original Yemen images (Aden, Wedding, Corporate, Store, Hospitality)
 - [x] Create bilingual homepage (Arabic/English) with proper RTL support
 - [x] Implement language switcher component
 - [x] Design navigation with brand colors (Green #2D7A4A)
