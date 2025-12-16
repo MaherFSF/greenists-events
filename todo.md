@@ -295,7 +295,7 @@
 - [x] Add rich visual content throughout
 
 ### Final Status
-- [x] All 195 unit tests passing (verified Dec 15, 2025)
+- [x] All 213 unit tests passing (verified Dec 15, 2025)
 - [x] All pages tested via browser
 - [x] Promotional video added to homepage
 - [x] 5 sector mascot characters generated
@@ -304,11 +304,18 @@
 
 ## Backend Implementation (Dec 15, 2025)
 - [x] Database schema with quotes, bookings, packages, products, add-ons tables
+- [x] **PDF Quote Generation System** - Professional branded quotes with:
+  - Green/gold Greenists branding
+  - Bilingual English/Arabic support
+  - Cost breakdown with VAT calculation
+  - Sustainability score display
+  - Terms and conditions
+  - Download endpoint: /api/quotes/:quoteNumber/pdf
 - [x] PDF quote generation service
 - [x] Email notification service
 - [x] Backend API routes for packages and pricing
 - [x] Calculator saves quotes to database
 - [x] Booking confirmation workflow page (/book)
 - [x] Comprehensive backend tests (23 new tests)
-- [x] All 195 unit tests passing
+- [x] All 213 unit tests passing
 
