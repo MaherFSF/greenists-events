@@ -3,56 +3,48 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'wouter';
 import { 
   ArrowRight, ArrowLeft, Star, Users, Calendar, Award, Leaf, Heart, 
-  Sparkles, Building2, PartyPopper, Briefcase, GraduationCap, Baby,
-  Music, MapPin, Phone, Mail, Clock, CheckCircle2, Play, ChevronDown,
-  Banknote, Stethoscope, Building, Plane, Zap, HardHat, Laugh,
-  Globe, Target, TrendingUp, Shield, Gem, Crown
+  Sparkles, Building2, GraduationCap, Baby, Music, MapPin, Phone, Mail, 
+  CheckCircle2, Play, ChevronDown, Banknote, Stethoscope, Plane, Zap, 
+  HardHat, Globe, Target, TrendingUp, Shield, Gem, Crown, Landmark,
+  HeartHandshake
 } from 'lucide-react';
 
-// Sector data with unique colors and real images
+// Sector data with unique colors
 const sectors = [
-  { id: 'corporate', nameEn: 'Corporate', nameAr: 'الشركات', image: '/images/event-types/corporate-event.png', mascot: '/images/mascots/corporate-mascot-aden.png', color: '#1E3A5F', gradient: 'from-[#1E3A5F] to-[#2E5A8F]' },
-  { id: 'weddings', nameEn: 'Weddings', nameAr: 'الأعراس', image: '/images/event-types/wedding-event.png', mascot: '/images/mascots/weddings-mascot-aden.png', color: '#C41E3A', gradient: 'from-[#C41E3A] to-[#E91E63]' },
-  { id: 'government', nameEn: 'Government', nameAr: 'الحكومة', image: '/images/event-types/government-event.png', mascot: '/images/mascots/government-mascot-aden.png', color: '#1B4332', gradient: 'from-[#1B4332] to-[#2D6A4F]' },
-  { id: 'healthcare', nameEn: 'Healthcare', nameAr: 'الصحة', image: '/images/event-types/healthcare-event.png', mascot: '/images/mascots/healthcare-mascot-aden.png', color: '#0077B6', gradient: 'from-[#0077B6] to-[#00B4D8]' },
-  { id: 'education', nameEn: 'Education', nameAr: 'التعليم', image: '/images/event-types/education-event.png', mascot: '/images/mascots/education-mascot-aden.png', color: '#7B2CBF', gradient: 'from-[#7B2CBF] to-[#9D4EDD]' },
-  { id: 'kids', nameEn: 'Kids', nameAr: 'الأطفال', image: '/images/event-types/kids-event.png', mascot: '/images/mascots/kids-mascot-aden.png', color: '#FF6B6B', gradient: 'from-[#FF6B6B] to-[#FFE66D]' },
-  { id: 'banking', nameEn: 'Banking', nameAr: 'البنوك', image: '/images/event-types/banking-event.png', mascot: '/images/mascots/banking-mascot-aden.png', color: '#0A4D68', gradient: 'from-[#0A4D68] to-[#088395]' },
-  { id: 'ngo', nameEn: 'NGO', nameAr: 'المنظمات', image: '/images/sectors/ngo-yemen.png', mascot: '/images/mascots/ngo-mascot-aden.png', color: '#2D7A4A', gradient: 'from-[#2D7A4A] to-[#52B788]' },
-  { id: 'entertainment', nameEn: 'Entertainment', nameAr: 'الترفيه', image: '/images/event-types/entertainment-event.png', mascot: '/images/mascots/entertainment-mascot-aden.png', color: '#FF006E', gradient: 'from-[#FF006E] to-[#FB5607]' },
-  { id: 'construction', nameEn: 'Construction', nameAr: 'البناء', image: '/images/sectors/construction-yemen.png', mascot: '/images/mascots/construction-mascot-aden.png', color: '#E85D04', gradient: 'from-[#E85D04] to-[#FAA307]' },
-  { id: 'energy', nameEn: 'Energy', nameAr: 'الطاقة', image: '/images/sectors/energy-yemen.png', mascot: '/images/mascots/energy-mascot-aden.png', color: '#023E8A', gradient: 'from-[#023E8A] to-[#0077B6]' },
-  { id: 'travel', nameEn: 'Travel', nameAr: 'السياحة', image: '/images/sectors/travel-yemen.png', mascot: '/images/mascots/travel-mascot-aden.png', color: '#006D77', gradient: 'from-[#006D77] to-[#83C5BE]' },
-  { id: 'condolences', nameEn: 'Condolences', nameAr: 'العزاء', image: '/images/sectors/condolences-yemen.png', mascot: '/images/mascots/condolences-mascot-aden.png', color: '#495057', gradient: 'from-[#495057] to-[#6C757D]' },
-];
-
-// Hero images
-const heroImages = [
-  '/images/aden-skyline.png',
-  '/images/yemen-wedding.png',
-  '/images/corporate-event.png',
-  '/images/branding/greenists_billboard_design(2).png',
+  { id: 'corporate', nameEn: 'Corporate', nameAr: 'الشركات', icon: Building2, color: '#1E3A5F', gradient: 'from-[#1E3A5F] to-[#2E5A8F]', image: '/images/event-types/corporate-event.png' },
+  { id: 'weddings', nameEn: 'Weddings', nameAr: 'الأعراس', icon: Heart, color: '#C41E3A', gradient: 'from-[#C41E3A] to-[#E91E63]', image: '/images/event-types/wedding-event.png' },
+  { id: 'government', nameEn: 'Government', nameAr: 'الحكومة', icon: Landmark, color: '#1B4332', gradient: 'from-[#1B4332] to-[#2D6A4F]', image: '/images/event-types/government-event.png' },
+  { id: 'healthcare', nameEn: 'Healthcare', nameAr: 'الصحة', icon: Stethoscope, color: '#0077B6', gradient: 'from-[#0077B6] to-[#00B4D8]', image: '/images/event-types/healthcare-event.png' },
+  { id: 'education', nameEn: 'Education', nameAr: 'التعليم', icon: GraduationCap, color: '#7B2CBF', gradient: 'from-[#7B2CBF] to-[#9D4EDD]', image: '/images/event-types/education-event.png' },
+  { id: 'kids', nameEn: 'Kids', nameAr: 'الأطفال', icon: Baby, color: '#FF6B6B', gradient: 'from-[#FF6B6B] to-[#FFE66D]', image: '/images/event-types/kids-event.png' },
+  { id: 'banking', nameEn: 'Banking', nameAr: 'البنوك', icon: Banknote, color: '#0A4D68', gradient: 'from-[#0A4D68] to-[#088395]', image: '/images/event-types/banking-event.png' },
+  { id: 'ngo', nameEn: 'NGO', nameAr: 'المنظمات', icon: Globe, color: '#2D7A4A', gradient: 'from-[#2D7A4A] to-[#52B788]', image: '/images/sectors/ngo-yemen.png' },
+  { id: 'entertainment', nameEn: 'Entertainment', nameAr: 'الترفيه', icon: Music, color: '#FF006E', gradient: 'from-[#FF006E] to-[#FB5607]', image: '/images/event-types/entertainment-event.png' },
+  { id: 'construction', nameEn: 'Construction', nameAr: 'البناء', icon: HardHat, color: '#E85D04', gradient: 'from-[#E85D04] to-[#FAA307]', image: '/images/sectors/construction-yemen.png' },
+  { id: 'energy', nameEn: 'Energy', nameAr: 'الطاقة', icon: Zap, color: '#023E8A', gradient: 'from-[#023E8A] to-[#0077B6]', image: '/images/sectors/energy-yemen.png' },
+  { id: 'travel', nameEn: 'Travel', nameAr: 'السياحة', icon: Plane, color: '#006D77', gradient: 'from-[#006D77] to-[#83C5BE]', image: '/images/sectors/travel-yemen.png' },
+  { id: 'condolences', nameEn: 'Condolences', nameAr: 'العزاء', icon: HeartHandshake, color: '#495057', gradient: 'from-[#495057] to-[#6C757D]', image: '/images/sectors/condolences-yemen.png' },
 ];
 
 // Animated counter component
-const AnimatedCounter = ({ value, suffix = '' }: { value: string; suffix?: string }) => {
+const AnimatedCounter = ({ value, suffix = '', visible }: { value: number; suffix?: string; visible: boolean }) => {
   const [count, setCount] = useState(0);
-  const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
   
   useEffect(() => {
+    if (!visible) return;
+    
     const duration = 2000;
     const steps = 60;
-    const increment = numericValue / steps;
+    const increment = value / steps;
     let current = 0;
     
     const timer = setInterval(() => {
       current += increment;
-      if (current >= numericValue) {
-        setCount(numericValue);
+      if (current >= value) {
+        setCount(value);
         clearInterval(timer);
       } else {
         setCount(Math.floor(current));
@@ -60,36 +52,97 @@ const AnimatedCounter = ({ value, suffix = '' }: { value: string; suffix?: strin
     }, duration / steps);
     
     return () => clearInterval(timer);
-  }, [numericValue]);
+  }, [value, visible]);
   
-  return <span>{count}{value.includes('+') ? '+' : ''}{suffix}</span>;
+  return <span>{count}{suffix}</span>;
 };
 
 export default function Home() {
   const { language } = useLanguage();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [scrollY, setScrollY] = useState(0);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [typedText, setTypedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const heroRef = useRef<HTMLDivElement>(null);
+  
+  const isRTL = language === 'ar';
+  
+  const tagline = isRTL 
+    ? 'من عدن إلى العالم - نصنع فعاليات مستدامة لا تُنسى'
+    : 'From Aden to the World - Creating Unforgettable Sustainable Events';
 
-  // Auto-advance slideshow
+  // Typewriter effect
   useEffect(() => {
+    let index = 0;
+    setTypedText('');
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
+      if (index <= tagline.length) {
+        setTypedText(tagline.slice(0, index));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 40);
+    
+    const cursorTimer = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    
+    return () => {
+      clearInterval(timer);
+      clearInterval(cursorTimer);
+    };
+  }, [tagline]);
+
+  // Mouse parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 30,
+        y: (e.clientY / window.innerHeight - 0.5) * 30
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Scroll tracking
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection observer for reveal animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setVisibleSections(prev => {
+              const newSet = new Set(prev);
+              newSet.add(entry.target.id);
+              return newSet;
+            });
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   const content = {
     en: {
-      heroTagline: "Events Experts & Business Innovators",
-      heroSubtitle: "From Aden to the World - Creating Unforgettable Sustainable Events",
-      heroCTA: "Plan Your Event",
-      heroSecondary: "Explore Sectors",
+      heroTagline: "Event Experts & Business Innovators",
       stats: [
-        { value: "500+", label: "Events Delivered", icon: Calendar },
-        { value: "50+", label: "Corporate Partners", icon: Building2 },
-        { value: "10+", label: "Years Excellence", icon: Award },
-        { value: "98%", label: "Client Satisfaction", icon: Heart },
+        { value: 500, suffix: '+', label: "Events Delivered", icon: Calendar },
+        { value: 50, suffix: '+', label: "Corporate Partners", icon: Building2 },
+        { value: 10, suffix: '+', label: "Years Excellence", icon: Award },
+        { value: 98, suffix: '%', label: "Client Satisfaction", icon: Heart },
       ],
       sectorsTitle: "Specialized Sectors",
       sectorsSubtitle: "Dedicated expertise for every industry",
@@ -104,27 +157,26 @@ export default function Home() {
       packagesTitle: "Event Packages",
       packagesSubtitle: "Tailored solutions for every budget",
       packages: [
-        { name: "Essential", price: "$500", priceYER: "850K YER", features: ["50 guests", "Basic setup", "4 hours"], icon: Star },
-        { name: "Silver", price: "$1,500", priceYER: "2.5M YER", features: ["150 guests", "Premium setup", "6 hours"], icon: Award },
-        { name: "Gold", price: "$3,500", priceYER: "6M YER", features: ["300 guests", "Luxury setup", "8 hours"], icon: Crown, popular: true },
-        { name: "Diamond", price: "$7,000+", priceYER: "12M+ YER", features: ["Unlimited", "Bespoke", "Multi-day"], icon: Gem },
+        { name: "Essential", price: 500, priceYER: "850K", features: ["50 guests", "Basic setup", "4 hours"], icon: Star, color: 'from-slate-500 to-slate-600' },
+        { name: "Silver", price: 1500, priceYER: "2.5M", features: ["150 guests", "Premium setup", "6 hours"], icon: Award, color: 'from-slate-400 to-slate-500' },
+        { name: "Gold", price: 3500, priceYER: "6M", features: ["300 guests", "Luxury setup", "8 hours"], icon: Crown, popular: true, color: 'from-amber-500 to-yellow-600' },
+        { name: "Diamond", price: 7000, priceYER: "12M+", features: ["Unlimited", "Bespoke", "Multi-day"], icon: Gem, color: 'from-cyan-400 to-blue-500' },
       ],
       videoTitle: "See Our Magic",
       videoSubtitle: "Watch how we transform visions into reality",
       ctaTitle: "Ready to Create Something Amazing?",
       ctaSubtitle: "Let's bring your vision to life together",
       ctaButton: "Get Free Consultation",
+      heroCTA: "Plan Your Event",
+      heroSecondary: "Explore Sectors",
     },
     ar: {
       heroTagline: "خبراء الفعاليات ومبتكرو الأعمال",
-      heroSubtitle: "من عدن إلى العالم - نصنع فعاليات مستدامة لا تُنسى",
-      heroCTA: "خطط لفعاليتك",
-      heroSecondary: "استكشف القطاعات",
       stats: [
-        { value: "500+", label: "فعالية منفذة", icon: Calendar },
-        { value: "50+", label: "شريك مؤسسي", icon: Building2 },
-        { value: "10+", label: "سنوات تميز", icon: Award },
-        { value: "98%", label: "رضا العملاء", icon: Heart },
+        { value: 500, suffix: '+', label: "فعالية منفذة", icon: Calendar },
+        { value: 50, suffix: '+', label: "شريك مؤسسي", icon: Building2 },
+        { value: 10, suffix: '+', label: "سنوات تميز", icon: Award },
+        { value: 98, suffix: '%', label: "رضا العملاء", icon: Heart },
       ],
       sectorsTitle: "القطاعات المتخصصة",
       sectorsSubtitle: "خبرة مخصصة لكل صناعة",
@@ -139,160 +191,251 @@ export default function Home() {
       packagesTitle: "باقات الفعاليات",
       packagesSubtitle: "حلول مخصصة لكل ميزانية",
       packages: [
-        { name: "الأساسية", price: "$500", priceYER: "850K YER", features: ["50 ضيف", "إعداد أساسي", "4 ساعات"], icon: Star },
-        { name: "الفضية", price: "$1,500", priceYER: "2.5M YER", features: ["150 ضيف", "إعداد مميز", "6 ساعات"], icon: Award },
-        { name: "الذهبية", price: "$3,500", priceYER: "6M YER", features: ["300 ضيف", "إعداد فاخر", "8 ساعات"], icon: Crown, popular: true },
-        { name: "الماسية", price: "$7,000+", priceYER: "12M+ YER", features: ["بلا حدود", "حسب الطلب", "متعدد الأيام"], icon: Gem },
+        { name: "الأساسية", price: 500, priceYER: "850K", features: ["50 ضيف", "إعداد أساسي", "4 ساعات"], icon: Star, color: 'from-slate-500 to-slate-600' },
+        { name: "الفضية", price: 1500, priceYER: "2.5M", features: ["150 ضيف", "إعداد مميز", "6 ساعات"], icon: Award, color: 'from-slate-400 to-slate-500' },
+        { name: "الذهبية", price: 3500, priceYER: "6M", features: ["300 ضيف", "إعداد فاخر", "8 ساعات"], icon: Crown, popular: true, color: 'from-amber-500 to-yellow-600' },
+        { name: "الماسية", price: 7000, priceYER: "12M+", features: ["بلا حدود", "حسب الطلب", "متعدد الأيام"], icon: Gem, color: 'from-cyan-400 to-blue-500' },
       ],
       videoTitle: "شاهد إبداعاتنا",
       videoSubtitle: "اكتشف كيف نحول الرؤى إلى حقيقة",
       ctaTitle: "مستعد لصنع شيء مذهل؟",
       ctaSubtitle: "دعنا نحول رؤيتك إلى واقع معاً",
       ctaButton: "احصل على استشارة مجانية",
+      heroCTA: "خطط لفعاليتك",
+      heroSecondary: "استكشف القطاعات",
     }
   };
 
   const t = content[language];
-  const isRTL = language === 'ar';
 
   return (
-    <div className={`min-h-screen bg-white ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      {/* Hero Section - Cinematic Full Screen */}
-      <section className="relative h-screen overflow-hidden">
-        {/* Background Slideshow */}
-        {heroImages.map((img, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              currentSlide === index ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img src={img} alt="" className="w-full h-full object-cover" />
-          </div>
-        ))}
-        
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
-        
-        {/* Animated Pattern Overlay */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
+      {/* ========== MAGICAL HERO SECTION ========== */}
+      <section 
+        ref={heroRef}
+        className="relative min-h-screen overflow-hidden"
+      >
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0a1810] via-[#0d1f17] to-[#1a3a2a]" />
+          
+          {/* Animated gradient orbs */}
+          <div 
+            className="absolute w-[800px] h-[800px] rounded-full opacity-20 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, #2D7A4A 0%, transparent 70%)',
+              top: '10%',
+              left: '20%',
+              transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
+              transition: 'transform 0.3s ease-out',
+              animation: 'pulse 6s ease-in-out infinite'
+            }}
+          />
+          <div 
+            className="absolute w-[600px] h-[600px] rounded-full opacity-15 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, #D4AF37 0%, transparent 70%)',
+              bottom: '20%',
+              right: '10%',
+              transform: `translate(${-mousePosition.x * 0.3}px, ${-mousePosition.y * 0.3}px)`,
+              transition: 'transform 0.3s ease-out',
+              animation: 'pulse 8s ease-in-out infinite alternate'
+            }}
+          />
+          
+          {/* Floating particles */}
+          {[...Array(25)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-amber-400/40 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `float ${5 + Math.random() * 10}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            />
+          ))}
+          
+          {/* Floating leaves */}
+          {[...Array(10)].map((_, i) => (
+            <Leaf
+              key={`leaf-${i}`}
+              className="absolute text-green-500/15 w-8 h-8"
+              style={{
+                left: `${5 + Math.random() * 90}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `floatLeaf ${20 + Math.random() * 15}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 10}s`,
+                transform: `rotate(${Math.random() * 360}deg)`
+              }}
+            />
+          ))}
+          
+          {/* Decorative geometric shapes */}
+          <div 
+            className="absolute top-32 left-16 w-40 h-40 border border-amber-400/20 rounded-full opacity-30"
+            style={{ transform: `translate(${mousePosition.x * 0.8}px, ${mousePosition.y * 0.8}px)` }}
+          />
+          <div 
+            className="absolute bottom-40 right-24 w-32 h-32 border border-green-400/20 rotate-45 opacity-30"
+            style={{ transform: `translate(${-mousePosition.x * 0.6}px, ${-mousePosition.y * 0.6}px)` }}
+          />
+          <div 
+            className="absolute top-1/2 left-1/4 w-24 h-24 border border-white/10 rounded-lg rotate-12 opacity-20"
+            style={{ transform: `translate(${mousePosition.x * 0.4}px, ${mousePosition.y * 0.4}px)` }}
+          />
         </div>
-        
+
         {/* Hero Content */}
-        <div className="relative z-10 h-full flex items-center">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              {/* Logo */}
-              <div className="mb-8 animate-fade-in">
-                <img 
-                  src="/images/branding/official-logo.png" 
-                  alt="Greenists" 
-                  className="h-20 md:h-28 mx-auto object-contain"
-                />
-              </div>
-              
-              {/* Brand Name */}
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-slide-up">
-                <span className="text-[#2D7A4A]">Green</span>
-                <span className="text-white">ists</span>
-              </h1>
-              
-              <p className="text-xl md:text-2xl text-[#D4AF37] font-semibold mb-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                {t.heroTagline}
+        <div className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
+          <div 
+            className="text-center max-w-5xl mx-auto"
+            style={{ 
+              transform: `translateY(${scrollY * 0.2}px)`,
+              opacity: Math.max(0, 1 - scrollY * 0.002)
+            }}
+          >
+            {/* Animated Logo with Sparkles */}
+            <div className="relative inline-block mb-8">
+              <img 
+                src="/images/branding/official-logo.png" 
+                alt="Greenists" 
+                className="h-24 md:h-32 lg:h-40 mx-auto drop-shadow-2xl"
+                style={{
+                  filter: 'drop-shadow(0 0 40px rgba(45, 122, 74, 0.4))'
+                }}
+              />
+              <Sparkles className="absolute -top-4 -right-4 w-10 h-10 text-amber-400 animate-pulse" />
+              <Sparkles className="absolute -bottom-2 -left-6 w-7 h-7 text-amber-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
+              <Sparkles className="absolute top-1/2 -right-8 w-5 h-5 text-green-400 animate-pulse" style={{ animationDelay: '1s' }} />
+            </div>
+
+            {/* Main Title with Gradient */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent drop-shadow-lg">
+                Green
+              </span>
+              <span className="text-white drop-shadow-lg">ists</span>
+            </h1>
+
+            {/* Animated Tagline */}
+            <p className="text-xl md:text-2xl lg:text-3xl text-amber-400 font-semibold mb-4">
+              {t.heroTagline}
+            </p>
+
+            {/* Typewriter Effect */}
+            <div className="h-16 mb-10 flex items-center justify-center">
+              <p className="text-lg md:text-xl lg:text-2xl text-gray-300/90 max-w-3xl">
+                {typedText}
+                <span className={`inline-block w-0.5 h-6 bg-amber-400 ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`} />
               </p>
-              
-              <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.4s' }}>
-                {t.heroSubtitle}
-              </p>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.6s' }}>
-                <Link href="/calculator">
-                  <Button size="lg" className="bg-[#2D7A4A] hover:bg-[#236339] text-white px-8 py-6 text-lg rounded-full shadow-2xl hover:shadow-[#2D7A4A]/50 transition-all transform hover:scale-105">
+            </div>
+
+            {/* CTA Buttons with Glow Effects */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+              <Link href="/calculator">
+                <Button 
+                  size="lg" 
+                  className="group relative px-10 py-7 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-lg rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(212,175,55,0.5)]"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
                     {t.heroCTA}
-                    {isRTL ? <ArrowLeft className="ml-2 h-5 w-5" /> : <ArrowRight className="mr-2 h-5 w-5" />}
-                  </Button>
-                </Link>
-                <Link href="/sectors">
-                  <Button size="lg" variant="outline" className="border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black px-8 py-6 text-lg rounded-full transition-all">
-                    {t.heroSecondary}
-                  </Button>
-                </Link>
-              </div>
+                    {isRTL ? <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> : <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                  </span>
+                </Button>
+              </Link>
+              
+              <Link href="/sectors">
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="px-10 py-7 border-2 border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400 font-bold text-lg rounded-full transition-all duration-300 hover:shadow-[0_0_40px_rgba(45,122,74,0.3)]"
+                >
+                  {t.heroSecondary}
+                </Button>
+              </Link>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="animate-bounce">
+              <ChevronDown className="w-10 h-10 text-gray-400/60 mx-auto" />
             </div>
           </div>
         </div>
-        
-        {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-10">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`transition-all duration-300 rounded-full ${
-                currentSlide === index 
-                  ? 'w-12 h-3 bg-[#D4AF37]' 
-                  : 'w-3 h-3 bg-white/50 hover:bg-white/80'
-              }`}
-            />
-          ))}
-        </div>
-        
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 right-8 animate-bounce z-10">
-          <ChevronDown className="w-8 h-8 text-white" />
-        </div>
       </section>
 
-      {/* Stats Section - Floating Cards */}
-      <section className="relative -mt-20 z-20 pb-16">
+      {/* ========== STATS SECTION ========== */}
+      <section 
+        id="stats-section"
+        data-animate
+        className={`relative py-24 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a] transition-all duration-1000 ${visibleSections.has('stats-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {t.stats.map((stat, index) => (
               <div 
                 key={index}
-                className="bg-white rounded-2xl shadow-xl p-6 text-center transform hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#2D7A4A]"
+                className="group relative"
+                style={{ animationDelay: `${index * 0.15}s` }}
               >
-                <stat.icon className="w-10 h-10 mx-auto mb-3 text-[#D4AF37]" />
-                <div className="text-3xl md:text-4xl font-bold text-[#2D7A4A] mb-1">
-                  <AnimatedCounter value={stat.value} />
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-amber-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:border-amber-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2">
+                  <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    <AnimatedCounter value={stat.value} suffix={stat.suffix} visible={visibleSections.has('stats-section')} />
+                  </div>
+                  <p className="text-gray-400 text-lg">{stat.label}</p>
                 </div>
-                <p className="text-gray-600 text-sm">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Sectors Grid - Hexagonal Design */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      {/* ========== SECTORS SECTION ========== */}
+      <section 
+        id="sectors-section"
+        data-animate
+        className={`py-24 bg-gradient-to-b from-[#1a3a2a] to-gray-900 transition-all duration-1000 ${visibleSections.has('sectors-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t.sectorsTitle}</h2>
-            <p className="text-xl text-gray-600">{t.sectorsSubtitle}</p>
-            <div className="w-24 h-1 bg-[#D4AF37] mx-auto mt-6" />
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.sectorsTitle}</h2>
+            <p className="text-xl text-gray-400">{t.sectorsSubtitle}</p>
+            <div className="w-32 h-1 bg-gradient-to-r from-green-500 to-amber-500 mx-auto mt-8 rounded-full" />
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
             {sectors.map((sector, index) => (
               <Link key={sector.id} href={`/sectors/${sector.id}`}>
                 <div 
-                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${sector.gradient} p-6 text-white cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  className="group relative cursor-pointer"
+                  style={{ animationDelay: `${index * 0.08}s` }}
                 >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
-                  <div className="w-full h-32 mb-4 rounded-xl overflow-hidden group-hover:scale-105 transition-transform">
-                    <img src={sector.image} alt={sector.nameEn} className="w-full h-full object-cover" />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${sector.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-60 transition-all duration-500`} />
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-white/30 group-hover:transform group-hover:scale-105 group-hover:-translate-y-3">
+                    {/* Image */}
+                    <div className="h-32 md:h-40 overflow-hidden">
+                      <img 
+                        src={sector.image} 
+                        alt={sector.nameEn}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-t ${sector.gradient} opacity-60`} />
+                    </div>
+                    {/* Content */}
+                    <div className="p-4 text-center relative">
+                      <div className={`w-14 h-14 mx-auto -mt-10 mb-3 rounded-xl bg-gradient-to-br ${sector.gradient} flex items-center justify-center transform transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg`}>
+                        <sector.icon className="w-7 h-7 text-white" />
+                      </div>
+                      <h3 className="text-white font-bold text-lg">
+                        {isRTL ? sector.nameAr : sector.nameEn}
+                      </h3>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold mb-1">
-                    {language === 'ar' ? sector.nameAr : sector.nameEn}
-                  </h3>
-                  <ArrowRight className={`w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ${isRTL ? 'rotate-180' : ''}`} />
                 </div>
               </Link>
             ))}
@@ -300,222 +443,208 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Choose Us - Bento Grid */}
-      <section className="py-20 bg-white">
+      {/* ========== WHY CHOOSE US SECTION ========== */}
+      <section 
+        id="why-section"
+        data-animate
+        className={`py-24 bg-gray-900 transition-all duration-1000 ${visibleSections.has('why-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t.whyTitle}</h2>
-            <p className="text-xl text-gray-600">{t.whySubtitle}</p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.whyTitle}</h2>
+            <p className="text-xl text-gray-400">{t.whySubtitle}</p>
+            <div className="w-32 h-1 bg-gradient-to-r from-amber-500 to-green-500 mx-auto mt-8 rounded-full" />
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.whyItems.map((item, index) => (
               <div 
                 key={index}
-                className="group p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-[#2D7A4A] hover:shadow-xl transition-all duration-300"
+                className="group relative"
+                style={{ animationDelay: `${index * 0.15}s` }}
               >
-                <div className="w-16 h-16 rounded-2xl bg-[#2D7A4A]/10 flex items-center justify-center mb-6 group-hover:bg-[#2D7A4A] transition-colors">
-                  <item.icon className="w-8 h-8 text-[#2D7A4A] group-hover:text-white transition-colors" />
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-amber-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:border-green-400/50 transition-all duration-500 hover:transform hover:scale-105 h-full">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center transform transition-transform duration-500 group-hover:rotate-6">
+                    <item.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                  <p className="text-gray-400">{item.desc}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Video Section - Cinematic */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      {/* ========== VIDEO SECTION ========== */}
+      <section 
+        id="video-section"
+        data-animate
+        className={`py-24 bg-gradient-to-b from-gray-900 to-[#0d1f17] transition-all duration-1000 ${visibleSections.has('video-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.videoTitle}</h2>
             <p className="text-xl text-gray-400">{t.videoSubtitle}</p>
           </div>
-          
+
           <div className="max-w-5xl mx-auto">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
-              <video 
-                ref={videoRef}
-                className="w-full aspect-video object-cover"
-                poster="/images/video/hero-scene.png"
-                controls={isVideoPlaying}
-                onClick={() => {
-                  if (videoRef.current) {
-                    videoRef.current.play();
-                    setIsVideoPlaying(true);
-                  }
-                }}
-              >
-                <source src="/videos/greenists-promo.mp4" type="video/mp4" />
-              </video>
-              
-              {!isVideoPlaying && (
-                <div 
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer group-hover:bg-black/40 transition-colors"
-                  onClick={() => {
-                    if (videoRef.current) {
-                      videoRef.current.play();
-                      setIsVideoPlaying(true);
-                    }
-                  }}
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-green-500/30 via-amber-500/30 to-green-500/30 rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
+              <div className="relative rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-amber-400/30 transition-colors">
+                <video 
+                  className="w-full aspect-video object-cover"
+                  poster="/images/hero/aden-event-hero.png"
+                  controls
+                  playsInline
                 >
-                  <div className="w-24 h-24 rounded-full bg-[#D4AF37] flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform">
-                    <Play className="w-10 h-10 text-white ml-2" fill="white" />
-                  </div>
-                </div>
-              )}
+                  <source src="/videos/greenists-hero.mp4" type="video/mp4" />
+                </video>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Packages Section - Premium Cards */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      {/* ========== PACKAGES SECTION ========== */}
+      <section 
+        id="packages-section"
+        data-animate
+        className={`py-24 bg-[#0d1f17] transition-all duration-1000 ${visibleSections.has('packages-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t.packagesTitle}</h2>
-            <p className="text-xl text-gray-600">{t.packagesSubtitle}</p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.packagesTitle}</h2>
+            <p className="text-xl text-gray-400">{t.packagesSubtitle}</p>
+            <div className="w-32 h-1 bg-gradient-to-r from-green-500 to-amber-500 mx-auto mt-8 rounded-full" />
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.packages.map((pkg, index) => (
               <div 
                 key={index}
-                className={`relative rounded-3xl p-8 ${
-                  pkg.popular 
-                    ? 'bg-gradient-to-br from-[#2D7A4A] to-[#1B5E20] text-white shadow-2xl scale-105 z-10' 
-                    : 'bg-white border border-gray-200 hover:border-[#2D7A4A] hover:shadow-xl'
-                } transition-all duration-300`}
+                className={`relative group ${pkg.popular ? 'lg:-mt-4 lg:mb-4' : ''}`}
+                style={{ animationDelay: `${index * 0.15}s` }}
               >
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#D4AF37] text-black text-sm font-bold px-4 py-1 rounded-full">
-                    {language === 'ar' ? 'الأكثر طلباً' : 'Most Popular'}
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
+                    <span className="px-6 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-bold rounded-full shadow-lg shadow-amber-500/30">
+                      {isRTL ? 'الأكثر طلباً' : 'Most Popular'}
+                    </span>
                   </div>
                 )}
                 
-                <pkg.icon className={`w-12 h-12 mb-4 ${pkg.popular ? 'text-[#D4AF37]' : 'text-[#2D7A4A]'}`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${pkg.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-all duration-500`} />
                 
-                <h3 className={`text-2xl font-bold mb-2 ${pkg.popular ? 'text-white' : 'text-gray-900'}`}>
-                  {pkg.name}
-                </h3>
-                
-                <div className="mb-6">
-                  <span className={`text-3xl font-bold ${pkg.popular ? 'text-[#D4AF37]' : 'text-[#2D7A4A]'}`}>
-                    {pkg.price}
-                  </span>
-                  <span className={`text-sm block ${pkg.popular ? 'text-white/70' : 'text-gray-500'}`}>
-                    {pkg.priceYER}
-                  </span>
+                <div className={`relative h-full bg-white/5 backdrop-blur-sm border ${pkg.popular ? 'border-amber-400/50' : 'border-white/10'} rounded-2xl p-8 transition-all duration-500 group-hover:border-white/30 group-hover:transform group-hover:scale-[1.02] overflow-hidden`}>
+                  {/* Shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  
+                  <div className={`w-14 h-14 mx-auto mb-6 rounded-xl bg-gradient-to-br ${pkg.color} flex items-center justify-center`}>
+                    <pkg.icon className="w-7 h-7 text-white" />
+                  </div>
+                  
+                  <h3 className={`text-2xl font-bold mb-4 text-center bg-gradient-to-r ${pkg.color} bg-clip-text text-transparent`}>
+                    {pkg.name}
+                  </h3>
+                  
+                  <div className="text-center mb-6">
+                    <span className="text-4xl font-bold text-white">${pkg.price.toLocaleString()}</span>
+                    <span className="text-gray-400 text-lg block mt-1">{pkg.priceYER} YER</span>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    {pkg.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-3 text-gray-300">
+                        <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link href="/calculator">
+                    <Button className={`w-full py-6 rounded-xl font-bold transition-all duration-300 ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      {isRTL ? 'احسب التكلفة' : 'Calculate Cost'}
+                    </Button>
+                  </Link>
                 </div>
-                
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <CheckCircle2 className={`w-5 h-5 ${pkg.popular ? 'text-[#D4AF37]' : 'text-[#2D7A4A]'}`} />
-                      <span className={pkg.popular ? 'text-white/90' : 'text-gray-600'}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Link href="/calculator">
-                  <Button 
-                    className={`w-full rounded-full py-6 ${
-                      pkg.popular 
-                        ? 'bg-[#D4AF37] hover:bg-[#C9A227] text-black' 
-                        : 'bg-[#2D7A4A] hover:bg-[#236339] text-white'
-                    }`}
-                  >
-                    {language === 'ar' ? 'احسب التكلفة' : 'Calculate Cost'}
-                  </Button>
-                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Brand Assets Showcase */}
-      <section className="py-20 bg-gray-900">
+      {/* ========== CTA SECTION ========== */}
+      <section 
+        id="cta-section"
+        data-animate
+        className={`py-24 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a] transition-all duration-1000 ${visibleSections.has('cta-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              {language === 'ar' ? 'هويتنا المؤسسية' : 'Our Brand Identity'}
-            </h2>
-            <p className="text-gray-400">
-              {language === 'ar' ? 'تصميم احترافي يعكس قيمنا' : 'Professional design reflecting our values'}
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="/images/branding/greenists_card_ceo_luxury(10).png" alt="Business Card" className="rounded-xl hover:scale-105 transition-transform" />
-            <img src="/images/branding/greenists_folder_updated(7).png" alt="Folder" className="rounded-xl hover:scale-105 transition-transform" />
-            <img src="/images/branding/greenists_tote_bag(5).png" alt="Tote Bag" className="rounded-xl hover:scale-105 transition-transform" />
-            <img src="/images/branding/greenists_card_consultant_elegant(2).png" alt="Consultant Card" className="rounded-xl hover:scale-105 transition-transform" />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#2D7A4A] via-[#236339] to-[#1B4D2E] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23D4AF37' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-          }} />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{t.ctaTitle}</h2>
-            <p className="text-xl text-white/80 mb-10">{t.ctaSubtitle}</p>
-            
-            <Link href="/contact">
-              <Button size="lg" className="bg-[#D4AF37] hover:bg-[#C9A227] text-black px-12 py-6 text-lg rounded-full shadow-2xl transform hover:scale-105 transition-all">
-                {t.ctaButton}
-                {isRTL ? <ArrowLeft className="ml-2 h-5 w-5" /> : <ArrowRight className="mr-2 h-5 w-5" />}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Info Bar */}
-      <section className="py-8 bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-8 text-white">
-            <a href="tel:+967773673918" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
-              <Phone className="w-5 h-5" />
-              <span>+967 773 673 918</span>
-            </a>
-            <a href="mailto:info@greenists-events.com" className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors">
-              <Mail className="w-5 h-5" />
-              <span>info@greenists-events.com</span>
-            </a>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#D4AF37]" />
-              <span>{language === 'ar' ? 'بجانب فندق ريلاكس، خور مكسر، عدن' : 'Beside Relax Hotel, Khormaksar, Aden'}</span>
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/30 to-amber-500/30 rounded-3xl blur-2xl" />
+              <div className="relative bg-gradient-to-br from-[#1a3a2a] to-[#0d1f17] border border-white/10 rounded-3xl p-12 md:p-16 text-center">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                  {t.ctaTitle}
+                </h2>
+                <p className="text-xl md:text-2xl text-gray-300 mb-10">
+                  {t.ctaSubtitle}
+                </p>
+                
+                <Link href="/contact">
+                  <Button 
+                    size="lg"
+                    className="px-12 py-8 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xl rounded-full hover:scale-105 transition-all duration-300 hover:shadow-[0_0_50px_rgba(212,175,55,0.5)]"
+                  >
+                    {t.ctaButton}
+                  </Button>
+                </Link>
+                
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10 text-gray-300">
+                  <a href="tel:+967773673918" className="flex items-center gap-2 hover:text-amber-400 transition-colors text-lg">
+                    <Phone className="w-5 h-5" />
+                    <span dir="ltr">+967 773 673 918</span>
+                  </a>
+                  <a href="mailto:info@greenists-events.com" className="flex items-center gap-2 hover:text-amber-400 transition-colors text-lg">
+                    <Mail className="w-5 h-5" />
+                    <span>info@greenists-events.com</span>
+                  </a>
+                </div>
+                
+                <div className="mt-8 flex items-center justify-center gap-2 text-gray-400">
+                  <MapPin className="w-5 h-5" />
+                  <span>
+                    {isRTL ? 'بجانب فندق ريلاكس، خور مكسر، عدن' : 'Next to Relax Hotel, Khor Maksar, Aden'}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <Footer />
-      
-      {/* Custom Animations */}
+
+      {/* CSS Animations */}
       <style>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
         }
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+        
+        @keyframes floatLeaf {
+          0% { transform: translateY(0) rotate(0deg) translateX(0); }
+          25% { transform: translateY(-30px) rotate(90deg) translateX(20px); }
+          50% { transform: translateY(-10px) rotate(180deg) translateX(-10px); }
+          75% { transform: translateY(-40px) rotate(270deg) translateX(15px); }
+          100% { transform: translateY(0) rotate(360deg) translateX(0); }
         }
-        .animate-fade-in {
-          animation: fade-in 1s ease-out forwards;
-        }
-        .animate-slide-up {
-          animation: slide-up 0.8s ease-out forwards;
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 0.2; transform: scale(1); }
+          50% { opacity: 0.3; transform: scale(1.05); }
         }
       `}</style>
     </div>
