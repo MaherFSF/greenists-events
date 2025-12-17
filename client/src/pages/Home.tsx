@@ -10,8 +10,67 @@ import {
   Sparkles, Building2, GraduationCap, Baby, Music, MapPin, Phone, Mail, 
   CheckCircle2, Play, ChevronDown, Banknote, Stethoscope, Plane, Zap, 
   HardHat, Globe, Target, TrendingUp, Shield, Gem, Crown, Landmark,
-  HeartHandshake
+  HeartHandshake, MessageCircle
 } from 'lucide-react';
+
+// Character data with their images and roles
+const characters = [
+  { 
+    id: 'salim', 
+    nameEn: 'Salim', 
+    nameAr: 'سالم', 
+    roleEn: 'Senior Advisor', 
+    roleAr: 'المستشار الأول',
+    image: '/mascots/salim-final.png',
+    greetingEn: "Welcome! I'm here to guide you through our services.",
+    greetingAr: "أهلاً وسهلاً! أنا هنا لمساعدتك في خدماتنا.",
+    color: '#8B4513'
+  },
+  { 
+    id: 'noor', 
+    nameEn: 'Noor', 
+    nameAr: 'نور', 
+    roleEn: 'Business Expert', 
+    roleAr: 'خبيرة الأعمال',
+    image: '/mascots/noor-final.png',
+    greetingEn: "Let me help you plan the perfect corporate event!",
+    greetingAr: "دعيني أساعدك في تخطيط فعالية مؤسسية مثالية!",
+    color: '#2D7A4A'
+  },
+  { 
+    id: 'faris', 
+    nameEn: 'Faris', 
+    nameAr: 'فارس', 
+    roleEn: 'Event Coordinator', 
+    roleAr: 'منسق الفعاليات',
+    image: '/mascots/faris-final.png',
+    greetingEn: "Ready to coordinate your dream event!",
+    greetingAr: "جاهز لتنسيق فعاليتك المثالية!",
+    color: '#1E3A5F'
+  },
+  { 
+    id: 'yasmin', 
+    nameEn: 'Yasmin', 
+    nameAr: 'ياسمين', 
+    roleEn: 'Creative Designer', 
+    roleAr: 'المصممة المبدعة',
+    image: '/mascots/yasmin-final.png',
+    greetingEn: "Let's create something beautiful together!",
+    greetingAr: "لنصنع شيئاً جميلاً معاً!",
+    color: '#C41E3A'
+  },
+  { 
+    id: 'aden', 
+    nameEn: 'Little Aden', 
+    nameAr: 'عدن الصغير', 
+    roleEn: 'Fun Ambassador', 
+    roleAr: 'سفير المرح',
+    image: '/mascots/little-aden-final.png',
+    greetingEn: "Hi! Let's make your event super fun!",
+    greetingAr: "مرحباً! لنجعل فعاليتك ممتعة جداً!",
+    color: '#FF6B6B'
+  },
+];
 
 // Sector data with unique colors
 const sectors = [
@@ -65,6 +124,8 @@ export default function Home() {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [typedText, setTypedText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  const [activeCharacter, setActiveCharacter] = useState(0);
+  const [showSpeechBubble, setShowSpeechBubble] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
   
   const isRTL = language === 'ar';
@@ -72,6 +133,15 @@ export default function Home() {
   const tagline = isRTL 
     ? 'من عدن إلى العالم - نصنع فعاليات مستدامة لا تُنسى'
     : 'From Aden to the World - Creating Unforgettable Sustainable Events';
+
+  // Auto-rotate characters
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCharacter(prev => (prev + 1) % characters.length);
+      setShowSpeechBubble(true);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Typewriter effect
   useEffect(() => {
@@ -139,6 +209,8 @@ export default function Home() {
   const content = {
     en: {
       heroTagline: "Event Experts & Business Innovators",
+      meetTeam: "Meet Our Team",
+      meetTeamSub: "Your dedicated Adeni experts ready to serve you",
       stats: [
         { value: 500, suffix: '+', label: "Events Delivered", icon: Calendar },
         { value: 50, suffix: '+', label: "Corporate Partners", icon: Building2 },
@@ -170,9 +242,12 @@ export default function Home() {
       ctaButton: "Get Free Consultation",
       heroCTA: "Plan Your Event",
       heroSecondary: "Explore Sectors",
+      talkTo: "Talk to",
     },
     ar: {
       heroTagline: "خبراء الفعاليات ومبتكرو الأعمال",
+      meetTeam: "تعرف على فريقنا",
+      meetTeamSub: "خبراء عدنيون متخصصون لخدمتك",
       stats: [
         { value: 500, suffix: '+', label: "فعالية منفذة", icon: Calendar },
         { value: 50, suffix: '+', label: "شريك مؤسسي", icon: Building2 },
@@ -204,16 +279,18 @@ export default function Home() {
       ctaButton: "احصل على استشارة مجانية",
       heroCTA: "خطط لفعاليتك",
       heroSecondary: "استكشف القطاعات",
+      talkTo: "تحدث مع",
     }
   };
 
   const t = content[language];
+  const currentChar = characters[activeCharacter];
 
   return (
     <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      {/* ========== MAGICAL HERO SECTION ========== */}
+      {/* ========== HERO SECTION WITH ALL 5 CHARACTERS ========== */}
       <section 
         ref={heroRef}
         className="relative min-h-screen overflow-hidden"
@@ -221,6 +298,18 @@ export default function Home() {
         {/* Animated Gradient Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0a1810] via-[#0d1f17] to-[#1a3a2a]" />
+          
+          {/* Aden Skyline Silhouette */}
+          <div 
+            className="absolute bottom-0 left-0 right-0 h-64 opacity-20"
+            style={{
+              background: 'linear-gradient(to top, #1a3a2a, transparent)',
+              maskImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 200\'%3E%3Cpath d=\'M0,200 L0,150 L50,150 L50,100 L100,100 L100,80 L150,80 L150,120 L200,120 L200,60 L250,60 L250,90 L300,90 L300,70 L350,70 L350,110 L400,110 L400,50 L450,50 L450,100 L500,100 L500,80 L550,80 L550,130 L600,130 L600,40 L650,40 L650,90 L700,90 L700,60 L750,60 L750,100 L800,100 L800,70 L850,70 L850,120 L900,120 L900,50 L950,50 L950,110 L1000,110 L1000,80 L1050,80 L1050,140 L1100,140 L1100,90 L1150,90 L1150,150 L1200,150 L1200,200 Z\' fill=\'white\'/%3E%3C/svg%3E")',
+              maskSize: 'cover',
+              WebkitMaskImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 200\'%3E%3Cpath d=\'M0,200 L0,150 L50,150 L50,100 L100,100 L100,80 L150,80 L150,120 L200,120 L200,60 L250,60 L250,90 L300,90 L300,70 L350,70 L350,110 L400,110 L400,50 L450,50 L450,100 L500,100 L500,80 L550,80 L550,130 L600,130 L600,40 L650,40 L650,90 L700,90 L700,60 L750,60 L750,100 L800,100 L800,70 L850,70 L850,120 L900,120 L900,50 L950,50 L950,110 L1000,110 L1000,80 L1050,80 L1050,140 L1100,140 L1100,90 L1150,90 L1150,150 L1200,150 L1200,200 Z\' fill=\'white\'/%3E%3C/svg%3E")',
+              WebkitMaskSize: 'cover'
+            }}
+          />
           
           {/* Animated gradient orbs */}
           <div 
@@ -275,47 +364,41 @@ export default function Home() {
             />
           ))}
           
-          {/* Decorative geometric shapes */}
+          {/* Islamic geometric pattern overlay */}
           <div 
-            className="absolute top-32 left-16 w-40 h-40 border border-amber-400/20 rounded-full opacity-30"
-            style={{ transform: `translate(${mousePosition.x * 0.8}px, ${mousePosition.y * 0.8}px)` }}
-          />
-          <div 
-            className="absolute bottom-40 right-24 w-32 h-32 border border-green-400/20 rotate-45 opacity-30"
-            style={{ transform: `translate(${-mousePosition.x * 0.6}px, ${-mousePosition.y * 0.6}px)` }}
-          />
-          <div 
-            className="absolute top-1/2 left-1/4 w-24 h-24 border border-white/10 rounded-lg rotate-12 opacity-20"
-            style={{ transform: `translate(${mousePosition.x * 0.4}px, ${mousePosition.y * 0.4}px)` }}
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
           />
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
+        {/* Hero Content with Characters */}
+        <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-10">
+          {/* Top Section - Logo and Tagline */}
           <div 
-            className="text-center max-w-5xl mx-auto"
+            className="text-center mb-8"
             style={{ 
               transform: `translateY(${scrollY * 0.2}px)`,
               opacity: Math.max(0, 1 - scrollY * 0.002)
             }}
           >
             {/* Animated Logo with Sparkles */}
-            <div className="relative inline-block mb-8">
+            <div className="relative inline-block mb-6">
               <img 
                 src="/images/branding/official-logo.png" 
                 alt="Greenists" 
-                className="h-24 md:h-32 lg:h-40 mx-auto drop-shadow-2xl"
+                className="h-20 md:h-28 lg:h-36 mx-auto drop-shadow-2xl"
                 style={{
                   filter: 'drop-shadow(0 0 40px rgba(45, 122, 74, 0.4))'
                 }}
               />
-              <Sparkles className="absolute -top-4 -right-4 w-10 h-10 text-amber-400 animate-pulse" />
-              <Sparkles className="absolute -bottom-2 -left-6 w-7 h-7 text-amber-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
-              <Sparkles className="absolute top-1/2 -right-8 w-5 h-5 text-green-400 animate-pulse" style={{ animationDelay: '1s' }} />
+              <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-amber-400 animate-pulse" />
+              <Sparkles className="absolute -bottom-2 -left-6 w-6 h-6 text-amber-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
             </div>
 
-            {/* Main Title with Gradient */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+            {/* Main Title */}
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
               <span className="bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 bg-clip-text text-transparent drop-shadow-lg">
                 Green
               </span>
@@ -323,73 +406,205 @@ export default function Home() {
             </h1>
 
             {/* Animated Tagline */}
-            <p className="text-xl md:text-2xl lg:text-3xl text-amber-400 font-semibold mb-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-amber-400 font-semibold mb-2">
               {t.heroTagline}
             </p>
 
             {/* Typewriter Effect */}
-            <div className="h-16 mb-10 flex items-center justify-center">
-              <p className="text-lg md:text-xl lg:text-2xl text-gray-300/90 max-w-3xl">
+            <div className="h-12 mb-6 flex items-center justify-center">
+              <p className="text-base md:text-lg lg:text-xl text-gray-300/90 max-w-2xl">
                 {typedText}
-                <span className={`inline-block w-0.5 h-6 bg-amber-400 ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`} />
+                <span className={`inline-block w-0.5 h-5 bg-amber-400 ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`} />
               </p>
             </div>
+          </div>
 
-            {/* CTA Buttons with Glow Effects */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              <Link href="/calculator">
-                <Button 
-                  size="lg" 
-                  className="group relative px-10 py-7 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-lg rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(212,175,55,0.5)]"
+          {/* ========== ALL 5 CHARACTERS SHOWCASE ========== */}
+          <div className="w-full max-w-7xl mx-auto mb-8">
+            <h2 className="text-center text-2xl md:text-3xl font-bold text-white mb-2">
+              {t.meetTeam}
+            </h2>
+            <p className="text-center text-gray-400 mb-8">{t.meetTeamSub}</p>
+            
+            {/* Main Character Display */}
+            <div className="relative flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
+              {/* Left Characters (Salim, Noor) */}
+              <div className="flex gap-4 lg:gap-8">
+                {characters.slice(0, 2).map((char, idx) => (
+                  <div 
+                    key={char.id}
+                    className={`relative cursor-pointer transition-all duration-500 ${activeCharacter === idx ? 'scale-110 z-20' : 'scale-90 opacity-70 hover:opacity-100 hover:scale-95'}`}
+                    onClick={() => { setActiveCharacter(idx); setShowSpeechBubble(true); }}
+                  >
+                    <div 
+                      className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 transition-all duration-300"
+                      style={{ 
+                        borderColor: activeCharacter === idx ? char.color : 'rgba(255,255,255,0.2)',
+                        boxShadow: activeCharacter === idx ? `0 0 30px ${char.color}50` : 'none'
+                      }}
+                    >
+                      <img 
+                        src={char.image} 
+                        alt={isRTL ? char.nameAr : char.nameEn}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-center text-white text-sm mt-2 font-medium">
+                      {isRTL ? char.nameAr : char.nameEn}
+                    </p>
+                    <p className="text-center text-gray-400 text-xs">
+                      {isRTL ? char.roleAr : char.roleEn}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Center - Active Character with Speech Bubble */}
+              <div className="relative">
+                {/* Speech Bubble */}
+                {showSpeechBubble && (
+                  <div 
+                    className={`absolute -top-20 ${isRTL ? 'right-0' : 'left-0'} w-64 bg-white rounded-2xl p-4 shadow-2xl z-30 animate-fadeIn`}
+                    style={{
+                      animation: 'fadeIn 0.5s ease-out'
+                    }}
+                  >
+                    <p className="text-gray-800 text-sm">
+                      {isRTL ? currentChar.greetingAr : currentChar.greetingEn}
+                    </p>
+                    <div 
+                      className={`absolute -bottom-3 ${isRTL ? 'right-8' : 'left-8'} w-6 h-6 bg-white transform rotate-45`}
+                    />
+                  </div>
+                )}
+                
+                {/* Main Character Image */}
+                <div 
+                  className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-8 transition-all duration-500"
+                  style={{ 
+                    borderColor: currentChar.color,
+                    boxShadow: `0 0 60px ${currentChar.color}60, 0 0 100px ${currentChar.color}30`
+                  }}
                 >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {t.heroCTA}
-                    {isRTL ? <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> : <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                  <img 
+                    src={currentChar.image} 
+                    alt={isRTL ? currentChar.nameAr : currentChar.nameEn}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+                
+                {/* Character Name Badge */}
+                <div 
+                  className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-2 rounded-full text-white font-bold shadow-lg"
+                  style={{ backgroundColor: currentChar.color }}
+                >
+                  <span className="flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    {t.talkTo} {isRTL ? currentChar.nameAr : currentChar.nameEn}
                   </span>
-                </Button>
-              </Link>
-              
-              <Link href="/sectors">
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="px-10 py-7 border-2 border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400 font-bold text-lg rounded-full transition-all duration-300 hover:shadow-[0_0_40px_rgba(45,122,74,0.3)]"
-                >
-                  {t.heroSecondary}
-                </Button>
-              </Link>
+                </div>
+              </div>
+
+              {/* Right Characters (Faris, Yasmin, Little Aden) */}
+              <div className="flex gap-4 lg:gap-8">
+                {characters.slice(2).map((char, idx) => (
+                  <div 
+                    key={char.id}
+                    className={`relative cursor-pointer transition-all duration-500 ${activeCharacter === idx + 2 ? 'scale-110 z-20' : 'scale-90 opacity-70 hover:opacity-100 hover:scale-95'}`}
+                    onClick={() => { setActiveCharacter(idx + 2); setShowSpeechBubble(true); }}
+                  >
+                    <div 
+                      className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 transition-all duration-300"
+                      style={{ 
+                        borderColor: activeCharacter === idx + 2 ? char.color : 'rgba(255,255,255,0.2)',
+                        boxShadow: activeCharacter === idx + 2 ? `0 0 30px ${char.color}50` : 'none'
+                      }}
+                    >
+                      <img 
+                        src={char.image} 
+                        alt={isRTL ? char.nameAr : char.nameEn}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-center text-white text-sm mt-2 font-medium">
+                      {isRTL ? char.nameAr : char.nameEn}
+                    </p>
+                    <p className="text-center text-gray-400 text-xs">
+                      {isRTL ? char.roleAr : char.roleEn}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="animate-bounce">
-              <ChevronDown className="w-10 h-10 text-gray-400/60 mx-auto" />
+            {/* Character Selection Dots */}
+            <div className="flex justify-center gap-3 mt-8">
+              {characters.map((char, idx) => (
+                <button
+                  key={char.id}
+                  onClick={() => { setActiveCharacter(idx); setShowSpeechBubble(true); }}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${activeCharacter === idx ? 'scale-150' : 'opacity-50 hover:opacity-100'}`}
+                  style={{ backgroundColor: char.color }}
+                />
+              ))}
             </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link href="/calculator">
+              <Button 
+                size="lg" 
+                className="group relative px-10 py-7 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-lg rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(212,175,55,0.5)]"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  {t.heroCTA}
+                  {isRTL ? <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> : <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                </span>
+              </Button>
+            </Link>
+            <Link href="/sectors">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="px-10 py-7 border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-semibold text-lg rounded-full transition-all duration-300 hover:scale-105"
+              >
+                {t.heroSecondary}
+              </Button>
+            </Link>
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <ChevronDown className="w-8 h-8 text-white/50" />
           </div>
         </div>
       </section>
 
       {/* ========== STATS SECTION ========== */}
       <section 
-        id="stats-section"
+        id="stats-section" 
         data-animate
-        className={`relative py-24 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a] transition-all duration-1000 ${visibleSections.has('stats-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className="py-16 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a]"
       >
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 transition-all duration-1000 ${visibleSections.has('stats-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             {t.stats.map((stat, index) => (
               <div 
-                key={index}
-                className="group relative"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                key={index} 
+                className="text-center group"
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-amber-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:border-amber-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2">
-                  <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                    <AnimatedCounter value={stat.value} suffix={stat.suffix} visible={visibleSections.has('stats-section')} />
+                <div className="relative inline-block mb-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <stat.icon className="w-10 h-10 text-amber-400" />
                   </div>
-                  <p className="text-gray-400 text-lg">{stat.label}</p>
+                  <div className="absolute inset-0 rounded-full bg-amber-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} visible={visibleSections.has('stats-section')} />
+                </div>
+                <p className="text-gray-400 text-sm md:text-base">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -398,45 +613,48 @@ export default function Home() {
 
       {/* ========== SECTORS SECTION ========== */}
       <section 
-        id="sectors-section"
+        id="sectors-section" 
         data-animate
-        className={`py-24 bg-gradient-to-b from-[#1a3a2a] to-gray-900 transition-all duration-1000 ${visibleSections.has('sectors-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className="py-20 bg-gradient-to-b from-[#1a3a2a] to-[#0d1f17]"
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.sectorsTitle}</h2>
+          <div className={`text-center mb-16 transition-all duration-1000 ${visibleSections.has('sectors-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.sectorsTitle}</h2>
             <p className="text-xl text-gray-400">{t.sectorsSubtitle}</p>
-            <div className="w-32 h-1 bg-gradient-to-r from-green-500 to-amber-500 mx-auto mt-8 rounded-full" />
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             {sectors.map((sector, index) => (
               <Link key={sector.id} href={`/sectors/${sector.id}`}>
                 <div 
-                  className="group relative cursor-pointer"
-                  style={{ animationDelay: `${index * 0.08}s` }}
+                  className={`group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl ${visibleSections.has('sectors-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  style={{ 
+                    transitionDelay: `${index * 50}ms`,
+                    aspectRatio: '1'
+                  }}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${sector.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-60 transition-all duration-500`} />
-                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-white/30 group-hover:transform group-hover:scale-105 group-hover:-translate-y-3">
-                    {/* Image */}
-                    <div className="h-32 md:h-40 overflow-hidden">
-                      <img 
-                        src={sector.image} 
-                        alt={sector.nameEn}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${sector.gradient} opacity-60`} />
-                    </div>
-                    {/* Content */}
-                    <div className="p-4 text-center relative">
-                      <div className={`w-14 h-14 mx-auto -mt-10 mb-3 rounded-xl bg-gradient-to-br ${sector.gradient} flex items-center justify-center transform transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg`}>
-                        <sector.icon className="w-7 h-7 text-white" />
-                      </div>
-                      <h3 className="text-white font-bold text-lg">
-                        {isRTL ? sector.nameAr : sector.nameEn}
-                      </h3>
-                    </div>
+                  {/* Background Image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${sector.image})` }}
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${sector.gradient} opacity-80 group-hover:opacity-90 transition-opacity duration-300`} />
+                  
+                  {/* Content */}
+                  <div className="relative h-full flex flex-col items-center justify-center p-4 text-center">
+                    <sector.icon className="w-10 h-10 md:w-12 md:h-12 text-white mb-3 group-hover:scale-110 transition-transform duration-300" />
+                    <h3 className="text-lg md:text-xl font-bold text-white">
+                      {isRTL ? sector.nameAr : sector.nameEn}
+                    </h3>
                   </div>
+                  
+                  {/* Hover Glow */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+                    style={{ boxShadow: `inset 0 0 60px ${sector.color}` }}
+                  />
                 </div>
               </Link>
             ))}
@@ -444,34 +662,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ========== WHY CHOOSE US SECTION ========== */}
+      {/* ========== WHY GREENISTS SECTION ========== */}
       <section 
-        id="why-section"
+        id="why-section" 
         data-animate
-        className={`py-24 bg-gray-900 transition-all duration-1000 ${visibleSections.has('why-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className="py-20 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a]"
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.whyTitle}</h2>
+          <div className={`text-center mb-16 transition-all duration-1000 ${visibleSections.has('why-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.whyTitle}</h2>
             <p className="text-xl text-gray-400">{t.whySubtitle}</p>
-            <div className="w-32 h-1 bg-gradient-to-r from-amber-500 to-green-500 mx-auto mt-8 rounded-full" />
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {t.whyItems.map((item, index) => (
               <div 
                 key={index}
-                className="group relative"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                className={`group relative p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-amber-400/30 transition-all duration-500 hover:scale-105 ${visibleSections.has('why-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-amber-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:border-green-400/50 transition-all duration-500 hover:transform hover:scale-105 h-full">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center transform transition-transform duration-500 group-hover:rotate-6">
-                    <item.icon className="w-8 h-8 text-white" />
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <item.icon className="w-8 h-8 text-amber-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
-                  <p className="text-gray-400">{item.desc}</p>
+                  <div className="absolute inset-0 rounded-2xl bg-amber-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-gray-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -480,29 +697,26 @@ export default function Home() {
 
       {/* ========== VIDEO SECTION ========== */}
       <section 
-        id="video-section"
+        id="video-section" 
         data-animate
-        className={`py-24 bg-gradient-to-b from-gray-900 to-[#0d1f17] transition-all duration-1000 ${visibleSections.has('video-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className="py-20 bg-gradient-to-b from-[#1a3a2a] to-[#0d1f17]"
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className={`text-center mb-12 transition-all duration-1000 ${visibleSections.has('video-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.videoTitle}</h2>
             <p className="text-xl text-gray-400">{t.videoSubtitle}</p>
           </div>
-
-          <div className="max-w-5xl mx-auto">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-green-500/30 via-amber-500/30 to-green-500/30 rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-amber-400/30 transition-colors">
-                <video 
-                  className="w-full aspect-video object-cover"
-                  poster="/images/hero/aden-event-hero.png"
-                  controls
-                  playsInline
-                >
-                  <source src="/videos/greenists-hero.mp4" type="video/mp4" />
-                </video>
-              </div>
+          
+          <div className={`max-w-4xl mx-auto transition-all duration-1000 delay-200 ${visibleSections.has('video-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
+              <video 
+                className="w-full aspect-video object-cover"
+                controls
+                poster="/images/video-poster.jpg"
+              >
+                <source src="/videos/greenists-promo.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           </div>
         </div>
@@ -510,127 +724,90 @@ export default function Home() {
 
       {/* ========== PACKAGES SECTION ========== */}
       <section 
-        id="packages-section"
+        id="packages-section" 
         data-animate
-        className={`py-24 bg-[#0d1f17] transition-all duration-1000 ${visibleSections.has('packages-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className="py-20 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a]"
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{t.packagesTitle}</h2>
+          <div className={`text-center mb-16 transition-all duration-1000 ${visibleSections.has('packages-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.packagesTitle}</h2>
             <p className="text-xl text-gray-400">{t.packagesSubtitle}</p>
-            <div className="w-32 h-1 bg-gradient-to-r from-green-500 to-amber-500 mx-auto mt-8 rounded-full" />
           </div>
-
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.packages.map((pkg, index) => (
               <div 
                 key={index}
-                className={`relative group ${pkg.popular ? 'lg:-mt-4 lg:mb-4' : ''}`}
-                style={{ animationDelay: `${index * 0.15}s` }}
+                className={`group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 ${visibleSections.has('packages-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${pkg.popular ? 'bg-gradient-to-br from-amber-500/20 to-yellow-600/20 border-2 border-amber-400/50' : 'bg-gradient-to-br from-white/5 to-white/10 border border-white/10'}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                    <span className="px-6 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-bold rounded-full shadow-lg shadow-amber-500/30">
-                      {isRTL ? 'الأكثر طلباً' : 'Most Popular'}
-                    </span>
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-full text-white text-sm font-bold">
+                    {isRTL ? 'الأكثر طلباً' : 'Most Popular'}
                   </div>
                 )}
                 
-                <div className={`absolute inset-0 bg-gradient-to-br ${pkg.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-all duration-500`} />
-                
-                <div className={`relative h-full bg-white/5 backdrop-blur-sm border ${pkg.popular ? 'border-amber-400/50' : 'border-white/10'} rounded-2xl p-8 transition-all duration-500 group-hover:border-white/30 group-hover:transform group-hover:scale-[1.02] overflow-hidden`}>
-                  {/* Shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  
-                  <div className={`w-14 h-14 mx-auto mb-6 rounded-xl bg-gradient-to-br ${pkg.color} flex items-center justify-center`}>
-                    <pkg.icon className="w-7 h-7 text-white" />
-                  </div>
-                  
-                  <h3 className={`text-2xl font-bold mb-4 text-center bg-gradient-to-r ${pkg.color} bg-clip-text text-transparent`}>
-                    {pkg.name}
-                  </h3>
-                  
-                  <div className="text-center mb-6">
-                    <span className="text-4xl font-bold text-white">${pkg.price.toLocaleString()}</span>
-                    <span className="text-gray-400 text-lg block mt-1">{pkg.priceYER} YER</span>
-                  </div>
-                  
-                  <ul className="space-y-3 mb-8">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 text-gray-300">
-                        <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <Link href="/calculator">
-                    <Button className={`w-full py-6 rounded-xl font-bold transition-all duration-300 ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]' : 'bg-white/10 text-white hover:bg-white/20'}`}>
-                      {isRTL ? 'احسب التكلفة' : 'Calculate Cost'}
-                    </Button>
-                  </Link>
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center mb-6`}>
+                  <pkg.icon className="w-8 h-8 text-white" />
                 </div>
+                
+                <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-amber-400">${pkg.price}</span>
+                  <span className="text-gray-400 text-sm ml-2">/ {pkg.priceYER} YER</span>
+                </div>
+                
+                <ul className="space-y-3 mb-8">
+                  {pkg.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2 text-gray-300">
+                      <CheckCircle2 className="w-5 h-5 text-green-400" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                
+                <Link href="/calculator">
+                  <Button 
+                    className={`w-full py-6 rounded-xl font-bold transition-all duration-300 ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+                  >
+                    {isRTL ? 'احسب التكلفة' : 'Calculate Cost'}
+                  </Button>
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== CHARACTER SHOWCASE ========== */}
+      {/* ========== CHARACTER SHOWCASE (DETAILED) ========== */}
       <CharacterShowcase />
 
       {/* ========== CTA SECTION ========== */}
-      <section 
-        id="cta-section"
-        data-animate
-        className={`py-24 bg-gradient-to-b from-[#0d1f17] to-[#1a3a2a] transition-all duration-1000 ${visibleSections.has('cta-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-      >
+      <section className="py-20 bg-gradient-to-b from-[#1a3a2a] to-[#0d1f17]">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/30 to-amber-500/30 rounded-3xl blur-2xl" />
-              <div className="relative bg-gradient-to-br from-[#1a3a2a] to-[#0d1f17] border border-white/10 rounded-3xl p-12 md:p-16 text-center">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                  {t.ctaTitle}
-                </h2>
-                <p className="text-xl md:text-2xl text-gray-300 mb-10">
-                  {t.ctaSubtitle}
-                </p>
-                
-                <Link href="/contact">
-                  <Button 
-                    size="lg"
-                    className="px-12 py-8 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xl rounded-full hover:scale-105 transition-all duration-300 hover:shadow-[0_0_50px_rgba(212,175,55,0.5)]"
-                  >
-                    {t.ctaButton}
-                  </Button>
-                </Link>
-                
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10 text-gray-300">
-                  <a href="tel:+967773673918" className="flex items-center gap-2 hover:text-amber-400 transition-colors text-lg">
-                    <Phone className="w-5 h-5" />
-                    <span dir="ltr">+967 773 673 918</span>
-                  </a>
-                  <a href="mailto:info@greenists-events.com" className="flex items-center gap-2 hover:text-amber-400 transition-colors text-lg">
-                    <Mail className="w-5 h-5" />
-                    <span>info@greenists-events.com</span>
-                  </a>
-                </div>
-                
-                <div className="mt-8 flex items-center justify-center gap-2 text-gray-400">
-                  <MapPin className="w-5 h-5" />
-                  <span>
-                    {isRTL ? 'بجانب فندق ريلاكس، خور مكسر، عدن' : 'Next to Relax Hotel, Khor Maksar, Aden'}
-                  </span>
-                </div>
-              </div>
+          <div className="relative max-w-4xl mx-auto text-center p-12 rounded-3xl overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-amber-500/20 to-green-500/20 blur-3xl" />
+            
+            <div className="relative z-10">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.ctaTitle}</h2>
+              <p className="text-xl text-gray-300 mb-8">{t.ctaSubtitle}</p>
+              
+              <Link href="/contact">
+                <Button 
+                  size="lg" 
+                  className="px-12 py-8 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xl rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_60px_rgba(212,175,55,0.5)]"
+                >
+                  {t.ctaButton}
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       <Footer />
-
+      
       {/* CSS Animations */}
       <style>{`
         @keyframes float {
@@ -639,16 +816,20 @@ export default function Home() {
         }
         
         @keyframes floatLeaf {
-          0% { transform: translateY(0) rotate(0deg) translateX(0); }
-          25% { transform: translateY(-30px) rotate(90deg) translateX(20px); }
-          50% { transform: translateY(-10px) rotate(180deg) translateX(-10px); }
-          75% { transform: translateY(-40px) rotate(270deg) translateX(15px); }
-          100% { transform: translateY(0) rotate(360deg) translateX(0); }
+          0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+          25% { transform: translateY(-30px) rotate(90deg) scale(1.1); }
+          50% { transform: translateY(-10px) rotate(180deg) scale(1); }
+          75% { transform: translateY(-40px) rotate(270deg) scale(0.9); }
         }
         
         @keyframes pulse {
           0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 0.3; transform: scale(1.05); }
+          50% { opacity: 0.3; transform: scale(1.1); }
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>
