@@ -9,6 +9,7 @@ import { lazy, Suspense } from "react";
 
 // Pages
 import Home from "./pages/Home";
+import AICharacterAssistant from "./components/AICharacterAssistant";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Calculator from "./pages/Calculator";
@@ -173,6 +174,7 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Router />
+            <AICharacterAssistant />
           </TooltipProvider>
         </LanguageProvider>
       </ThemeProvider>

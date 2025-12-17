@@ -4,6 +4,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import CharacterShowcase from '@/components/CharacterShowcase';
 import { 
   ArrowRight, ArrowLeft, Star, Users, Calendar, Award, Leaf, Heart, 
   Sparkles, Building2, GraduationCap, Baby, Music, MapPin, Phone, Mail, 
@@ -574,6 +575,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ========== CHARACTER SHOWCASE ========== */}
+      <CharacterShowcase />
 
       {/* ========== CTA SECTION ========== */}
       <section 
